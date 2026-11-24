@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Treino SARESP 7º ano</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+/* Layout: cabeçalho com abas de nível; cartão central com a questão; a Professora Coruja explica embaixo.
+   Visual único e claro, de "caderno de atividades": papel quadriculado suave, peças com sombra grossa. */
+:root{
+  color-scheme:light;
+  --paper:#F4F7FB; --grid:rgba(47,128,237,.07); --card:#FFFFFF; --ink:#1E2A4A; --muted:#62708E; --line:#D5DEEC; --shadow:#C3CEE0;
+  --bas:#22A35A; --bas-d:#167A41; --bas-l:#DDF5E7;
+  --ade:#2F80ED; --ade-d:#1D5FBA; --ade-l:#DCEAFD;
+  --ava:#7B5CD6; --ava-d:#5A3FB0; --ava-l:#EAE3FB;
+  --lv:var(--bas); --lv-d:var(--bas-d); --lv-l:var(--bas-l);
+  --ok:#22A35A; --ok-l:#D9F5E4; --bad:#E8505B; --bad-l:#FDE2E4;
+  --note:#FFF3B0; --note-d:#E3C445; --owl:#B9824F; --owl-d:#8A5A2E;
+  --panel:#FFFFFF; --tint:#D7E6F8; --tint2:#B3CDEE; --tint3:#86ADDD; --paint:#F28C28; --teal:#10A99A;
+  --font-display:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+[data-lv="a"]{--lv:var(--ade); --lv-d:var(--ade-d); --lv-l:var(--ade-l)}
+[data-lv="v"]{--lv:var(--ava); --lv-d:var(--ava-d); --lv-l:var(--ava-l)}
+*,*::before,*::after{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.45;
+  background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/26px 26px, linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/26px 26px, var(--paper);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 40px}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible{outline:4px solid #E8A800;outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:14px}
+
+/* topo */
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(22px,3vw,32px);line-height:1}
+.brand svg{width:46px;height:46px;flex:none}
+.brand small{display:block;font-family:var(--font-body);font-size:13px;color:var(--muted);font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
+.tabs{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.tab{border:none;border-radius:14px;padding:9px 16px;font-family:var(--font-display);font-weight:700;font-size:18px;background:var(--card);box-shadow:0 4px 0 var(--shadow);display:flex;align-items:center;gap:8px}
+.tab i{width:12px;height:12px;border-radius:50%}
+.tab[data-l="b"] i{background:var(--bas)} .tab[data-l="a"] i{background:var(--ade)} .tab[data-l="v"] i{background:var(--ava)}
+.tab[aria-selected="true"][data-l="b"]{background:var(--bas);color:#fff;box-shadow:0 4px 0 var(--bas-d)}
+.tab[aria-selected="true"][data-l="a"]{background:var(--ade);color:#fff;box-shadow:0 4px 0 var(--ade-d)}
+.tab[aria-selected="true"][data-l="v"]{background:var(--ava);color:#fff;box-shadow:0 4px 0 var(--ava-d)}
+.tab[aria-selected="true"] i{background:#fff}
+
+/* cartão */
+.card{background:var(--card);border-radius:24px;box-shadow:0 6px 0 var(--shadow);padding:clamp(16px,2.6vw,30px);display:grid;gap:16px;min-width:0}
+h2{font-family:var(--font-display);font-weight:700;font-size:clamp(26px,3.4vw,40px);line-height:1.08;margin:0;text-wrap:balance}
+.lead{color:var(--muted);font-weight:700;margin:0;max-width:62ch}
+.btn{border:none;border-radius:16px;padding:13px 24px;font-family:var(--font-display);font-weight:700;font-size:clamp(18px,2vw,22px);color:#fff;background:var(--lv);box-shadow:0 5px 0 var(--lv-d);transition:transform .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--lv-d)}
+.btn.soft{background:#EEF3FA;color:var(--ink);box-shadow:0 5px 0 var(--shadow)}
+.btn.soft:active{box-shadow:0 1px 0 var(--shadow)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 12px;font-weight:900;font-size:13px;letter-spacing:.04em;text-transform:uppercase;background:var(--lv-l);color:var(--lv-d)}
+.chip.plain{background:#EEF3FA;color:var(--muted)}
+
+/* início */
+.start{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center}
+.lvbadge{display:inline-block;background:var(--lv);color:#fff;font-family:var(--font-display);font-weight:700;border-radius:12px;padding:4px 12px;font-size:16px;margin-bottom:8px}
+.field{display:grid;gap:6px}
+.field label{font-weight:900;font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.field input{font:inherit;font-size:20px;font-weight:800;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);width:100%}
+.hello{display:flex;gap:14px;align-items:flex-end}
+.hello .owl{width:120px;flex:none}
+.bubble{background:var(--note);border-radius:18px 18px 18px 4px;padding:12px 16px;font-weight:800;box-shadow:0 4px 0 var(--note-d);position:relative}
+
+/* questão */
+.qtop{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dots{display:flex;gap:5px;margin-left:auto;flex-wrap:wrap}
+.dots i{width:14px;height:14px;border-radius:50%;background:#E6ECF5}
+.dots i.ok{background:var(--ok)} .dots i.no{background:var(--bad)} .dots i.now{background:var(--lv);box-shadow:0 0 0 3px var(--lv-l)}
+.count{margin-left:auto;font-weight:900;color:var(--muted);font-variant-numeric:tabular-nums}
+.qnum{font-family:var(--font-display);font-weight:700;color:var(--lv)}
+.qtext{font-family:var(--font-display);font-weight:600;font-size:clamp(21px,2.6vw,29px);line-height:1.3;margin:0;text-wrap:pretty}
+.qtext b{color:var(--lv-d)}
+.figbox{display:grid;place-items:center;background:#F6F9FD;border-radius:18px;padding:12px;min-width:0}
+.fig{width:100%;max-width:440px;max-height:300px;height:auto}
+.fig.sm{max-width:160px}
+.tb{border-collapse:collapse;font-weight:800;font-size:19px;margin:0 auto;font-variant-numeric:tabular-nums}
+.tb th,.tb td{border:2px solid var(--ink);padding:6px 16px;text-align:center}
+.tb th{background:var(--tint)}
+.tb.ord td.hi{background:var(--paint);color:#fff}
+.alts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.alts.svg{grid-template-columns:repeat(4,1fr)}
+.alt{display:flex;align-items:center;gap:12px;text-align:left;border:none;border-radius:16px;padding:12px 14px;background:#fff;box-shadow:0 0 0 3px var(--line) inset,0 4px 0 var(--shadow);min-width:0;transition:transform .1s, box-shadow .15s}
+.alt:hover{box-shadow:0 0 0 3px var(--lv) inset,0 4px 0 var(--lv-d);transform:translateY(-2px)}
+.alt .L{flex:none;width:40px;height:40px;border-radius:12px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:21px}
+.alt .T{font-weight:800;font-size:clamp(17px,1.9vw,22px);line-height:1.25;min-width:0;font-variant-numeric:tabular-nums}
+.alts.svg .alt{flex-direction:column;align-items:stretch}
+.alts.svg .alt .T svg{width:100%;height:auto;max-height:170px}
+.done .alt{cursor:default;transform:none!important}
+.done .alt:not(.right):not(.wrong){opacity:.45;box-shadow:0 0 0 3px var(--line) inset,0 4px 0 var(--shadow)}
+.alt.right{background:var(--ok-l);box-shadow:0 0 0 3px var(--ok) inset,0 4px 0 #167A41}
+.alt.right .L{background:var(--ok)}
+.alt.wrong{background:var(--bad-l);box-shadow:0 0 0 3px var(--bad) inset,0 4px 0 #B3343E;animation:shake .35s}
+.alt.wrong .L{background:var(--bad)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* explicação */
+.explain{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:start;animation:rise .35s ease}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.explain .owl{width:110px}
+.ebox{background:#FFFBEA;border:3px solid var(--note-d);border-radius:20px;padding:14px 18px;display:grid;gap:10px;min-width:0}
+.ebox h3{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(21px,2.4vw,27px)}
+.ebox h3.ok{color:var(--ok)} .ebox h3.no{color:var(--bad)}
+.steps{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:s}
+.steps li{display:flex;gap:10px;align-items:flex-start;font-size:clamp(17px,1.8vw,20px);font-weight:700;counter-increment:s;min-width:0}
+.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:9px;background:var(--lv);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-size:16px;margin-top:1px}
+.steps li > div{min-width:0;overflow-x:auto}
+.steps .big{font-family:var(--font-display);font-size:26px;letter-spacing:.05em}
+.rule{background:var(--note);border-radius:6px 16px 16px 16px;padding:10px 16px;box-shadow:0 4px 0 var(--note-d);transform:rotate(-.5deg)}
+.rule small{display:block;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#8A6D00;font-size:12px}
+.rule p{margin:2px 0 0;font-family:var(--font-display);font-weight:700;font-size:clamp(19px,2.1vw,24px);line-height:1.2}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 .12em;font-weight:900}
+.fr span:first-child{border-bottom:2.5px solid currentColor;padding:0 .18em .08em}
+.fr span:last-child{padding-top:.08em}
+
+/* resultado */
+.score{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.ring{width:150px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--lv) calc(var(--p)*1%), #E6ECF5 0);position:relative}
+.ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:#fff}
+.ring b{position:relative;font-family:var(--font-display);font-size:40px;line-height:1;text-align:center}
+.ring b small{display:block;font-size:15px;color:var(--muted);font-family:var(--font-body);font-weight:900}
+.stars{display:flex;gap:6px}
+.stars svg{width:42px;height:42px}
+.report{width:100%;border-collapse:separate;border-spacing:0 6px;font-variant-numeric:tabular-nums}
+.report th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:0 10px}
+.report td{background:#F6F9FD;padding:9px 10px;font-weight:800}
+.report td:first-child{border-radius:12px 0 0 12px} .report td:last-child{border-radius:0 12px 12px 0;text-align:right}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:900}
+.pill.g{background:var(--ok-l);color:#167A41} .pill.y{background:#FFF1C2;color:#8A6D00} .pill.r{background:var(--bad-l);color:#B3343E}
+.tablewrap{overflow-x:auto}
+
+/* figuras */
+.f-shape{fill:var(--tint);stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+.f-line{fill:none;stroke:var(--ink);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.f-mid{stroke:var(--ink);stroke-width:2}
+.f-dash{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:6 5}
+.f-thin{fill:none;stroke:#C9D4E3;stroke-width:1.3}
+.f-grid{stroke:#7F95B5}
+.f-off{fill:#fff;stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+.f-on{fill:var(--paint);stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+.f-on2{fill:var(--teal);stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+.f-t1{fill:#EAF2FC}
+.f-txt{fill:var(--ink);font-family:var(--font-display);font-weight:600}
+.f-bold{font-weight:700}
+.f-mut{fill:var(--muted);font-family:var(--font-body);font-weight:800}
+.f-ink{fill:var(--ink)}
+.f-dot{fill:var(--paint);stroke:var(--ink);stroke-width:2.5}
+.f-lab{fill:#fff;opacity:.92}
+.f-col{fill:#4A90C2;stroke:var(--ink);stroke-width:1.5}
+.f-grp{fill:none;stroke:#9FB3CF;stroke-width:2;stroke-dasharray:5 4}
+.f-cf{fill:#CFE0F1;stroke:var(--ink);stroke-width:1.6}
+.f-ct{fill:#EEF4FB;stroke:var(--ink);stroke-width:1.6}
+.f-cr{fill:#9DBBE0;stroke:var(--ink);stroke-width:1.6}
+
+@media (max-width:760px){
+  .start,.score{grid-template-columns:1fr}
+  .alts,.alts.svg{grid-template-columns:1fr 1fr}
+  .explain{grid-template-columns:1fr}
+  .explain .owl{width:80px}
+  .tabs{margin-left:0;width:100%}
+  .tab{flex:1;justify-content:center;font-size:16px;padding:9px 8px}
+}
+@media (max-width:480px){ .alts{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* formatos da prova real: SIM/NÃO, marque três, lacunas */
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none!important}
+.sntb{border-collapse:collapse;width:100%;font-weight:800;font-size:clamp(16px,1.8vw,19px)}
+.sntb th{background:var(--tint);border:2px solid var(--ink);padding:8px 10px;text-align:left}
+.sntb th:not(:first-child){text-align:center;width:84px}
+.sntb td{border:2px solid var(--ink);padding:8px 10px;vertical-align:middle;background:#fff}
+.sntb td:not(.st){text-align:center;padding:6px}
+.yn{border:none;border-radius:12px;padding:8px 0;width:100%;min-width:62px;font-family:var(--font-display);font-weight:700;font-size:17px;background:#EEF3FA;box-shadow:0 3px 0 var(--shadow)}
+.yn.sel{background:var(--lv);color:#fff;box-shadow:0 3px 0 var(--lv-d)}
+.yn.right{background:var(--ok);color:#fff;box-shadow:0 3px 0 #167A41}
+.yn.wrong{background:var(--bad);color:#fff;box-shadow:0 3px 0 #B3343E}
+.sntb tr.okrow td.st{background:var(--ok-l)} .sntb tr.norow td.st{background:var(--bad-l)}
+.m3list{display:grid;gap:10px}
+.chk{display:flex;align-items:center;gap:12px;text-align:left;border:none;border-radius:16px;padding:12px 14px;background:#fff;box-shadow:0 0 0 3px var(--line) inset,0 4px 0 var(--shadow);font-weight:800;font-size:clamp(17px,1.9vw,20px)}
+.chk .box{flex:none;width:30px;height:30px;border-radius:9px;border:3px solid var(--ink);display:grid;place-items:center;font-weight:900;background:#fff}
+.chk.on{box-shadow:0 0 0 3px var(--lv) inset,0 4px 0 var(--lv-d)} .chk.on .box{background:var(--lv);border-color:var(--lv-d);color:#fff}
+.chk.right{background:var(--ok-l);box-shadow:0 0 0 3px var(--ok) inset,0 4px 0 #167A41}
+.chk.wrong{background:var(--bad-l);box-shadow:0 0 0 3px var(--bad) inset,0 4px 0 #B3343E}
+.lactext{font-family:var(--font-display);font-weight:600;font-size:clamp(20px,2.3vw,26px);line-height:2.1;margin:0}
+.gap{border:none;border-bottom:4px solid var(--ink);background:#EEF3FA;border-radius:10px 10px 4px 4px;min-width:110px;padding:2px 12px;font:inherit;font-weight:700;color:var(--muted)}
+.gap.full{color:var(--ink);background:var(--lv-l)}
+.gap.act{outline:3px solid var(--lv);outline-offset:2px}
+.gap.right{background:var(--ok-l);border-color:var(--ok);color:#167A41}
+.gap.wrong{background:var(--bad-l);border-color:var(--bad);color:#B3343E;text-decoration:line-through}
+.fix{font-weight:800;color:#167A41;background:var(--ok-l);border-radius:8px;padding:2px 8px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chipv{border:none;border-radius:14px;padding:10px 16px;background:#fff;box-shadow:0 0 0 3px var(--line) inset,0 4px 0 var(--shadow);font-weight:900;font-size:19px;font-variant-numeric:tabular-nums}
+.chipv.used{opacity:.4}
+.whys{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.whys li{border-radius:12px;padding:8px 12px;font-weight:700;font-size:16px;background:#fff;border-left:6px solid var(--ok)}
+.whys li.n{border-left-color:var(--bad)}
+.whys li span{color:var(--muted)}
+.whyl{margin:0;font-weight:800}
+@media (max-width:480px){ .sntb th:not(:first-child){width:64px} .yn{min-width:48px;font-size:15px} }
+</style>
+</head>
+<body>
+
+
+<div class="wrap" id="app" data-lv="b">
+  <header class="top">
+    <h1 class="brand"><span id="logo"></span><span>Treino SARESP<small>Matemática · 7º ano</small></span></h1>
+    <nav class="tabs" role="tablist" aria-label="Nível">
+      <button class="tab" role="tab" data-l="b" aria-selected="true"><i></i>Básico</button>
+      <button class="tab" role="tab" data-l="a" aria-selected="false"><i></i>Adequado</button>
+      <button class="tab" role="tab" data-l="v" aria-selected="false"><i></i>Avançado</button>
+    </nav>
+  </header>
+  <main class="card" id="stage"></main>
+</div>
+
+
+<script>
+const LEVELS = ['b','a','v'];
+let RND = Math.random; let FORCE = {};
+const br = (tag,p) => (FORCE[tag]!==undefined ? FORCE[tag] : RND()<p);
+const R = (a,b) => a + Math.floor(RND()*(b-a+1));
+const pick = arr => arr[Math.floor(RND()*arr.length)];
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(RND()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const NB = ' ';
+const fmt = n => { const s=String(Math.abs(n)); const g = Math.abs(n)>=1000 ? s.replace(/\B(?=(\d{3})+(?!\d))/g, NB) : s; return (n<0?'−':'')+g; };
+const dec = (v, places) => { // v número; vírgula decimal
+  let s = places==null ? String(+v.toFixed(4)) : v.toFixed(places);
+  let [i,f] = s.split('.'); i = fmt(+i); return f ? i+','+f : i; };
+const money = c => 'R$'+NB+fmt(Math.floor(c/100))+','+String(c%100).padStart(2,'0'); // c em centavos
+const F = (n,d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const gcd = (a,b) => b ? gcd(b, a%b) : Math.abs(a);
+const B = s => `<b>${s}</b>`;
+const NAMES = ['Ana','Bruno','Carla','Davi','Elisa','Felipe','Gabi','Heitor','Isis','João','Kauê','Lara','Miguel','Nina','Otávio','Paula','Rafa','Sara','Téo','Vitória','Yuri','Zoe','Lucas','Maria','Pedro','Alice','Enzo','Bia','Caio','Lívia'];
+const nm = () => pick(NAMES);
+
+/* monta 4 alternativas únicas; vals = [correta, distratores...]; extra = função que gera distratores de reserva */
+function alts(correct, ds, extra){
+  const out=[correct]; const seen=new Set([String(correct)]);
+  for(const d of ds){ if(out.length>=4) break; const s=String(d); if(!seen.has(s) && d!==undefined && d!==null && s!=='NaN'){ seen.add(s); out.push(d); } }
+  let guard=0;
+  while(out.length<4 && guard++<200){ const d=extra(guard); const s=String(d); if(!seen.has(s)){ seen.add(s); out.push(d); } }
+  const order=shuffle([0,1,2,3]);
+  return {alts: order.map(i=>out[i]), ans: order.indexOf(0)};
+}
+const numExtra = (c, step=1, min=0) => g => { const k = (Math.floor(g/2)+1)*step*(g%2?1:-1); const v=c+k; return v>=min? v : c+Math.abs(k)+step*g; };
+
+/* ---------- desenhos (SVG) ---------- */
+const S = (vb, inner, cls='fig') => `<svg class="${cls}" viewBox="${vb}" role="img" aria-hidden="true">${inner}</svg>`;
+const P = (pts, cls) => `<polygon class="${cls}" points="${pts.map(p=>p.map(v=>+v.toFixed(1)).join(',')).join(' ')}"/>`;
+const L = (a,b,cls='f-line') => `<line class="${cls}" x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}"/>`;
+const T = (x,y,s,size=24,cls='f-txt',anchor='middle') => `<text class="${cls}" x="${(+x).toFixed(1)}" y="${(+y).toFixed(1)}" font-size="${size}" text-anchor="${anchor}" dominant-baseline="middle">${s}</text>`;
+const reg = (cx,cy,r,n,rot=-90) => Array.from({length:n},(_,k)=>{ const a=(rot+360*k/n)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; });
+function bar(n,k,x=6,y=6,w=408,h=60,k2=0){ let s=''; const cw=w/n;
+  for(let i=0;i<n;i++){ const c=i<k?'f-on':(i<k+k2?'f-on2':'f-off'); s+=`<rect class="${c}" x="${(x+i*cw).toFixed(1)}" y="${y}" width="${cw.toFixed(1)}" height="${h}"/>`; } return s; }
+function pie(n,k,cx=110,cy=110,r=100){ let s='';
+  if(n===1) return `<circle class="${k?'f-on':'f-off'}" cx="${cx}" cy="${cy}" r="${r}"/>`;
+  for(let i=0;i<n;i++){ const a0=(-90+360*i/n)*Math.PI/180, a1=(-90+360*(i+1)/n)*Math.PI/180;
+    s+=`<path class="${i<k?'f-on':'f-off'}" d="M${cx},${cy} L${(cx+r*Math.cos(a0)).toFixed(1)},${(cy+r*Math.sin(a0)).toFixed(1)} A${r},${r} 0 0 1 ${(cx+r*Math.cos(a1)).toFixed(1)},${(cy+r*Math.sin(a1)).toFixed(1)} Z"/>`; } return s; }
+function gridLines(cols,rows,sz,x0,y0){ let s='';
+  for(let i=0;i<=cols;i++) s+=`<line class="f-thin" x1="${x0+i*sz}" y1="${y0}" x2="${x0+i*sz}" y2="${y0+rows*sz}"/>`;
+  for(let j=0;j<=rows;j++) s+=`<line class="f-thin" x1="${x0}" y1="${y0+j*sz}" x2="${x0+cols*sz}" y2="${y0+j*sz}"/>`; return s; }
+function hundred(k){ let s=''; for(let i=0;i<100;i++){ const r=Math.floor(i/10), c=i%10; s+=`<rect class="${i<k?'f-on2':'f-off'}" x="${4+c*22}" y="${4+r*22}" width="22" height="22" style="stroke-width:1.2"/>`; } return S('0 0 228 228', s); }
+function numberLine(max, div, marks){ // marks: [{v:numerador em 1/div, lab}]
+  const W=460, x0=24, x1=W-30, u=(x1-x0)/max; let s=`<line class="f-line" x1="${x0-10}" y1="60" x2="${x1+20}" y2="60"/><path class="f-ink" d="M${x1+22},60 l-12,-7 v14 z"/>`;
+  for(let i=0;i<=max*div;i++){ const x=x0+i*u/div, big=i%div===0; s+=L([x,big?48:53],[x,big?72:67], big?'f-line':'f-mid'); if(big) s+=T(x,92,i/div,22); }
+  marks.forEach(m=>{ const x=x0+m.v*u/div; s+=`<circle class="f-dot" cx="${x.toFixed(1)}" cy="60" r="8"/>`+T(x,26,m.lab,22,'f-txt f-bold'); });
+  return S(`0 0 ${W} 108`, s);
+}
+function chart(cats, vals, title, unit){
+  const W=440,H=250,x0=46,y0=210,top=40; const mx=Math.ceil(Math.max(...vals)*1.15/10)*10; const sc=(y0-top)/mx; const bw=(W-x0-14)/cats.length;
+  let s=T(W/2,16,title,18,'f-txt f-bold');
+  for(let v=0; v<=mx; v+=mx/5){ const y=y0-v*sc; s+=`<line class="f-thin" x1="${x0}" y1="${y.toFixed(1)}" x2="${W-6}" y2="${y.toFixed(1)}"/>`+T(x0-8,y,Math.round(v),13,'f-mut','end'); }
+  cats.forEach((c,i)=>{ const x=x0+i*bw+bw*0.18, h=vals[i]*sc; s+=`<rect class="f-col" x="${x.toFixed(1)}" y="${(y0-h).toFixed(1)}" width="${(bw*0.64).toFixed(1)}" height="${h.toFixed(1)}"/>`+T(x+bw*0.32,y0-h-11,vals[i],15,'f-txt f-bold')+T(x+bw*0.32,y0+18,c,14,'f-mut'); });
+  s+=L([x0,y0],[W-6,y0])+L([x0,y0],[x0,top-6]);
+  return S(`0 0 ${W} ${H}`, s);
+}
+function table(head, rows){ return `<table class="tb"><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((c,i)=>i?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</table>`; }
+function plane(points, n=8, extra=''){ // points: [{x,y,lab}]
+  const s0=36, o=[40, 40+n*s0]; let s=gridLines(n,n,s0,o[0],o[1]-n*s0);
+  s+=L(o,[o[0]+n*s0+16,o[1]])+L(o,[o[0],o[1]-n*s0-16]);
+  for(let i=0;i<=n;i++){ s+=T(o[0]+i*s0,o[1]+18,i,15,'f-mut'); if(i) s+=T(o[0]-16,o[1]-i*s0,i,15,'f-mut'); }
+  s+=T(o[0]+n*s0+24,o[1]-4,'x',17,'f-mut')+T(o[0]+2,o[1]-n*s0-28,'y',17,'f-mut');
+  s+=extra.replace(/\{X(\d+)\}/g,(m,a)=>o[0]+a*s0).replace(/\{Y(\d+)\}/g,(m,a)=>o[1]-a*s0);
+  points.forEach(p=>{ const X=o[0]+p.x*s0, Y=o[1]-p.y*s0; s+=`<circle class="f-dot" cx="${X}" cy="${Y}" r="8"/>`+`<rect class="f-lab" x="${X+8}" y="${Y-30}" width="${p.lab.length*13+8}" height="22" rx="4"/>`+T(X+12+p.lab.length*6.5,Y-19,p.lab,18,'f-txt f-bold'); });
+  return S(`0 0 ${n*s0+80} ${n*s0+80}`, s);
+}
+/* ===================== MOTOR DO TREINO SARESP 7º ANO (sem DOM) ===================== */
+/* ---------- utilidades extras do 7º ano ---------- */
+const sg = n => fmt(n);                                   // inteiro com sinal tipográfico (−)
+const par = n => n<0 ? `(−${fmt(-n)})` : `(+${fmt(n)})`;   // (−6) ou (+4)
+const deg = n => fmt(n)+'°';
+const clock = m => { m=((m%1440)+1440)%1440; return `${Math.floor(m/60)}h${String(m%60).padStart(2,'0')}`; };
+const dur = m => { const h=Math.floor(m/60), mm=m%60; return h ? (mm?`${h} h ${mm} min`:`${h} h`) : `${mm} min`; };
+const red = (n,d) => { const g=gcd(n,d); return [n/g,d/g]; };
+const FR = (n,d) => { const [a,b]=red(n,d); return b===1 ? String(a) : F(a,b); };   // fração simplificada (HTML)
+const FRt = (n,d) => { const [a,b]=red(n,d); return b===1 ? String(a) : `${a}/${b}`; }; // versão texto
+const lcm = (a,b) => a/gcd(a,b)*b;
+const cents = r => Math.round(r*100);
+const listExtra = arr => g => arr[(g-1)%arr.length] + (g>arr.length ? ' ' : '');
+const uniq = a => [...new Set(a)];
+function altsFixed(labels, ans){ return {alts:labels, ans}; }
+/* gera uma questão SIM/NÃO: items=[{s, v, why}] */
+const SN = (o) => (o.items.length===4 && new Set(o.items.map(i=>i.s)).size===4) ? {t:'sn', ...o} : null;
+const M3 = (o) => (o.items.length===5 && o.items.filter(i=>i.v).length===3) ? {t:'m3', ...o} : null;
+const LAC = (o) => (o.opts.length>=o.gaps.length+2 && o.gaps.every(g=>o.opts.includes(String(g)))) ? {t:'lac', ...o} : null;
+function pickTF(trues, falses, nT, nF){ const t=shuffle(trues).slice(0,nT).map(x=>({...x,v:true})); const f=shuffle(falses).slice(0,nF).map(x=>({...x,v:false})); return shuffle([...t,...f]); }
+function chipSet(correct, wrongs, n=6){ const out=uniq(correct.map(String)); for(const w of wrongs){ if(out.length>=n) break; const s=String(w); if(!out.includes(s)) out.push(s); } return shuffle(out); }
+
+/* reta de inteiros */
+function intLine(mn, mx, marks){ const W=460, x0=26, x1=W-34, u=(x1-x0)/(mx-mn);
+  let s=`<line class="f-line" x1="${x0-12}" y1="60" x2="${x1+18}" y2="60"/><path class="f-ink" d="M${x1+22},60 l-12,-7 v14 z"/><path class="f-ink" d="M${x0-16},60 l12,-7 v14 z"/>`;
+  for(let v=mn; v<=mx; v++){ const x=x0+(v-mn)*u; s+=L([x,49],[x,71], 'f-line'); }
+  [mn,0,mx].forEach(v=>{ const x=x0+(v-mn)*u; s+=T(x,94,sg(v),21); });
+  marks.forEach(m=>{ const x=x0+(m.v-mn)*u; s+=`<circle class="f-dot" cx="${x.toFixed(1)}" cy="60" r="8"/>`+T(x,26,m.lab,22,'f-txt f-bold'); });
+  return S(`0 0 ${W} 108`, s); }
+/* reta de frações: inteiros 0..max, cada um dividido em div partes */
+function fracLine(max, div){ const W=460, x0=26, x1=W-40, u=(x1-x0)/max; let s=`<line class="f-line" x1="${x0}" y1="60" x2="${x1+20}" y2="60"/><path class="f-ink" d="M${x1+24},60 l-12,-7 v14 z"/>`;
+  for(let i=0;i<=max*div;i++){ const x=x0+i*u/div, big=i%div===0; s+=L([x,big?46:53],[x,big?74:67], big?'f-line':'f-mid'); if(big) s+=T(x,30,i/div,22,'f-txt f-bold'); }
+  return S(`0 0 ${W} 96`, s); }
+/* triângulo com ângulos */
+function triFig(a,b,c,labs){ // a,b ângulos da base (esq, dir); labs: textos para A,B,C
+  const r=x=>x*Math.PI/180, base=300, x0=30, y0=200;
+  const h=base*Math.sin(r(a))*Math.sin(r(b))/Math.sin(r(a+b)); const xa=x0+h/Math.tan(r(a));
+  const A=[x0,y0], Bp=[x0+base,y0], C=[xa,y0-h]; const sc=Math.min(1, 170/h); const tr=p=>[x0+(p[0]-x0)*sc+(1-sc)*base/2, y0-(y0-p[1])*sc];
+  const A2=tr(A),B2=tr(Bp),C2=tr(C);
+  let s=P([A2,B2,C2],'f-shape');
+  s+=T(A2[0]+34,A2[1]-14,labs[0],20,'f-txt f-bold')+T(B2[0]-34,B2[1]-14,labs[1],20,'f-txt f-bold')+T(C2[0],C2[1]+26,labs[2],20,'f-txt f-bold');
+  return S(`0 0 360 215`, s); }
+function triArea(b,h){ const W=360, sc=Math.min(260/b, 150/h), bw=b*sc, hh=h*sc, x0=(W-bw)/2, y0=180, ap=x0+bw*pick([0.25,0.35,0.6,0.7]);
+  let s=P([[x0,y0],[x0+bw,y0],[ap,y0-hh]],'f-shape')+`<line class="f-dash" x1="${ap}" y1="${y0}" x2="${ap}" y2="${y0-hh}"/><rect class="f-line" x="${ap}" y="${y0-12}" width="12" height="12" style="stroke-width:2"/>`;
+  s+=T(x0+bw/2,y0+20,`${fmt(b)} m`,19)+T(ap+12,y0-hh/2,`${fmt(h)} m`,19,'f-txt','start');
+  return S(`0 0 ${W} 210`, s); }
+function lShape(W1,H1,w2,h2){ // retângulo W1×H1 com recorte w2×h2 no canto superior direito
+  const sc=Math.min(280/W1,160/H1), x0=56,y0=200; const X=v=>x0+v*sc, Y=v=>y0-v*sc;
+  const pts=[[X(0),Y(0)],[X(W1),Y(0)],[X(W1),Y(H1-h2)],[X(W1-w2),Y(H1-h2)],[X(W1-w2),Y(H1)],[X(0),Y(H1)]];
+  let s=P(pts,'f-shape');
+  s+=T(X(W1/2),Y(0)+20,`${W1} m`,18)+T(X(0)-6,Y(H1/2),`${H1} m`,18,'f-txt','end')+T(X(W1-w2/2),Y(H1-h2)-14,`${w2} m`,18)+T(X(W1)+6,Y((H1-h2)/2),`${H1-h2} m`,18,'f-txt','start')+T(X((W1-w2)/2),Y(H1)-14,`${W1-w2} m`,18);
+  return S(`0 0 400 230`, s); }
+
+/* ====================== BÁSICO ====================== */
+const BAS = {};
+/* 1. Inteiros na reta numérica */
+BAS.reta1 = () => {
+  const mn=-R(4,7), mx=R(3,6); const k=-R(2,-mn-1);
+  const cand=uniq([k, -k, k+1, k-1, k+2, k-2].filter(v=>v>=mn&&v<=mx&&v!==0));
+  let pts=uniq([k, -k<=mx?-k:k+2, ...shuffle(cand.filter(v=>v!==k&&v!==-k))]).filter(v=>v>=mn&&v<=mx).slice(0,4);
+  if(pts.length<4) return BAS.reta1();
+  pts.sort((a,b)=>a-b); const labs=['P','Q','R','S']; const marks=pts.map((v,i)=>({v,lab:labs[i]})); const ai=pts.indexOf(k);
+  const wrongPos = pts.indexOf(-k);
+  return {q:`Observe a reta numérica a seguir, em que a distância entre dois tracinhos seguidos é de 1 unidade.<br>O ponto que representa o número ${B(sg(k))} é`,
+    fig:intLine(mn,mx,marks), ...altsFixed(['P.','Q.','R.','S.'], ai),
+    exp:[`Os números ${B('negativos')} ficam à ${B('esquerda')} do zero.`, `Partindo do 0, conte ${-k} tracinhos para a esquerda.`, `Você chega no ponto ${B(labs[ai])}.`, ...(wrongPos>=0?[`Por que não é ${labs[wrongPos]}? Esse ponto está à direita do zero: ele é o ${B('+'+(-k))}, e não o ${sg(k)}.`]:[])],
+    regra:'Negativo fica à esquerda do zero. Quanto mais à esquerda, menor o número.', ck: pts[ai]===k};
+};
+BAS.reta2 = () => {
+  const cities=shuffle(['Curitiba','Gramado','São Joaquim','Urubici','Campos do Jordão','Monte Verde','Caxias do Sul','Bom Jardim da Serra']).slice(0,4);
+  let ts; do{ ts=cities.map(()=>R(-8,6)); }while(uniq(ts).length<4 || ts.filter(t=>t<0).length<2 || ts.filter(t=>t>0).length<1);
+  const mi=Math.min(...ts), ma=Math.max(...ts); const cMin=cities[ts.indexOf(mi)];
+  const negs=ts.filter(t=>t<0).sort((a,b)=>a-b); const closeZero=negs[negs.length-1]; const cClose=cities[ts.indexOf(closeZero)];
+  const i1=ts.indexOf(negs[0]), i2=ts.indexOf(closeZero);
+  const trues=[
+    {s:`A cidade mais fria foi ${cMin}.`, why:`A menor temperatura é ${sg(mi)} °C, em ${cMin}.`},
+    {s:`A temperatura de ${cities[i2]} foi maior que a de ${cities[i1]}.`, why:`${sg(closeZero)} está mais perto do zero que ${sg(negs[0])}, então é maior.`},
+    {s:`A diferença entre a maior e a menor temperatura foi de ${ma-mi} °C.`, why:`De ${sg(mi)} até 0 são ${-mi} graus, e de 0 até ${sg(ma)} são ${ma}. Total: ${ma-mi} °C.`},
+    {s:`Em ordem crescente, as temperaturas ficam: ${[...ts].sort((a,b)=>a-b).map(t=>sg(t)+' °C').join('; ')}.`, why:'Crescente é do menor para o maior: os negativos mais longe do zero vêm primeiro.'}
+  ];
+  const falses=[
+    {s:`A cidade mais fria foi ${cClose}.`, why:`${sg(closeZero)} °C é a temperatura negativa ${B('mais perto do zero')}: é a menos fria entre os negativos. A mais fria é ${cMin}, com ${sg(mi)} °C.`},
+    {s:`A temperatura de ${cities[i1]} foi maior que a de ${cities[i2]}.`, why:`Pegadinha! ${negs[0]<0?fmt(-negs[0]):''} é maior que ${fmt(-closeZero)}, mas com o sinal de menos é o contrário: ${sg(negs[0])} é ${B('menor')} que ${sg(closeZero)}.`},
+    {s:`A diferença entre a maior e a menor temperatura foi de ${ma+mi===ma-mi?ma-mi+2:Math.abs(ma+mi)} °C.`, why:`É preciso somar a distância dos dois lados do zero: ${-mi} + ${ma} = ${ma-mi} °C.`},
+    {s:`Em ordem crescente, as temperaturas ficam: ${[...ts].sort((a,b)=>Math.abs(a)-Math.abs(b)||a-b).map(t=>sg(t)+' °C').join('; ')}.`, why:'Essa ordem olhou só o número, sem o sinal. Nos negativos, quanto maior o número, menor a temperatura.'}
+  ];
+  const ordC=[...ts].sort((a,b)=>a-b).join(), ordF=[...ts].sort((a,b)=>Math.abs(a)-Math.abs(b)||a-b).join();
+  const ok=falses.filter((f,i)=>!(i===3&&ordC===ordF)&&!(i===2&&Math.abs(ma+mi)===ma-mi));
+  const items=[]; const idx=shuffle([0,1,2,3]); const truthPattern=shuffle([true,true,false,R(0,1)===1]);
+  idx.forEach((k,j)=>{ const useT = truthPattern[j] || !ok.includes(falses[k]); items.push(useT?{...trues[k],v:true}:{...falses[k],v:false}); });
+  return SN({q:`A tabela mostra a temperatura mínima registrada em algumas cidades em um dia de inverno.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`,
+    tbl:table(['Cidade','Temperatura mínima'], cities.map((c,i)=>[c, sg(ts[i])+' °C'])), items,
+    exp:['Na reta numérica, quem está mais à esquerda é menor.','Nos negativos: quanto mais longe do zero, mais frio.'],
+    regra:'−8 é menor que −2. Entre negativos, o maior é o que está mais perto do zero.'});
+};
+BAS.reta3 = () => {
+  const ctx=pick([['Os saldos bancários, em reais,','R$','de quatro clientes'],['As altitudes, em metros,','m','de quatro pontos de um mapa (negativo = abaixo do nível do mar)'],['As temperaturas, em °C,','°C','de quatro cidades em uma madrugada']]);
+  let v; do{ v=[R(-15,-1),R(-15,-1),R(0,12),R(-9,9)]; }while(uniq(v).length<4 || uniq(v.map(Math.abs)).length<4);
+  v=shuffle(v); const cor=[...v].sort((a,b)=>a-b), abs=[...v].sort((a,b)=>Math.abs(a)-Math.abs(b)), dsc=[...v].sort((a,b)=>b-a);
+  const negFirst=[...v].filter(x=>x<0).sort((a,b)=>b-a).concat(v.filter(x=>x>=0).sort((a,b)=>a-b));
+  const fm=a=>a.map(sg).join(';  ');
+  return {q:`${ctx[0]} ${ctx[2]} são: ${v.map(sg).join(', ')}.<br>Esses números, organizados do ${B('menor para o maior')}, são`,
+    ...alts(fm(cor),[fm(abs),fm(negFirst),fm(dsc)],listExtra([fm([...v])])),
+    exp:[`Comece pelos negativos que estão ${B('mais longe do zero')}: eles são os menores.`, `Depois vêm os negativos perto do zero, o zero (se houver) e, por último, os positivos.`, `Ordem: ${B(fm(cor))}.`, `Cuidado: ${sg(Math.min(...v))} parece "grande" por causa do ${-Math.min(...v)}, mas com o sinal de menos ele é o menor de todos.`],
+    regra:'Do menor para o maior: negativos (do mais longe ao mais perto do zero), zero, positivos.', ck:cor[0]<cor[3]};
+};
+
+/* 2. Operações com inteiros: regra de sinais */
+BAS.sin1 = () => {
+  const op=pick(['×','÷']); let a=R(2,12), b=R(2,9); let sa=pick([-1,1]), sb=pick([-1,1]); if(sa>0&&sb>0) sa=-1;
+  let x,y,res; if(op==='×'){ x=sa*a; y=sb*b; res=x*y; } else { const q=R(2,12); x=sa*b*q; y=sb*b; res=x/y; }
+  const wrongSign=-res, soma=x+y, somaNeg=-(x+y);
+  const same=Math.sign(x)===Math.sign(y);
+  return {q:`O resultado de ${par(x)} ${op} ${par(y)} é`, ...alts(sg(res),[sg(wrongSign),sg(soma),sg(somaNeg)],g=>sg(res+(g%2?1:-1)*g)),
+    exp:[`Primeiro, faça a conta sem os sinais: ${Math.abs(x)} ${op} ${Math.abs(y)} = ${Math.abs(res)}.`, `Agora o sinal: ${same?'os dois sinais são '+B('iguais'):'os sinais são '+B('diferentes')}.`, `${same?'Sinais iguais dão resultado positivo':'Sinais diferentes dão resultado negativo'}: ${B(sg(res))}.`, `Por que não é ${sg(soma)}? Esse seria o resultado de uma ${B('soma')}, e aqui a conta é de ${op==='×'?'multiplicação':'divisão'}.`],
+    regra:'Na multiplicação e na divisão: sinais iguais → +. Sinais diferentes → −.', ck: (op==='×'? x*y : x/y)===res};
+};
+BAS.sin2 = () => {
+  const c=pick([
+    ()=>{ const k=R(2,6), t=R(3,9); return {txt:`Um mergulhador desce ${B(k+' metros')} por minuto, a partir da superfície do mar. A posição dele pode ser indicada por um número negativo.<br>Depois de ${B(t+' minutos')}, a posição desse mergulhador, em metros, é`, a:-k, b:t, un:''}; },
+    ()=>{ const k=R(2,5), t=R(3,8); return {txt:`Durante uma noite fria, a temperatura caiu ${B(k+' °C')} por hora, durante ${B(t+' horas')}.<br>A variação total da temperatura nesse período, em °C, foi de`, a:-k, b:t, un:''}; },
+    ()=>{ const k=R(2,9)*50, t=R(3,6); return {txt:`Uma pequena empresa teve prejuízo de ${B('R$ '+fmt(k))} por mês, durante ${B(t+' meses')}. Prejuízo é representado por número negativo.<br>O resultado da empresa nesse período, em reais, é`, a:-k, b:t, un:''}; }
+  ])();
+  const res=c.a*c.b;
+  return {q:c.txt, ...alts(sg(res),[sg(-res), sg(c.a-c.b), sg(c.a+c.b)],g=>sg(res-g*Math.abs(c.a))),
+    exp:[`Cada vez, o valor muda ${sg(c.a)}.`, `Isso acontece ${c.b} vezes: ${par(c.a)} × ${par(c.b)}.`, `${Math.abs(c.a)} × ${c.b} = ${Math.abs(res)}. Sinais diferentes → negativo: ${B(sg(res))}.`, `Por que não é ${sg(-res)}? O valor ${B('diminuiu')} (desceu, esfriou, perdeu), então o resultado é negativo.`],
+    regra:'Repetir uma perda várias vezes é multiplicar: (negativo) × (positivo) = negativo.', ck:res<0};
+};
+BAS.sin3 = () => {
+  const mk=()=>{ const op=pick(['×','÷']); const sa=pick([-1,1]), sb=pick([-1,1]); let x,y,r; if(op==='×'){ x=sa*R(2,9); y=sb*R(2,9); r=x*y; } else { const b=R(2,9), q=R(2,9); x=sa*b*q; y=sb*b; r=x/y; } return {x,y,op,r}; };
+  const list=[]; const seen=new Set(); while(list.length<5){ const o=mk(); const k=o.x+o.op+o.y; if(seen.has(k)||(o.x>0&&o.y>0)) continue; seen.add(k); list.push(o); }
+  const truth=shuffle([true,true,true,false,false]);
+  const items=list.map((o,i)=>{ const shown=truth[i]?o.r:-o.r; const same=Math.sign(o.x)===Math.sign(o.y);
+    return {s:`${par(o.x)} ${o.op} ${par(o.y)} = ${sg(shown)}`, v:truth[i], why: truth[i]?`${same?'Sinais iguais':'Sinais diferentes'} → ${o.r>0?'positivo':'negativo'}. Está certo.`:`O número ${Math.abs(o.r)} está certo, mas o sinal não: ${same?'sinais iguais dão +':'sinais diferentes dão −'}. O correto é ${sg(o.r)}.`}; });
+  return M3({q:`Analise as igualdades a seguir e marque as ${B('três')} que estão corretas.`, items,
+    exp:['Em cada conta, faça primeiro o número sem sinal.','Depois olhe os sinais: iguais → +, diferentes → −.'], regra:'Sinais iguais: +. Sinais diferentes: −. Vale para × e ÷.'});
+};
+BAS.sin4 = () => {
+  const b=R(2,6), q=R(2,9), c=R(2,12); const sa=pick([-1,1]); const x=sa*b*q; const y=pick([-1,1])*b; const d=x/y; const res=d+c;
+  return {q:`O resultado da expressão ${par(x)} ÷ ${par(y)} + ${c} é`, ...alts(sg(res),[sg(-d+c), sg(d-c), sg(-d-c)],g=>sg(res+g)),
+    exp:[`Primeiro a divisão: ${par(x)} ÷ ${par(y)} = ${sg(d)} (${Math.sign(x)===Math.sign(y)?'sinais iguais → +':'sinais diferentes → −'}).`, `Depois a soma: ${sg(d)} + ${c} = ${B(sg(res))}.`, `Por que não é ${sg(-d+c)}? Aí o sinal da divisão foi trocado.`],
+    regra:'Primeiro × e ÷, depois + e −. E não esqueça a regra de sinais!', ck: x/y+c===res};
+};
+
+/* 3. Fração de quantidade */
+const FQCTX=[['Uma cooperativa colheu {T} kg de café. Desses, {f} foram vendidos para exportação.','Quantos quilogramas foram exportados?','kg'],
+ ['Uma escola tem {T} alunos. Desses, {f} participaram da gincana.','Quantos alunos participaram da gincana?','alunos'],
+ ['Uma campanha arrecadou {T} litros de água. Desse total, {f} foram enviados para um abrigo.','Quantos litros foram enviados para o abrigo?','litros'],
+ ['Um estádio tem {T} lugares. Em um jogo, {f} dos lugares foram ocupados.','Quantos lugares foram ocupados?','lugares'],
+ ['Uma loja recebeu {T} camisetas. Desse total, {f} são da cor azul.','Quantas camisetas são azuis?','camisetas'],
+ ['Uma biblioteca tem {T} livros. Desses, {f} são de aventura.','Quantos livros são de aventura?','livros']];
+BAS.fq1 = () => {
+  const d=pick([3,4,5,6,8,10]); let n=R(2,d-1); while(gcd(n,d)!==1) n=R(2,d-1);
+  const T=d*R(12,90)*(d<6?5:1); const c=T/d*n; const ctx=pick(FQCTX);
+  const w=[T/d, T-c, Number.isInteger(T/n)?T/n:T/d*(n+1)];
+  return {q:`${ctx[0].replace('{T}',fmt(T)).replace('{f}',F(n,d))}<br>${ctx[1]}`, ...alts(fmt(c),w.map(fmt),g=>fmt(c+g*T/d)),
+    exp:[`${F(n,d)} quer dizer: divida em ${B(d)} partes iguais e pegue ${B(n)}.`, `Uma parte: ${fmt(T)} ÷ ${d} = ${fmt(T/d)}.`, `${n} partes: ${fmt(T/d)} × ${n} = ${B(fmt(c))}.`, `Por que não é ${fmt(T/d)}? Esse valor é só ${B('uma')} parte (${F(1,d)}). Faltou multiplicar por ${n}.`],
+    regra:'Fração de quantidade: divide pelo de baixo, multiplica pelo de cima.', ck: Math.abs(T*n/d-c)<1e-9};
+};
+BAS.fq2 = () => {
+  const d=pick([3,4,5,8,10]); let n=R(1,d-1); while(gcd(n,d)!==1) n=R(1,d-1); const T=d*R(10,60); const c=T/d*n, r=T-c;
+  const ctx=pick([['Em uma escola com {T} alunos, {f} vão para a escola de ônibus.','alunos vão de ônibus','alunos vão de outra forma'],['De um pomar com {T} árvores, {f} são laranjeiras.','árvores são laranjeiras','árvores são de outros tipos'],['Em uma pesquisa com {T} pessoas, {f} preferem futebol.','pessoas preferem futebol','pessoas preferem outros esportes']]);
+  return LAC({q:`${ctx[0].replace('{T}',fmt(T)).replace('{f}',F(n,d))}<br>Complete as lacunas com os valores corretos.`,
+    text:`Assim, {0} ${ctx[1]} e {1} ${ctx[2]}.`, gaps:[fmt(c),fmt(r)], opts:chipSet([fmt(c),fmt(r)],[fmt(T/d),fmt(T-T/d),fmt(c*2),fmt(T),fmt(c+T/d),fmt(r+T/d),fmt(c+10)]),
+    exp:[`Uma parte: ${fmt(T)} ÷ ${d} = ${fmt(T/d)}.`, `${n===1?'É só uma parte':n+' partes: '+fmt(T/d)+' × '+n}: ${B(fmt(c))}.`, `O resto: ${fmt(T)} − ${fmt(c)} = ${B(fmt(r))}.`],
+    regra:'Parte + resto = total. Ache a parte e tire do total.', ck:c+r===T});
+};
+
+/* 4. Comparar frações e equivalentes */
+BAS.cf1 = () => {
+  let fr, guard=0; do{ fr=shuffle(NAMES).slice(0,4).map(nm=>{ const d=pick([3,4,5,6,8,10,12]); return {nm, n:R(1,d-1), d}; });
+    guard++; }while(guard<200 && (uniq(fr.map(f=>f.n/f.d)).length<4 || (()=>{ const mx=fr.reduce((m,f)=>f.n/f.d>m.n/m.d?f:m); const bigD=fr.reduce((m,f)=>f.d>m.d?f:m), bigN=fr.reduce((m,f)=>f.n>m.n?f:m); return mx===bigD||mx===bigN; })()));
+  const mx=fr.reduce((m,f)=>f.n/f.d>m.n/m.d?f:m); const bigN=fr.reduce((m,f)=>f.n>m.n?f:m);
+  const food=pick(['pizza','torta','barra de chocolate','bolo']);
+  return {q:`Quatro amigos compraram, cada um, uma ${food} do mesmo tamanho. ${fr.map(f=>`${f.nm} comeu ${F(f.n,f.d)}`).join(', ')} da sua ${food}.<br>Quem comeu a maior quantidade foi`,
+    ...altsFixed(fr.map(f=>f.nm+'.'), fr.indexOf(mx)),
+    exp:[`Para comparar, transforme em decimal (divida o de cima pelo de baixo) ou use o mesmo denominador.`, ...fr.map(f=>`${f.nm}: ${F(f.n,f.d)} ≈ ${dec(f.n/f.d,2)}`).slice(0,4), `O maior é de ${B(mx.nm)}.`, `Cuidado: ${bigN.nm} tem o maior número em cima, mas os pedaços dele são ${B('menores')} (a ${food} foi dividida em ${bigN.d} partes).`],
+    regra:'Quanto maior o denominador, menor cada pedaço. Compare as frações pelo valor, não só pelos números.', ck: true};
+};
+BAS.cf2 = () => {
+  const d0=pick([3,4,5,6,7]); let n0=R(1,d0-1); while(gcd(n0,d0)!==1) n0=R(1,d0-1);
+  const ks=shuffle([2,3,4,5,6,7]).slice(0,3); const trues=ks.map(k=>({s:F(n0*k,d0*k), why:`${n0} × ${k} = ${n0*k} e ${d0} × ${k} = ${d0*k}. É equivalente.`}));
+  const k1=R(2,5), k2=R(2,4);
+  const falses=[{s:F(n0+k1,d0+k1), why:`Somar ${k1} em cima e embaixo ${B('não')} gera fração equivalente.`},{s:F(n0*k2,d0*k2+1), why:`Em cima foi ×${k2}, mas embaixo não: ${d0} × ${k2} = ${d0*k2}, não ${d0*k2+1}.`},{s:F(d0,n0), why:'Essa fração está de cabeça para baixo: os números trocaram de lugar.'},{s:F(n0*k2+1,d0*k2), why:`Embaixo foi ×${k2}, mas em cima deveria ser ${n0*k2}.`}].filter(f=>{ return true; });
+  const items=shuffle([...trues.map(t=>({...t,v:true})), ...shuffle(falses).slice(0,2).map(f=>({...f,v:false}))]);
+  return M3({q:`Observe a fração ${F(n0,d0)}.<br>Marque as ${B('três')} frações que são equivalentes a ela.`, items,
+    exp:['Fração equivalente vale a mesma coisa.', `Ela aparece quando multiplicamos (ou dividimos) ${B('em cima e embaixo pelo mesmo número')}.`], regra:'Equivalente: × ou ÷ em cima e embaixo pelo mesmo número. Somar não vale!'});
+};
+BAS.cf3 = () => {
+  const d=pick([4,6,8,10,12]); const opts=[]; for(let k=1;k<d;k++) if(gcd(k,d)>1) opts.push(k); const k=pick(opts); const [a,b]=red(k,d);
+  const fig=S('0 0 420 72', bar(d,k));
+  const w=[F(k,d-k), F(a+1,b+1), F(b-a,b), F(d-k,d)];
+  return {q:`A figura representa uma barra de cereal dividida em partes iguais. A parte pintada foi comida.<br>A fração ${B('equivalente')} à parte comida é`, fig,
+    ...alts(F(a,b), w.filter(x=>x!==F(a,b)), listExtra([F(a,b*2),F(a*3,b*2)])),
+    exp:[`A barra tem ${d} partes e ${k} estão pintadas: ${F(k,d)}.`, `Divida em cima e embaixo por ${k/a}: ${F(k,d)} = ${B(F(a,b))}.`, `Por que não ${F(k,d-k)}? O de baixo é o ${B('total')} de partes (${d}), não as partes que sobraram.`],
+    regra:'Denominador = total de partes. Numerador = partes pintadas.', ck: a/b===k/d};
+};
+
+/* 5. Soma e subtração de frações com denominadores diferentes */
+BAS.fo1 = () => {
+  const pairs=[[2,4],[2,6],[2,8],[3,6],[4,8],[2,10],[5,10],[3,9],[4,12],[3,12],[2,3],[3,4],[2,5]];
+  let [b,d]=shuffle(pick(pairs)); const sub=R(0,1)===1; let a=R(1,b-1), c=R(1,d-1);
+  const D=lcm(b,d); let N1=a*D/b, N2=c*D/d; if(sub && N1<=N2){ [a,b,c,d]=[c,d,a,b]; [N1,N2]=[N2,N1]; } if(sub&&N1===N2) return BAS.fo1();
+  const N=sub?N1-N2:N1+N2; if(!sub && N>D*1.6) return BAS.fo1();
+  const ctx=sub? pick([[`O tanque de uma moto estava com ${F(a,b)} de gasolina. Em uma viagem, foi gasto ${F(c,d)} do tanque.`,'Que fração do tanque ainda tem gasolina?'],[`${nm()} tinha ${F(a,b)} de uma pizza e deu ${F(c,d)} da pizza para a irmã.`,'Com que fração da pizza ficou?'],[`Uma garrafa tinha ${F(a,b)} de litro de suco. Foram tomados ${F(c,d)} de litro.`,'Que quantidade de suco sobrou, em litros?']])
+     : pick([[`Em uma receita, usa-se ${F(a,b)} de xícara de leite e ${F(c,d)} de xícara de água.`,'Ao todo, quanto de líquido vai na receita, em xícaras?'],[`${nm()} caminhou ${F(a,b)} de quilômetro de manhã e ${F(c,d)} de quilômetro à tarde.`,'Quanto caminhou no dia, em quilômetros?'],[`Em uma horta, ${F(a,b)} do terreno tem alface e ${F(c,d)} tem tomate.`,'Que fração do terreno tem alface ou tomate?']]);
+  const op=sub?'−':'+'; const wr1 = sub ? FR(Math.abs(a-c)||1, Math.abs(b-d)||1) : FR(a+c,b+d); const wr2 = FR(sub?Math.abs(a-c)||1:a+c, Math.max(b,d)); const wr3 = FR(sub?Math.abs(a-c)||1:a+c, b*d);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(FR(N,D),[wr1,wr2,wr3],listExtra([FR(N+1,D),FR(N,D*2)])),
+    exp:[`Os denominadores são diferentes (${b} e ${d}). Primeiro deixe os pedaços do ${B('mesmo tamanho')}.`, `Use o denominador ${D}: ${F(a,b)} = ${F(N1,D)} e ${F(c,d)} = ${F(N2,D)}.`, `Agora ${sub?'subtraia':'some'} só os de cima: ${N1} ${op} ${N2} = ${N}. Resultado: ${F(N,D)}${FR(N,D)!==F(N,D)?' = '+B(FR(N,D)):''}.`, `Por que não ${wr1}? Não se ${sub?'subtrai':'soma'} os de baixo! O denominador só diz o tamanho do pedaço.`],
+    regra:`Denominadores diferentes? Primeiro iguale. Depois ${sub?'subtraia':'some'} só os numeradores.`, ck: Math.abs((sub?a/b-c/d:a/b+c/d) - N/D)<1e-9};
+};
+BAS.fo2 = () => {
+  const b=pick([2,3,4,5,6]); let d=pick([2,3,4,5,6,8,10,12].filter(x=>x!==b)); const a=R(1,b-1), c=R(1,d-1); const D=lcm(b,d); if(D>24) return BAS.fo2();
+  const N=a*D/b + c*D/d;
+  return {q:`O resultado de ${F(a,b)} + ${F(c,d)} é`, ...alts(FR(N,D),[FR(a+c,b+d), FR(a+c,Math.max(b,d)), FR(a*c,b*d)],listExtra([FR(N+1,D),FR(N,D+1)])),
+    exp:[`Ache um denominador comum para ${b} e ${d}: ${D}.`, `${F(a,b)} = ${F(a*D/b,D)} e ${F(c,d)} = ${F(c*D/d,D)}.`, `Some os de cima: ${a*D/b} + ${c*D/d} = ${N}. Fica ${F(N,D)}${FR(N,D)!==F(N,D)?' = '+B(FR(N,D)):''}.`, `Por que não ${FR(a+c,b+d)}? Somar em cima e embaixo é o erro mais comum. O denominador não se soma!`],
+    regra:'Iguale os denominadores, some os numeradores, mantenha o denominador.', ck: Math.abs(a/b+c/d-N/D)<1e-9};
+};
+
+/* 6. Decimais com dinheiro */
+const LANCHE=[['Cachorro-quente',650,950],['Refrigerante em lata',450,650],['Pipoca',300,600],['Pastel',700,1100],['Suco natural',500,900],['Bolo de pote',800,1200],['Água',250,450],['Pão de queijo',350,600],['Açaí pequeno',1200,1800]];
+BAS.din1 = () => {
+  const its=shuffle(LANCHE).slice(0,3).map(([n,lo,hi])=>({n, p:R(lo/5,hi/5)*5, q:R(1,3)})); its[0].q=Math.max(2,its[0].q);
+  const tot=its.reduce((s,i)=>s+i.p*i.q,0); const pay=[2000,5000,10000].find(v=>v>tot+100)||10000; if(tot>=pay) return BAS.din1();
+  const troco=pay-tot, unit=its.reduce((s,i)=>s+i.p,0);
+  const wBorrow = (()=>{ const r=Math.floor(pay/100)-Math.floor(tot/100), c=Math.abs((pay%100)-(tot%100)); return r*100+c; })();
+  return {q:`Na festa junina da escola, ${nm()} comprou os itens do quadro a seguir e pagou com uma nota de ${money(pay)}.<br>Nessas condições, o troco recebido foi de`,
+    tbl:table(['Item','Preço de cada','Quantidade'], its.map(i=>[i.n,money(i.p),i.q])),
+    ...alts(money(troco),[money(tot), money(pay-unit), wBorrow!==troco?money(wBorrow):money(troco+100)],g=>money(troco+g*10)),
+    exp:[`Primeiro, o total de cada item (preço × quantidade): ${its.map(i=>`${money(i.p)} × ${i.q} = ${money(i.p*i.q)}`).join('; ')}.`, `Total da compra: ${B(money(tot))}.`, `Troco: ${money(pay)} − ${money(tot)} = ${B(money(troco))}.`, `Por que não ${money(tot)}? Esse é o valor da compra, e a pergunta é o ${B('troco')}.`],
+    regra:'Troco = valor pago − total da compra. Antes, multiplique preço × quantidade.', ck: pay-tot===troco};
+};
+BAS.din2 = () => {
+  const its=shuffle(LANCHE).slice(0,2).map(([n,lo,hi])=>({n, p:R(lo/5,hi/5)*5}));
+  const tot=its[0].p+its[1].p; const pay=tot<2000?2000:5000; const troco=pay-tot;
+  return LAC({q:`${nm()} comprou um ${its[0].n.toLowerCase()} de ${money(its[0].p)} e um ${its[1].n.toLowerCase()} de ${money(its[1].p)}, e pagou com uma nota de ${money(pay)}.<br>Complete as lacunas com os valores corretos.`,
+    text:`O total da compra foi {0} e o troco foi {1}.`, gaps:[money(tot),money(troco)], opts:chipSet([money(tot),money(troco)],[money(tot+100),money(troco-100>0?troco-100:troco+50),money(Math.abs(its[0].p-its[1].p)),money(troco+10)]),
+    exp:[`Some os preços, vírgula embaixo de vírgula: ${money(its[0].p)} + ${money(its[1].p)} = ${B(money(tot))}.`, `Troco: ${money(pay)} − ${money(tot)} = ${B(money(troco))}.`, 'Dica: confira somando o troco com a compra. Tem que dar o valor da nota.'],
+    regra:'Some e subtraia com vírgula embaixo de vírgula. Troco + compra = valor pago.', ck: tot+troco===pay});
+};
+
+/* 7. Critérios de divisibilidade */
+const divBy=(n,k)=>n%k===0;
+BAS.dv1 = () => {
+  const k=pick([2,3,5,10,3,9]); let ok; do{ ok=R(30,400)*k; }while(ok>999||ok<100);
+  const bad=()=>{ let n; do{ n=R(100,999); if(k===3||k===9){ const last=pick([3,6,9]); n=Math.floor(n/10)*10+last; } if(k===5) n=Math.floor(n/10)*10+pick([1,2,3,4,6,7,8,9]); if(k===10) n=Math.floor(n/10)*10+5; }while(divBy(n,k)); return n; };
+  const ctx=pick([[`Um professor quer organizar os alunos em grupos de ${k} pessoas, sem sobrar ninguém.`,'O número de alunos pode ser'],[`Uma fábrica embala parafusos em caixas com ${k} unidades, sem sobrar parafuso.`,'A quantidade de parafusos pode ser'],[`Qual dos números a seguir é divisível por ${k}?`,'']]);
+  const rule={2:'é par (termina em 0, 2, 4, 6 ou 8)',3:'a soma dos algarismos é divisível por 3',5:'termina em 0 ou em 5',9:'a soma dos algarismos é divisível por 9',10:'termina em 0'}[k];
+  const ds=uniq([bad(),bad(),bad(),bad()]).filter(x=>x!==ok).slice(0,3); const sum=n=>String(n).split('').reduce((s,c)=>s+ +c,0);
+  return {q:`${ctx[0]}${ctx[1]?'<br>'+ctx[1]:''}`, ...alts(fmt(ok),ds.map(fmt),g=>fmt(bad())),
+    exp:[`Um número é divisível por ${k} quando ${B(rule)}.`, ...(k===3||k===9?[`${fmt(ok)}: ${String(ok).split('').join(' + ')} = ${sum(ok)} → divisível por ${k}. ✔`, `Cuidado: terminar em 3, 6 ou 9 ${B('não')} garante nada. Tem que somar os algarismos!`]:[`${fmt(ok)} ${rule.replace('é par','é par').replace(/^termina/,'termina')}. ✔`]), `Resposta: ${B(fmt(ok))}.`],
+    regra:`Divisível por ${k}: ${rule}.`, ck: divBy(ok,k)};
+};
+BAS.dv2 = () => {
+  const N=pick([R(10,99)*6, R(10,99)*10, R(10,99)*15, R(10,99)*9, R(10,99)*4]); if(N>999||N<100) return BAS.dv2();
+  const tests=[[2,'2'],[3,'3'],[4,'4'],[5,'5'],[6,'6'],[9,'9'],[10,'10']].map(([k,s])=>({k,s:`${fmt(N)} é divisível por ${s}.`, v:divBy(N,k)}));
+  const sum=String(N).split('').reduce((s,c)=>s+ +c,0);
+  const why=k=>({2:N%2===0?'Termina em número par.':'Termina em número ímpar.',3:`Soma dos algarismos = ${sum}${sum%3===0?', que é divisível por 3.':', que não é divisível por 3.'}`,4:`Os dois últimos algarismos formam ${N%100}${(N%100)%4===0?', divisível por 4.':', que não é divisível por 4.'}`,5:N%5===0?'Termina em 0 ou 5.':'Não termina em 0 nem em 5.',6:N%6===0?'É par e divisível por 3.':'Para ser divisível por 6 precisa ser par E divisível por 3.',9:`Soma dos algarismos = ${sum}${sum%9===0?', divisível por 9.':', que não é divisível por 9.'}`,10:N%10===0?'Termina em 0.':'Não termina em 0.'})[k];
+  const T=tests.filter(t=>t.v), Fs=tests.filter(t=>!t.v); if(T.length<3||Fs.length<2) return BAS.dv2();
+  const items=shuffle([...shuffle(T).slice(0,3), ...shuffle(Fs).slice(0,2)]).map(t=>({s:t.s, v:t.v, why:why(t.k)}));
+  return M3({q:`Considere o número ${B(fmt(N))}.<br>Analise as afirmações a seguir e marque as ${B('três')} verdadeiras.`, items,
+    exp:['Use os critérios de divisibilidade, um de cada vez.', `Soma dos algarismos de ${fmt(N)}: ${String(N).split('').join(' + ')} = ${sum}.`], regra:'2: par. 3: soma divisível por 3. 5: termina em 0 ou 5. 6: divisível por 2 e por 3. 10: termina em 0.'});
+};
+
+/* 8. Plano cartesiano: localizar */
+const PLACES=['Lago','Horta','Loja','Pista','Quadra','Bica','Feira','Praça'];
+BAS.pc1 = () => {
+  let x,y; do{ x=R(1,7); y=R(1,7); }while(x===y);
+  const others=[[y,x]]; let gd=0; while(others.length<3&&gd++<500){ const c=[R(1,7),R(1,7)]; if([[x,y],...others].every(p=>Math.abs(p[0]-c[0])+Math.abs(p[1]-c[1])>=3 && !(Math.abs(p[1]-c[1])<1 && Math.abs(p[0]-c[0])<3))) others.push(c); } if(others.length<3||Math.abs(x-y)<3) return BAS.pc1();
+  const pts=shuffle([[x,y],...others]); const labs=shuffle(PLACES).slice(0,4);
+  const ai=pts.findIndex(p=>p[0]===x&&p[1]===y); const sw=pts.findIndex(p=>p[0]===y&&p[1]===x);
+  return {q:`A figura representa o mapa de um parque desenhado no plano cartesiano.<br>O local que está no ponto de coordenadas ${B(`(${x}, ${y})`)} é`,
+    fig:plane(pts.map((p,i)=>({x:p[0],y:p[1],lab:labs[i]}))), ...altsFixed(labs.map(l=>l+'.'), ai),
+    exp:[`No par (${x}, ${y}), o ${B('primeiro')} número é o x (anda para a direita).`, `O ${B('segundo')} é o y (sobe).`, `Ande ${x} para a direita e suba ${y}: chegamos em ${B(labs[ai])}.`, ...(sw>=0?[`Por que não ${labs[sw]}? Ele está em (${y}, ${x}): os números trocaram de lugar.`]:[])],
+    regra:'(x, y): primeiro anda na horizontal, depois sobe.', ck: true};
+};
+BAS.pc2 = () => {
+  let x,y; do{ x=R(1,7); y=R(1,7); }while(x===y);
+  const lab=pick(PLACES);
+  return {q:`Observe o ponto marcado no plano cartesiano a seguir.<br>As coordenadas do ponto ${lab} são`,
+    fig:plane([{x,y,lab}]), ...alts(`(${x}, ${y})`,[`(${y}, ${x})`,`(${x}, ${y+1>7?y-1:y+1})`,`(${x+1>7?x-1:x+1}, ${y})`],listExtra([`(${x-1||x+2}, ${y-1||y+2})`])),
+    exp:[`Do ponto, desça até o eixo x: chega no ${B(x)}.`, `Do ponto, vá até o eixo y: chega no ${B(y)}.`, `Coordenadas: ${B(`(${x}, ${y})`)}. Primeiro o x, depois o y.`, `Por que não (${y}, ${x})? É a ordem trocada, a pegadinha mais comum.`],
+    regra:'Coordenadas: (x, y). Primeiro a horizontal, depois a vertical.', ck: true};
+};
+
+/* 9. Noção de ângulo (giros) */
+BAS.gi1 = () => {
+  const fr=pick([[1,4,90],[1,2,180],[1,8,45],[1,3,120],[1,6,60]]); const n=R(2, Math.floor(360/fr[2])-0); const tot=fr[2]*n; if(tot>360) return BAS.gi1();
+  const ctx=pick([[`A catraca de um ônibus gira ${F(fr[0],fr[1])} de volta a cada passageiro que passa por ela.`,`Depois que ${n} passageiros passaram, a catraca girou, ao todo,`],[`Uma roda-gigante gira ${F(fr[0],fr[1])} de volta a cada parada.`,`Depois de ${n} paradas, ela girou, ao todo,`],[`Um robô de brinquedo gira ${F(fr[0],fr[1])} de volta cada vez que o botão é apertado.`,`Depois de ${n} apertos, o robô girou, ao todo,`]]);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(deg(tot),[deg(fr[2]), deg(Math.round(100/fr[1])*n), deg(360-tot===tot?tot+fr[2]:360-tot||tot+fr[2])],g=>deg(tot+g*fr[2])),
+    exp:[`Uma volta inteira tem ${B('360°')}.`, `${F(fr[0],fr[1])} de volta: 360° ÷ ${fr[1]} = ${fr[2]}°.`, `${n} vezes: ${fr[2]}° × ${n} = ${B(deg(tot))}.`, `Por que não ${deg(fr[2])}? Esse é o giro de uma vez só. Faltou multiplicar por ${n}.`],
+    regra:'Volta inteira = 360°. Meia volta = 180°. 1/4 de volta = 90°.', ck: tot===360/fr[1]*n};
+};
+BAS.gi2 = () => {
+  const t=pick([5,10,15,20,25,30,35,40,45,50,55]); const g=6*t;
+  return {q:`Em um relógio, o ponteiro dos minutos dá uma volta inteira em 60 minutos.<br>Em ${B(t+' minutos')}, esse ponteiro gira`, ...alts(deg(g),[deg(t), deg(360-g===g?g+30:360-g), deg(g/2)],gg=>deg(g+gg*30)),
+    exp:['Em 60 minutos o ponteiro gira 360°.', `Em 1 minuto: 360° ÷ 60 = 6°.`, `Em ${t} minutos: 6° × ${t} = ${B(deg(g))}.`, `Por que não ${deg(t)}? Minutos e graus são coisas diferentes: cada minuto vale 6°.`],
+    regra:'Ponteiro dos minutos: 6° por minuto. 15 min = 90°, 30 min = 180°.', ck: g===360*t/60};
+};
+BAS.gi3 = () => {
+  const D=['Norte','Leste','Sul','Oeste']; const s=R(0,3); const k=pick([1,2,3]); const hor=pick([true,false]); const e=(s+(hor?k:-k)+8)%4;
+  const kt={1:F(1,4)+' de volta',2:'meia volta',3:F(3,4)+' de volta'}[k];
+  const wrong=(s+(hor?-k:k)+8)%4;
+  return {q:`Um robô está virado para o ${B(D[s])}. Ele gira ${kt} no sentido ${hor?'horário (como os ponteiros do relógio)':'anti-horário (contrário aos ponteiros do relógio)'}.<br>Depois do giro, o robô fica virado para o`,
+    fig:S('0 0 200 200',`<circle class="f-off" cx="100" cy="100" r="70"/>`+L([100,30],[100,170],'f-thin')+L([30,100],[170,100],'f-thin')+T(100,16,'N',20,'f-txt f-bold')+T(100,188,'S',20,'f-txt f-bold')+T(186,100,'L',20,'f-txt f-bold')+T(14,100,'O',20,'f-txt f-bold'),'fig sm'),
+    ...altsFixed(D.map(x=>x+'.'), e),
+    exp:[`Cada ${F(1,4)} de volta passa para o próximo ponto: N → L → S → O (sentido horário).`, `${kt} = ${k} ${k===1?'passo':'passos'} ${hor?'no sentido horário':'no sentido anti-horário'}.`, `Do ${D[s]}, contando ${k}: chega no ${B(D[e])}.`, ...(k!==2?[`Por que não ${D[wrong]}? Esse seria o giro no sentido contrário.`]:[])],
+    regra:'1/4 de volta = 90° = um ponto cardeal. Horário: N → L → S → O.', ck: true};
+};
+
+/* 10. Porcentagem simples */
+const PROD=['uma bicicleta','um tênis','um fone de ouvido','uma mochila','um videogame','uma cadeira','um celular','uma jaqueta','uma bola oficial','um relógio'];
+BAS.pc_1 = () => {
+  const p=pick([10,20,25,50,30,40]); const V=(p===25?R(4,60)*20:R(5,60)*10)*(p===30||p===40?5:1); if(V>4000) return BAS.pc_1();
+  const d=V*p/100; const prod=pick(PROD);
+  return {q:`Uma loja anuncia ${B(p+'% de desconto')} em ${prod} que custa ${money(V*100)}.<br>O valor do desconto é de`, ...alts(money(d*100),[money((V-d)*100), money(p*100), money(d*200)],g=>money((d+g*V/20)*100)),
+    exp:[`${p}% quer dizer ${p} de cada 100.`, p===10?`10% é dividir por 10: ${fmt(V)} ÷ 10 = ${fmt(d)}.`: p===50?`50% é a metade: ${fmt(V)} ÷ 2 = ${fmt(d)}.`: p===25?`25% é a quarta parte: ${fmt(V)} ÷ 4 = ${fmt(d)}.`:`10% de ${fmt(V)} é ${fmt(V/10)}. Então ${p}% = ${fmt(V/10)} × ${p/10} = ${fmt(d)}.`, `Desconto: ${B(money(d*100))}.`, `Por que não ${money((V-d)*100)}? Esse é o ${B('preço final')} (já com desconto). A pergunta é só o desconto.`],
+    regra:'10% = ÷10. 50% = metade. 25% = ÷4. 20% = 2 × 10%.', ck: Math.abs(V*p/100-d)<1e-9};
+};
+BAS.pc_2 = () => {
+  const p=pick([10,20,25,50,30,40,60,75]); const N=pick([20,40,60,80,100,120,200,240,300,400,500]); const c=N*p/100; if(!Number.isInteger(c)) return BAS.pc_2();
+  const ctx=pick([[`Em uma escola com ${N} alunos, ${p}% praticam algum esporte.`,'O número de alunos que praticam esporte é'],[`Em uma pesquisa com ${N} pessoas, ${p}% disseram que preferem ler livros em papel.`,'O número de pessoas que preferem livros em papel é'],[`Um time disputou ${N} jogos e venceu ${p}% deles.`,'O número de jogos que esse time venceu é']]);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(fmt(c),[fmt(N-c), fmt(p), fmt(c*2===N?c+N/10:c*2)],g=>fmt(c+g*N/20)),
+    exp:[`${p}% = ${p} em cada 100.`, `10% de ${N} = ${N/10}.`, `${p}% = ${p/10} × ${N/10} = ${B(fmt(c))}.`, `Por que não ${fmt(N-c)}? Esses são os que ${B('não')} entram nos ${p}%.`],
+    regra:'Para achar a %: ache 10% (÷10) e multiplique.', ck: c===N*p/100};
+};
+
+/* 11. Grandezas: conversões */
+BAS.cv1 = () => {
+  const H=R(1,3), M=pick([5,10,15,20,25,30,35,40,45,50]); const c=60*H+M;
+  const thing=pick(['Um filme','Uma partida de vôlei','Uma viagem de ônibus','Um show','Uma aula de natação']);
+  return {q:`${thing} durou ${B(dur(c))}.<br>Essa duração, em minutos, corresponde a`, ...alts(fmt(c)+' min',[fmt(100*H+M)+' min', fmt(60*H)+' min', fmt(H>1?60+M:60*H+M+60)+' min'],g=>fmt(c+g*5)+' min'),
+    exp:[`Cada hora tem ${B('60 minutos')} (e não 100!).`, `${H} h = ${H} × 60 = ${60*H} min.`, `${60*H} + ${M} = ${B(fmt(c)+' min')}.`, `Por que não ${100*H+M} min? Aí a hora foi contada como 100 minutos.`],
+    regra:'1 hora = 60 minutos. Horas × 60 + minutos.', ck: c===H*60+M};
+};
+BAS.cv2 = () => {
+  const typ=pick(['L','kg']); const big=pick([1,1.5,2,2.5,3,3.5,4,5]); const small=pick([100,200,250,500]); const n=big*1000/small; if(!Number.isInteger(n)) return BAS.cv2();
+  const ctx = typ==='L' ? [`Uma garrafa tem ${B(dec(big)+' L')} de suco. ${nm()} vai encher copos de ${B(small+' mL')}.`,'Quantos copos ficarão cheios?'] : [`${nm()} tem ${B(dec(big)+' kg')} de arroz e vai separar em pacotes de ${B(small+' g')}.`,'Quantos pacotes ele vai conseguir fazer?'];
+  const u=typ==='L'?['L','mL']:['kg','g'];
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(fmt(n),[fmt(n*10), Math.floor(big)*1000/small!==n&&Math.floor(big)>0?fmt(Math.floor(big)*1000/small):fmt(n*2), fmt(n*2)],g=>fmt(n+g)),
+    exp:[`Primeiro, deixe tudo na mesma unidade: 1 ${u[0]} = 1 000 ${u[1]}.`, `${dec(big)} ${u[0]} = ${fmt(big*1000)} ${u[1]}.`, `${fmt(big*1000)} ÷ ${small} = ${B(fmt(n))}.`, `Por que não ${fmt(n*10)}? Aí 1 ${u[0]} foi contado como 10 000 ${u[1]}.`, ...(Math.floor(big)!==big&&Math.floor(big)>0?[`E não é ${fmt(Math.floor(big)*1000/small)}: o ${dec(big%1)} ${u[0]} depois da vírgula também conta!`]:[])],
+    regra:`1 ${u[0]} = 1 000 ${u[1]}. Converta antes de dividir.`, ck: n*small===big*1000};
+};
+BAS.cv3 = () => {
+  const typ=pick([['L','mL'],['kg','g'],['m','cm']]); const k=typ[0]==='m'?100:1000; const v=pick([1.5,2.5,0.5,0.75,1.25,3.2,2.4,4.5,0.25,1.8]); const c=Math.round(v*k);
+  const ctx={L:`Uma jarra tem capacidade de ${B(dec(v)+' L')}.`, kg:`Um pacote de farinha tem ${B(dec(v)+' kg')}.`, m:`Uma fita mede ${B(dec(v)+' m')}.`}[typ[0]];
+  return {q:`${ctx}<br>Essa medida, em ${typ[1]==='mL'?'mililitros':typ[1]==='g'?'gramas':'centímetros'}, corresponde a`, ...alts(fmt(c)+' '+typ[1],[fmt(c/10)+' '+typ[1], fmt(c*10)+' '+typ[1], fmt(Math.round(v*(k===1000?100:10)))+' '+typ[1]],g=>fmt(c+g*k/20)+' '+typ[1]),
+    exp:[`1 ${typ[0]} = ${fmt(k)} ${typ[1]}.`, `${dec(v)} × ${fmt(k)} = ${B(fmt(c))}. A vírgula anda ${k===1000?3:2} casas para a direita.`, `Por que não ${fmt(c/10)}? A vírgula andou uma casa a menos.`],
+    regra:`De ${typ[0]} para ${typ[1]}: multiplique por ${fmt(k)}.`, ck: Math.abs(v*k-c)<1e-9};
+};
+/* ====================== ADEQUADO ====================== */
+const ADE = {};
+/* 1. Problemas com inteiros (quadros) */
+ADE.iq1 = () => {
+  const ini=-R(2,40)*10; const ops=shuffle([['Depósito',1],['Saque',-1],['Pagamento de conta',-1],['Pix recebido',1],['Tarifa do banco',-1]]).slice(0,3);
+  const vals=ops.map(o=>o[1]*(o[0]==='Tarifa do banco'?R(1,4)*5:R(3,40)*10)); const fin=ini+vals.reduce((a,b)=>a+b,0);
+  const wIni=-ini+vals.reduce((a,b)=>a+b,0), wAll=ini+vals.reduce((a,b)=>a+Math.abs(b),0), wStop=ini+vals[0]+vals[1];
+  const mR=v=>(v<0?'−':'')+'R$ '+fmt(Math.abs(v))+',00';
+  return {q:`${nm()} anotou no quadro a seguir as movimentações da sua conta bancária em um dia. Valores negativos indicam saldo devedor.<br>Nessas condições, o saldo no fim do dia era de`,
+    tbl:table(['Movimentação','Valor'], [['Saldo no início do dia',mR(ini)], ...ops.map((o,i)=>[o[0], (vals[i]>0?'+ ':'− ')+'R$ '+fmt(Math.abs(vals[i]))+',00'])]),
+    ...alts(mR(fin),[mR(wIni),mR(wAll),mR(wStop)],g=>mR(fin+g*10)),
+    exp:[`Comece no saldo inicial: ${mR(ini)}.`, ...ops.map((o,i)=>`${o[0]}: ${vals[i]>0?'soma':'tira'} ${fmt(Math.abs(vals[i]))}.`), `Conta: ${sg(ini)} ${vals.map(v=>v<0?'− '+fmt(-v):'+ '+fmt(v)).join(' ')} = ${B(sg(fin))}.`, ...(ini<0?[`Cuidado: o saldo começou ${B('negativo')}. Quem esquece o sinal encontra ${mR(wIni)}.`]:[`Cuidado: saque e pagamento ${B('tiram')} dinheiro. Quem soma tudo encontra ${mR(wAll)}.`])],
+    regra:'Entrada de dinheiro: +. Saída: −. Saldo negativo é dívida.', ck: fin===ini+vals[0]+vals[1]+vals[2]};
+};
+ADE.iq2 = () => {
+  const hs=['6h','9h','12h','15h','18h']; let t; do{ t=[R(-6,-1)]; for(let i=1;i<5;i++) t.push(t[i-1]+pick([-1,1])*R(1,6)); }while(uniq(t).length<5 || Math.max(...t)<1 || t.filter(x=>x<0).length<2);
+  const mi=Math.min(...t), ma=Math.max(...t); const iMi=t.indexOf(mi), iMa=t.indexOf(ma);
+  const a=0, b=R(2,4); const sub=t[b]-t[a];
+  const cands=[
+    [`Às ${hs[iMi]}, foi registrada a menor temperatura do dia.`, true, `A menor é ${sg(mi)} °C, às ${hs[iMi]}.`],
+    [`Às ${hs[(iMi+1)%5]}, foi registrada a menor temperatura do dia.`, false, `Às ${hs[(iMi+1)%5]} fazia ${sg(t[(iMi+1)%5])} °C. A menor foi ${sg(mi)} °C, às ${hs[iMi]}.`],
+    [`Das ${hs[a]} às ${hs[b]}, a temperatura ${sub>=0?'subiu':'caiu'} ${Math.abs(sub)} °C.`, true, `De ${sg(t[a])} para ${sg(t[b])}: ${sg(t[b])} − ${par(t[a])} = ${sg(sub)}.`],
+    [`Das ${hs[a]} às ${hs[b]}, a temperatura ${sub>=0?'subiu':'caiu'} ${Math.abs(Math.abs(t[b])-Math.abs(t[a]))===Math.abs(sub)?Math.abs(sub)+2:Math.abs(Math.abs(t[b])-Math.abs(t[a]))} °C.`, false, `Faça ${sg(t[b])} − ${par(t[a])} = ${sg(sub)}. Não dá para tirar os números sem olhar o sinal.`],
+    [`A diferença entre a maior e a menor temperatura do dia foi de ${ma-mi} °C.`, true, `${sg(ma)} − ${par(mi)} = ${ma-mi} °C.`],
+    [`A diferença entre a maior e a menor temperatura do dia foi de ${ma+mi===ma-mi?ma-mi+3:Math.abs(ma+mi)} °C.`, false, `Do ${sg(mi)} até o 0 e do 0 até ${sg(ma)}: ${-mi} + ${ma} = ${ma-mi} °C.`],
+    [`Às ${hs[iMa]}, a temperatura estava acima de zero.`, ma>0, ma>0?`Às ${hs[iMa]} fazia ${sg(ma)} °C, acima de zero.`:'Não, ainda estava negativa.'],
+  ];
+  const T=cands.filter(c=>c[1]), Fa=cands.filter(c=>!c[1]); const nT=R(2,3); const items=shuffle([...shuffle(T).slice(0,nT),...shuffle(Fa).slice(0,4-nT)]).map(c=>({s:c[0],v:c[1],why:c[2]}));
+  return SN({q:`O quadro mostra as temperaturas registradas em uma cidade da serra, ao longo de um dia de inverno.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`,
+    tbl:table(['Horário',...hs],[['Temperatura',...t.map(x=>sg(x)+' °C')]]), items,
+    exp:['Para saber quanto mudou: valor final − valor inicial.','Se der positivo, subiu. Se der negativo, caiu.'], regra:'Variação = final − inicial. Com negativos, use a reta: conte os passos até o zero e depois do zero.'});
+};
+ADE.iq3 = () => {
+  const st=-R(1,3); const up=R(4,12), dn=R(2,9); const fin=st+up-dn;
+  const ctx=pick([['Um elevador estava no {s}º subsolo (andar {S}). Ele subiu {u} andares e depois desceu {d} andares.','O elevador parou no andar'],['Um submarino estava a {S0} m (abaixo do nível do mar). Ele subiu {u0} m e depois desceu {d0} m.','A nova posição do submarino, em metros, é']]);
+  const isE=ctx[0].includes('elevador'); const k=isE?1:10; const S0=st*k, U=up*k, D=dn*k, Fi=fin*k;
+  const q=ctx[0].replace('{s}',-st).replace('{S}',sg(st)).replace('{u}',up).replace('{d}',dn).replace('{S0}',sg(S0)).replace('{u0}',U).replace('{d0}',D);
+  return {q:`${q}<br>${ctx[1]}`, ...alts(sg(Fi),[sg(-S0+U-D), sg(S0+U+D), sg(S0-U+D)],g=>sg(Fi+g*k)),
+    exp:[`Comece em ${sg(S0)}.`, `Subir é somar: ${sg(S0)} + ${U} = ${sg(S0+U)}.`, `Descer é tirar: ${sg(S0+U)} − ${D} = ${B(sg(Fi))}.`, `Cuidado: o ponto de partida é ${B('negativo')}. Quem começa no ${fmt(-S0)} encontra ${sg(-S0+U-D)}.`],
+    regra:'Subir: +. Descer: −. Comece sempre do número com sinal.', ck: Fi===S0+U-D};
+};
+
+/* 2. MMC e MDC */
+ADE.mm1 = () => {
+  const pairs=[[10,15],[12,18],[15,20],[20,30],[12,16],[8,12],[6,10],[18,24],[15,25],[20,25],[10,25],[6,9],[16,24],[30,45],[40,60]];
+  const [a,b]=pick(pairs); const l=lcm(a,b); const st=R(6,9)*60+pick([0,0,15,30]);
+  const ctx=pick([[`Em uma fábrica, a sirene A toca a cada ${B(a+' minutos')} e a sirene B toca a cada ${B(b+' minutos')}. Às ${clock(st)}, as duas tocaram juntas.`,'Elas voltarão a tocar juntas, pela primeira vez, às'],[`Na rodoviária, o ônibus da linha 1 sai a cada ${B(a+' minutos')} e o da linha 2 a cada ${B(b+' minutos')}. Às ${clock(st)}, os dois saíram juntos.`,'Eles vão sair juntos de novo, pela primeira vez, às'],[`Um paciente toma um remédio a cada ${B(a+' minutos')} e mede a pressão a cada ${B(b+' minutos')}. Às ${clock(st)}, fez as duas coisas juntas.`,'Ele vai fazer as duas coisas juntas de novo, pela primeira vez, às']]);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(clock(st+l),[clock(st+a+b), clock(st+Math.abs(b-a)), clock(st+a*b)].filter(x=>x!==clock(st+l)),g=>clock(st+l+g*5)),
+    exp:[`Conte de ${a} em ${a}: ${Array.from({length:Math.min(6,l/a)},(_,i)=>(i+1)*a).join(', ')}…`, `Conte de ${b} em ${b}: ${Array.from({length:Math.min(6,l/b)},(_,i)=>(i+1)*b).join(', ')}…`, `O primeiro número que aparece nas duas listas é ${B(l)} minutos (MMC).`, `${clock(st)} + ${dur(l)} = ${B(clock(st+l))}.`, `Por que não ${clock(st+a+b)}? Somar ${a} + ${b} não garante que as duas coincidem.`],
+    regra:'Coincidir de novo = MMC (o primeiro múltiplo comum).', ck: l%a===0&&l%b===0};
+};
+ADE.mm2 = () => {
+  const g=pick([4,5,6,8,9,10,12,15]); let p,q; do{ p=R(2,9); q=R(2,9); }while(gcd(p,q)!==1||p===q); const A=g*p, Bv=g*q;
+  const it=pick([['lápis','borrachas','kits escolares'],['bombons','pirulitos','saquinhos de festa'],['camisetas','bonés','pacotes de doação'],['rosas','margaridas','buquês']]);
+  const cds=[]; for(let d=1; d<g; d++) if(g%d===0&&d>1) cds.push(d);
+  const w=[cds.length?cds[cds.length-1]:g/2, Math.abs(A-Bv), Math.min(A,Bv)].filter(x=>x!==g&&Number.isInteger(x)&&x>0);
+  return {q:`Uma loja tem ${B(A+' '+it[0])} e ${B(Bv+' '+it[1])}. Ela quer montar ${it[2]} iguais, usando todos os itens, sem sobrar nenhum.<br>O ${B('maior')} número de ${it[2]} que ela pode montar é`, ...alts(fmt(g),w.map(fmt),gg=>fmt(g+gg)),
+    exp:[`Precisamos de um número que divida ${A} e ${Bv} ao mesmo tempo, sem sobra.`, `Divisores de ${A}: ${Array.from({length:A},(_,i)=>i+1).filter(d=>A%d===0).join(', ')}.`, `Divisores de ${Bv}: ${Array.from({length:Bv},(_,i)=>i+1).filter(d=>Bv%d===0).join(', ')}.`, `O maior que aparece nas duas listas é ${B(g)} (MDC). Cada um terá ${p} ${it[0]} e ${q} ${it[1]}.`],
+    regra:'Dividir em partes iguais sem sobrar = divisor comum. O maior = MDC.', ck: A%g===0&&Bv%g===0&&gcd(A,Bv)===g};
+};
+ADE.mm3 = () => {
+  const e2=R(1,4), e3=R(0,2), e5=R(0,2), e7=pick([0,0,1]); const N=2**e2*3**e3*5**e5*7**e7; if(N<60||N>2000) return ADE.mm3();
+  const fac=[[2,e2],[3,e3],[5,e5],[7,e7]].filter(x=>x[1]).map(([p,e])=>e>1?`${p}<sup>${e}</sup>`:`${p}`).join(' × ');
+  const wfac=[[2,e2+1],[3,e3],[5,e5],[7,e7]].filter(x=>x[1]).map(([p,e])=>e>1?`${p}<sup>${e}</sup>`:`${p}`).join(' × ');
+  const pool=[[`${fmt(N)} pode ser decomposto como ${fac}.`, true, 'Multiplicando os fatores, dá exatamente '+fmt(N)+'.'],[`${fmt(N)} pode ser decomposto como ${wfac}.`, false, `Esse produto dá ${fmt(N*2)}, o dobro de ${fmt(N)}.`]];
+  [4,6,8,9,10,12,15,7,25,100].forEach(k=>pool.push([`${fmt(N)} é divisível por ${k}.`, N%k===0, N%k===0?`${fmt(N)} ÷ ${k} = ${fmt(N/k)}, sem resto.`:`${fmt(N)} ÷ ${k} deixa resto ${N%k}.`]));
+  pool.push([`${fmt(N)} é múltiplo de ${N%7===0?11:7}.`, false, `${fmt(N)} ÷ ${N%7===0?11:7} não é exata.`]);
+  const T=pool.filter(p=>p[1]), Fa=pool.filter(p=>!p[1]); if(T.length<3||Fa.length<2) return ADE.mm3();
+  const items=shuffle([...shuffle(T).slice(0,3),...shuffle(Fa).slice(0,2)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return M3({q:`O número ${B(fmt(N))} pode ser relacionado a outros números de diversas maneiras.<br>Analise as afirmações a seguir e marque as ${B('três')} verdadeiras.`, items,
+    exp:[`Fatorando: ${fmt(N)} = ${fac}.`,'Um número divide '+fmt(N)+' quando a divisão é exata (resto zero).'], regra:'Fatorar = escrever como produto de números primos. Múltiplo/divisível = divisão exata.'});
+};
+
+/* 3. Problemas com frações (soma e subtração) */
+ADE.fp1 = () => {
+  const dens=[[3,4],[4,6],[2,5],[3,5],[4,5],[3,8],[4,8],[6,4],[2,6],[5,10],[3,6],[2,3]];
+  const [b,d]=shuffle(pick(dens)); const a=R(1,b-1), c=R(1,d-1); const D=lcm(b,d); const used=a*D/b+c*D/d; if(used>=D) return ADE.fp1();
+  const left=D-used; const n1=nm(); let n2=nm(); while(n2===n1) n2=nm();
+  const ctx=pick([[`De uma pizza, ${n1} comeu ${F(a,b)} e ${n2} comeu ${F(c,d)}.`,'A fração da pizza que sobrou é'],[`Em uma corrida, ${n1} percorreu ${F(a,b)} do percurso correndo e ${F(c,d)} do percurso andando.`,'A fração do percurso que ainda falta é'],[`Do salário, ${n1} gastou ${F(a,b)} com aluguel e ${F(c,d)} com alimentação.`,'A fração do salário que sobrou é'],[`De um terreno, ${F(a,b)} foi usado para a horta e ${F(c,d)} para o jardim.`,'A fração do terreno que ainda está livre é']]);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(FR(left,D),[FR(used,D), FR(Math.max(1,(b+d)-(a+c)),b+d), FR(Math.max(1,D-(a+c)),D)],listExtra([FR(left+1,D),FR(left,D*2)])),
+    exp:[`Primeiro some as partes usadas. Iguale os denominadores: ${F(a,b)} = ${F(a*D/b,D)} e ${F(c,d)} = ${F(c*D/d,D)}.`, `Usado: ${F(used,D)}.`, `O inteiro é ${F(D,D)}. Sobra: ${F(D,D)} − ${F(used,D)} = ${F(left,D)}${FR(left,D)!==F(left,D)?' = '+B(FR(left,D)):''}.`, `Por que não ${FR(used,D)}? Essa é a parte ${B('usada')}. A pergunta é o que sobrou.`],
+    regra:'O inteiro vale 1 (todas as partes). Sobra = 1 − o que foi usado.', ck: Math.abs(1-a/b-c/d-left/D)<1e-9};
+};
+ADE.fp2 = () => {
+  let b=pick([3,4,5,6,8]); let d=pick([2,3,4,6,8,10,12].filter(x=>x!==b)); let a=R(1,b-1), c=R(1,d-1); if(a/b===c/d) return ADE.fp2(); if(a/b<c/d){ [a,b,c,d]=[c,d,a,b]; }
+  const D=lcm(b,d); if(D>24) return ADE.fp2(); const N=a*D/b-c*D/d; const n1=nm(); let n2=nm(); while(n2===n1) n2=nm();
+  const ctx=pick([[`Em uma eleição de grêmio, ${n1} recebeu ${F(a,b)} dos votos e ${n2} recebeu ${F(c,d)} dos votos.`,`A fração dos votos que ${n1} recebeu a mais que ${n2} é`],[`${n1} já leu ${F(a,b)} de um livro e ${n2} já leu ${F(c,d)} do mesmo livro.`,`A fração do livro que ${n1} leu a mais que ${n2} é`]]);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(FR(N,D),[FR(Math.abs(a-c)||1,Math.abs(b-d)||1), FR(a*D/b+c*D/d,D), FR(Math.abs(a-c)||1,D)],listExtra([FR(N+1,D),FR(N,D*2)])),
+    exp:[`"A mais" é uma subtração: ${F(a,b)} − ${F(c,d)}.`, `Iguale os denominadores: ${F(a*D/b,D)} − ${F(c*D/d,D)}.`, `${a*D/b} − ${c*D/d} = ${N}. Resultado: ${B(FR(N,D))}.`, `Por que não ${FR(Math.abs(a-c)||1,Math.abs(b-d)||1)}? Subtrair em cima e embaixo não vale!`],
+    regra:'Diferença de frações: iguale os denominadores e subtraia só os numeradores.', ck: Math.abs(a/b-c/d-N/D)<1e-9};
+};
+
+/* 4. Multiplicação e divisão de frações */
+ADE.fm1 = () => {
+  const fr=pick([[3,4],[2,3],[1,2],[3,5],[4,5],[2,5],[5,6],[3,8]]); const pt=pick([[1,2],[2,3],[1,3],[3,4],[1,4],[3,2],[2,1]]); const [a,b]=fr, [c,d]=pt;
+  const thing=pick([['xícara de açúcar','xícara'],['litro de leite','litro'],['quilograma de farinha','quilograma'],['xícara de chocolate em pó','xícara']]);
+  if(FR(a+c,b+d)===FR(a*c,b*d)||b*d/gcd(a*c,b*d)===1) return ADE.fm1();
+  const what = c===2&&d===1?'fazer o dobro da receita':c===3&&d===2?'fazer uma vez e meia a receita':`preparar apenas ${F(c,d)} dessa receita`;
+  const res=FR(a*c,b*d);
+  return {q:`Uma receita de bolo leva ${F(a,b)} de ${thing[0]}. ${nm()} vai ${what}.<br>A quantidade de que ela vai precisar é`, ...alts(res,[FR(a+c,b+d), F(c,d)===res?FR(a*d,b*c):FR(c,d), FR(a*d,b*c)],listExtra([FR(Math.abs(a*d-c*b)||1,b*d),FR(a*c,b*d*2)])),
+    exp:[`"${F(c,d)} da receita" quer dizer ${F(c,d)} ${B('de')} ${F(a,b)}. "De" vira multiplicação.`, `${F(c,d)} × ${F(a,b)}: em cima ${c} × ${a} = ${c*a}; embaixo ${d} × ${b} = ${d*b}.`, `${F(c*a,d*b)}${res!==F(c*a,d*b)?' = '+B(res):''} de ${thing[1]}.`, `Por que não ${FR(a+c,b+d)}? Somar em cima e embaixo não é multiplicar.`],
+    regra:'Fração de fração: multiplique em cima com em cima e embaixo com embaixo.', ck: true};
+};
+ADE.fm2 = () => {
+  const k=pick([2,3,4,5,8,10]); const n=R(2,9); const c=n*k;
+  const ctx=pick([[`Uma jarra tem ${B(n+' litros')} de suco. Cada copo leva ${F(1,k)} de litro.`,'O número de copos que dá para encher é'],[`${nm()} tem ${B(n+' kg')} de amendoim e vai fazer saquinhos de ${F(1,k)} de kg.`,'O número de saquinhos que ele vai fazer é'],[`Uma fita de ${B(n+' metros')} será cortada em pedaços de ${F(1,k)} de metro.`,'O número de pedaços que serão obtidos é']]);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(fmt(c),[Number.isInteger(n/k)?fmt(n/k):dec(n/k,2), fmt(n+k), fmt(c*2)],g=>fmt(c+g)),
+    exp:[`Quantos ${F(1,k)} cabem em 1 inteiro? ${B(k)}.`, `Em ${n} inteiros: ${n} × ${k} = ${B(fmt(c))}.`, `Isso é a divisão ${n} ÷ ${F(1,k)} = ${n} × ${k}.`, `Por que não ${Number.isInteger(n/k)?fmt(n/k):dec(n/k,2)}? Aí foi feita ${n} ÷ ${k}, mas os pedaços são ${B('pequenos')}: cabem muitos!`],
+    regra:'Dividir por 1/k é o mesmo que multiplicar por k.', ck: c===n*k};
+};
+ADE.fm3 = () => {
+  const [a,b]=pick([[2,3],[3,4],[3,5],[1,2],[2,5],[4,5]]); const [c,d]=pick([[1,4],[1,3],[2,3],[1,2],[3,4],[1,5]]); const T=b*d*R(4,15);
+  const g1=pick([['alunos','são meninas','das meninas joga vôlei','meninas que jogam vôlei'],['funcionários','trabalham no turno da manhã','desses trabalham no setor de vendas','funcionários da manhã que trabalham nas vendas'],['livros','são de ficção','dos de ficção são de aventura','livros de aventura']]);
+  const c1=T*a/b, c2=c1*c/d;
+  return {q:`Uma escola tem ${fmt(T)} ${g1[0]}. Desses, ${F(a,b)} ${g1[1]}, e ${F(c,d)} ${g1[2]}.<br>O número de ${g1[3]} é`.replace('Uma escola tem '+fmt(T)+' funcionários','Uma empresa tem '+fmt(T)+' funcionários').replace('Uma escola tem '+fmt(T)+' livros','Uma biblioteca tem '+fmt(T)+' livros'),
+    ...alts(fmt(c2),[fmt(c1), fmt(T*c/d), fmt(c1-c2)],g=>fmt(c2+g*T/(b*d))),
+    exp:[`Primeiro: ${F(a,b)} de ${fmt(T)} = ${fmt(T)} ÷ ${b} × ${a} = ${fmt(c1)}.`, `Depois: ${F(c,d)} de ${fmt(c1)} = ${fmt(c1)} ÷ ${d} × ${c} = ${B(fmt(c2))}.`, `Por que não ${fmt(T*c/d)}? A segunda fração é ${B('de uma parte')}, e não do total.`],
+    regra:'Fração de fração: calcule por partes, sempre sobre o grupo certo.', ck: Math.abs(T*a/b*c/d-c2)<1e-9};
+};
+
+/* 5. Decimais: multiplicação, divisão, estimativa */
+const FEIRA=[['tomate',500,900],['batata',400,700],['cebola',350,650],['banana',400,800],['maçã',700,1200],['cenoura',300,600],['uva',900,1500]];
+ADE.dm1 = () => {
+  const [p1,p2]=shuffle(FEIRA).slice(0,2).map(([n,lo,hi])=>({n,p:R(lo/10,hi/10)*10})); const w1=pick([1.5,2.5,0.5,1.25,0.75]), w2=pick([2.25,1.5,0.5,3.5,1.75,2.5]);
+  const c1=Math.round(p1.p*w1), c2=Math.round(p2.p*w2); if(p1.p*w1!==c1||p2.p*w2!==c2) return ADE.dm1(); const tot=c1+c2;
+  const wA=p1.p+p2.p, wB=p1.p*Math.floor(w1)+p2.p*Math.floor(w2), wC=c1+Math.round(p2.p*Math.floor(w2)+ (w2%1)*100);
+  return {q:`Na feira, o quilograma de ${p1.n} custa ${money(p1.p)} e o quilograma de ${p2.n} custa ${money(p2.p)}. ${nm()} comprou ${dec(w1)} kg de ${p1.n} e ${dec(w2)} kg de ${p2.n}.<br>Nessas condições, o valor gasto nessa compra foi de`,
+    ...alts(money(tot),[money(wA),money(wB),money(wC)],g=>money(tot+g*35)),
+    exp:[`${p1.n}: ${money(p1.p)} × ${dec(w1)} = ${money(c1)}.`, `${p2.n}: ${money(p2.p)} × ${dec(w2)} = ${money(c2)}.`, `Total: ${money(c1)} + ${money(c2)} = ${B(money(tot))}.`, `Cuidado com a parte depois da vírgula do peso: ${dec(w1)} kg é ${Math.floor(w1)?Math.floor(w1)+' kg e ':''}mais ${dec(w1%1)} kg. Quem usa só a parte inteira encontra ${money(wB)}.`],
+    regra:'Preço do kg × peso = valor pago. Decimal × decimal: conte as casas depois da vírgula.', ck: Math.abs(p1.p*w1+p2.p*w2-tot)<1e-9};
+};
+ADE.dm2 = () => {
+  const L=R(20,55), pr=R(530,699); const tot=L*pr; const q=pr;
+  const wA=Math.round(tot/(Math.round(L/10)*10)); const wB=Math.floor(pr/100)*100+ (pr%100<10?pr%100*10:Math.floor((pr%100)/10)); const wC=Math.floor(tot/100/L)*100+(tot%100);
+  const cands=uniq([wA,wB,wC,pr+10,pr-10]).filter(v=>v!==pr&&v>400&&v<800).slice(0,3);
+  return {q:`Em um posto de combustível, ${nm()} abasteceu ${L} litros de gasolina e pagou ${money(tot)}.<br>O preço de cada litro de gasolina nesse posto era de`, ...alts(money(pr),cands.map(money),g=>money(pr+g*7)),
+    exp:[`Preço do litro = total ÷ litros.`, `${money(tot)} ÷ ${L} = ${B(money(pr))}.`, `Confira: ${money(pr)} × ${L} = ${money(tot)}. ✔`, `Dica: aproxime para conferir. ${L} litros a uns R$ ${Math.round(pr/100)} dá perto de R$ ${fmt(L*Math.round(pr/100))}.`],
+    regra:'Valor de 1 unidade = total ÷ quantidade. Confira multiplicando de volta.', ck: L*pr===tot};
+};
+ADE.dm3 = () => {
+  const it0=pick([['queijo',3500,6500],['carne moída',3000,4500],['frango',1400,2400],['peixe',2800,5500],['presunto',3000,5000]]); const p=R(it0[1]/10,it0[2]/10)*10, w=pick([1.5,2.5,0.5,0.75,1.25,2]); const c=p*w; if(!Number.isInteger(c)) return ADE.dm3(); const pay=[5000,10000,20000].find(v=>v>c+200)||20000; const tr=pay-c;
+  const it=it0[0];
+  return LAC({q:`Em um mercado, o quilograma de ${it} custa ${money(p)}. ${nm()} comprou ${dec(w)} kg e pagou com uma nota de ${money(pay)}.<br>Complete as lacunas com os valores corretos.`,
+    text:'A compra custou {0} e o troco foi {1}.', gaps:[money(c),money(tr)], opts:chipSet([money(c),money(tr)],[money(p*Math.floor(w)||p),money(pay-(p*Math.floor(w)||p)),money(c*10),money(Math.round(c/10))]),
+    exp:[`${money(p)} × ${dec(w)} = ${B(money(c))}.`, `Troco: ${money(pay)} − ${money(c)} = ${B(money(tr))}.`, `Dica: ${dec(w)} kg ${w<1?'é menos de 1 kg, então custa menos que '+money(p):'é mais de '+Math.floor(w)+' kg, então custa mais que '+money(p*Math.floor(w))}.`],
+    regra:'Preço do kg × peso. Depois, troco = pago − compra.', ck: Math.abs(p*w-c)<1e-9});
+};
+ADE.dm4 = () => {
+  const its=Array.from({length:3},()=>R(5,40)*100-pick([10,5,1])); const tot=its.reduce((a,b)=>a+b,0); const est=its.reduce((a,b)=>a+Math.round(b/100),0);
+  const ctx=pick(['uma camiseta, uma bermuda e um boné','um caderno, uma mochila e um estojo','um livro, um jogo e uma revista']);
+  return {q:`${nm()} comprou ${ctx} pelos preços ${its.map(money).join(', ')}.<br>Arredondando os preços para o real mais próximo, o valor ${B('aproximado')} gasto foi de`, ...alts('R$ '+fmt(est)+',00',['R$ '+fmt(est-3)+',00','R$ '+fmt(est+10)+',00','R$ '+fmt(its.reduce((a,b)=>a+Math.floor(b/100),0)-(est-its.reduce((a,b)=>a+Math.floor(b/100),0)===3?1:0))+',00'],g=>'R$ '+fmt(est+g*5)+',00'),
+    exp:[`Arredonde cada preço: ${its.map(v=>`${money(v)} ≈ R$ ${Math.round(v/100)}`).join('; ')}.`, `Some: ${its.map(v=>Math.round(v/100)).join(' + ')} = ${B('R$ '+fmt(est))}.`, `O valor exato é ${money(tot)}: bem perto!`, `Cuidado: ${money(its[0])} fica mais perto de R$ ${Math.round(its[0]/100)} do que de R$ ${Math.floor(its[0]/100)}.`],
+    regra:'Arredondar: olhe os centavos. 50 ou mais, sobe; menos de 50, fica.', ck: Math.abs(tot/100-est)<2};
+};
+
+/* 6. Porcentagem: desconto e acréscimo */
+ADE.pa1 = () => {
+  const p=pick([10,15,20,25,30,40]); const V=R(6,90)*20; const d=V*p/100; if(!Number.isInteger(d)) return ADE.pa1(); const fin=V-d; const prod=pick(PROD);
+  return {q:`${prod[0].toUpperCase()+prod.slice(1)} custa ${money(V*100)}. Para pagamento à vista, a loja dá ${B(p+'% de desconto')}.<br>Nessas condições, o preço à vista é de`, ...alts(money(fin*100),[money(d*100), money((V-p)*100), money((V+d)*100)],g=>money((fin+g*V/20)*100)),
+    exp:[`Primeiro, o desconto: ${p}% de ${fmt(V)}.`, p===10?`10% é dividir por 10: ${fmt(V)} ÷ 10 = ${dec(d)}.`:`10% de ${fmt(V)} = ${dec(V/10)}. Então ${p}% = ${dec(V/10)} × ${dec(p/10)} = ${dec(d)}.`, `Preço à vista: ${fmt(V)} − ${dec(d)} = ${B(money(fin*100))}.`, `Por que não ${money((V-p)*100)}? Tirar ${p} reais é diferente de tirar ${p}%.`],
+    regra:'Preço com desconto = preço − (porcentagem do preço).', ck: fin===V*(100-p)/100};
+};
+ADE.pa2 = () => {
+  const p=pick([10,20,25,50,5,15]); const ctx=pick([[`A meta de uma Unidade de Saúde era aplicar {V} doses de vacina no mês. Por causa da procura, a meta foi aumentada em {p}%.`,'A nova meta passou a ser de','doses'],[`Uma obra estava prevista para durar {V} dias. Por causa das chuvas, o prazo aumentou {p}%.`,'O novo prazo da obra é de','dias'],[`Uma escola tinha {V} alunos matriculados. Neste ano, o número de alunos aumentou {p}%.`,'O número de alunos neste ano é de','alunos']]);
+  const V=pick([40,60,80,120,200,240,300,400,600,800,1200]); const inc=V*p/100; if(!Number.isInteger(inc)) return ADE.pa2(); const fin=V+inc;
+  return {q:`${ctx[0].replace('{V}',fmt(V)).replace('{p}',p)}<br>${ctx[1]}`, ...alts(fmt(fin)+' '+ctx[2],[fmt(inc)+' '+ctx[2], fmt(V+p)+' '+ctx[2], fmt(V-inc)+' '+ctx[2]],g=>fmt(fin+g*V/20)+' '+ctx[2]),
+    exp:[`Primeiro, quanto é ${p}% de ${fmt(V)}: ${fmt(inc)}.`, `Aumentou, então soma: ${fmt(V)} + ${fmt(inc)} = ${B(fmt(fin))}.`, `Por que não ${fmt(inc)}? Esse é só o ${B('aumento')}. Faltou somar com o valor de antes.`],
+    regra:'Aumento de p%: valor + (p% do valor). Porcentagem não é só sobre dinheiro!', ck: fin===V*(100+p)/100};
+};
+ADE.pa3 = () => {
+  const p=pick([10,20,25,30,15]); const V=R(8,60)*20; const d=V*p/100; if(!Number.isInteger(d)) return ADE.pa3(); const fin=V-d; const prod=pick(PROD);
+  return LAC({q:`Em uma promoção, ${prod} de ${money(V*100)} está com ${B(p+'% de desconto')}.<br>Complete as lacunas com os valores corretos.`, text:'O desconto é de {0} e o preço com desconto fica {1}.',
+    gaps:[money(d*100),money(fin*100)], opts:chipSet([money(d*100),money(fin*100)],[money(p*100),money((V-p)*100),money((V+d)*100),money(d*200)]),
+    exp:[`${p}% de ${fmt(V)}: ache 10% (${dec(V/10)}) e multiplique por ${dec(p/10)}: ${B(money(d*100))}.`, `Preço com desconto: ${fmt(V)} − ${dec(d)} = ${B(money(fin*100))}.`],
+    regra:'Desconto = % do preço. Preço final = preço − desconto.', ck: d+fin===V});
+};
+
+/* 7. Proporcionalidade direta */
+ADE.pr1 = () => {
+  const ctx=pick([['Uma receita de bolo usa {a} g de farinha para {p} pessoas.','Para {q} pessoas, a quantidade de farinha deve ser de','g'],['Um carro percorre {a} km com {p} litros de combustível.','Com {q} litros, mantendo o mesmo consumo, ele percorre','km'],['Uma máquina fabrica {a} peças em {p} horas.','Em {q} horas, no mesmo ritmo, ela fabrica','peças'],['Para pintar {p} m² de parede são usados {a} mL de tinta.','Para pintar {q} m², são necessários','mL']]);
+  const p=pick([2,3,4,5,6,8]); const u=R(3,30)*(ctx[2]==='mL'?20:ctx[2]==='g'?25:5); const a=u*p; let q; do{ q=R(2,15); }while(q===p); const c=u*q;
+  return {q:`${ctx[0].replace('{a}',fmt(a)).replace('{p}',p)}<br>${ctx[1].replace('{q}',q)}`, ...alts(fmt(c)+' '+ctx[2],[fmt(a+(q-p))+' '+ctx[2], fmt(u)+' '+ctx[2], fmt(Math.abs(u*(q-p)))+' '+ctx[2]],g=>fmt(c+g*u)+' '+ctx[2]),
+    exp:[`Primeiro, ache o valor para ${B('1')}: ${fmt(a)} ÷ ${p} = ${fmt(u)}.`, `Depois, multiplique por ${q}: ${fmt(u)} × ${q} = ${B(fmt(c))}.`, `Por que não ${fmt(a+(q-p))}? Em grandezas proporcionais não se ${B('soma')} a diferença: se uma dobra, a outra dobra.`],
+    regra:'Grandezas diretamente proporcionais: ache o valor de 1 e multiplique.', ck: c*p===a*q};
+};
+ADE.pr2 = () => {
+  const u=pick([250,350,450,600,750,1200,1500,180,240]); const qs=uniq([1,pick([2,3]),pick([4,5,6]),pick([8,10,12])]).sort((a,b)=>a-b); if(qs.length<4) return ADE.pr2();
+  const it=pick(['caderno','ingresso','pacote de figurinhas','sorvete']); const hide=[2,3];
+  const cells=qs.map((q,i)=>hide.includes(i)?'?':money(u*q));
+  return LAC({q:`O quadro mostra o preço a pagar de acordo com a quantidade de ${it}s comprados, sempre pelo mesmo preço de cada um.<br>Complete as lacunas com os valores corretos.`,
+    tbl:table(['Quantidade',...qs.map(String)],[['Preço',...cells]]), text:`Com ${qs[2]} ${it}s, paga-se {0}. Com ${qs[3]} ${it}s, paga-se {1}.`,
+    gaps:[money(u*qs[2]),money(u*qs[3])], opts:chipSet([money(u*qs[2]),money(u*qs[3])],[money(u*qs[1]+u*(qs[2]-qs[1])*0+u),money(u*(qs[3]+1)),money(u*qs[2]+qs[3]-qs[2]),money(u*qs[3]/2+u)]),
+    exp:[`Preço de 1: ${money(u)}.`, `${qs[2]} × ${money(u)} = ${B(money(u*qs[2]))}.`, `${qs[3]} × ${money(u)} = ${B(money(u*qs[3]))}.`],
+    regra:'Em um quadro de proporção, divida para achar o valor de 1 e multiplique.', ck:true});
+};
+
+/* 8. Razão e partilha */
+ADE.pt1 = () => {
+  const [a,b]=pick([[1,2],[2,3],[3,4],[4,5],[2,5],[3,5],[1,3],[5,7],[3,7]]); const k=R(5,60)*(R(0,1)?2:1); const T=(a+b)*k;
+  const ctx=pick([[`Em uma escola, a razão entre o número de meninos e o número de meninas é de ${a} para ${b}. A escola tem ${fmt(T)} alunos.`,'O número de meninas é',b],[`Em uma loja, a razão entre bicicletas e patinetes vendidos é de ${a} para ${b}. Foram vendidos ${fmt(T)} itens.`,'O número de bicicletas vendidas é',a],[`Em uma receita de tinta, a razão entre tinta branca e tinta azul é de ${a} para ${b}. Serão feitos ${fmt(T)} mL de mistura.`,'A quantidade de tinta azul, em mL, é',b]]);
+  const c=ctx[2]*k, other=(a+b-ctx[2])*k;
+  const w=[other, Number.isInteger(T/ctx[2])?T/ctx[2]:T/2, T/2].filter(x=>x!==c&&Number.isInteger(x));
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(fmt(c),w.map(fmt),g=>fmt(c+g*k)),
+    exp:[`Razão ${a} para ${b}: a cada ${a+b} partes, ${a} ${a===1?'é':'são'} de um tipo e ${b} do outro.`, `Uma parte: ${fmt(T)} ÷ ${a+b} = ${fmt(k)}.`, `${ctx[2]} partes: ${fmt(k)} × ${ctx[2]} = ${B(fmt(c))}.`, `Por que não ${fmt(other)}? Esse é o ${B('outro')} grupo. Leia com atenção qual grupo a pergunta pede.`],
+    regra:`Razão a : b → divida o total por (a + b) e multiplique pela parte pedida.`, ck: c+other===T};
+};
+ADE.pt2 = () => {
+  const [a,b]=pick([[2,1],[3,1],[3,2],[4,1],[5,2],[4,3]]); const F1=R(2,12)*a*50; const k=F1/a; const c=k*b;
+  const ctx=pick([['farinha','açúcar','g'],['água','suco concentrado','mL'],['areia','cimento','kg']]);
+  return {q:`Em uma mistura, a razão entre ${ctx[0]} e ${ctx[1]} é de ${a} para ${b}. Foram usados ${fmt(F1)} ${ctx[2]} de ${ctx[0]}.<br>A quantidade de ${ctx[1]} que deve ser usada é de`, ...alts(fmt(c)+' '+ctx[2],[fmt(F1*b)+' '+ctx[2], fmt(F1/(a+b)*b)===fmt(c)?fmt(c+k)+' '+ctx[2]:fmt(Math.round(F1/(a+b)*b))+' '+ctx[2], fmt(F1-(a-b)*50)+' '+ctx[2]],g=>fmt(c+g*k/2)+' '+ctx[2]),
+    exp:[`Razão ${a} para ${b}: para cada ${a} de ${ctx[0]}, vão ${b} de ${ctx[1]}.`, `${fmt(F1)} ÷ ${a} = ${fmt(k)} (uma parte).`, `${ctx[1]}: ${fmt(k)} × ${b} = ${B(fmt(c)+' '+ctx[2])}.`],
+    regra:'Razão: descubra quanto vale uma parte e multiplique.', ck: c*a===F1*b};
+};
+
+/* 9. Equações do 1º grau */
+ADE.eq1 = () => {
+  const a=R(2,9), x=R(2,15), b=R(1,20)*pick([1,-1]); const c=a*x+b;
+  const eqs=`${a}x ${b<0?'−':'+'} ${Math.abs(b)} = ${sg(c)}`;
+  const w=[(c+b)/a, c-b, (c-b)*a, c/a-b].filter(v=>Number.isInteger(v)&&v!==x);
+  return {q:`O valor de x que torna verdadeira a igualdade ${B(eqs)} é`, ...alts(sg(x),w.map(sg),g=>sg(x+g)),
+    exp:[`Isole o x. Primeiro ${b<0?'some '+Math.abs(b)+' nos dois lados':'tire '+b+' dos dois lados'}: ${a}x = ${sg(c)} ${b<0?'+':'−'} ${Math.abs(b)} = ${sg(c-b)}.`, `Depois divida os dois lados por ${a}: x = ${sg(c-b)} ÷ ${a} = ${B(sg(x))}.`, `Confira: ${a} × ${x} ${b<0?'−':'+'} ${Math.abs(b)} = ${sg(c)}. ✔`],
+    regra:'Equação: faça a mesma operação dos dois lados até o x ficar sozinho.', ck: a*x+b===c};
+};
+ADE.eq2 = () => {
+  const a=R(2,6), x=R(3,20), b=R(2,30); const c=a*x+b; const who=nm();
+  return {q:`${who} pensou em um número. Multiplicou esse número por ${a} e, ao resultado, somou ${b}. Obteve ${c}.<br>O número em que ${who} pensou é`, ...alts(fmt(x),[fmt((c+b)/a===x?x+2:Number.isInteger((c+b)/a)?(c+b)/a:c-b), fmt(c-b), fmt(Number.isInteger(c/a)?c/a:x+1)],g=>fmt(x+g)),
+    exp:[`Escreva como equação: ${a} × n + ${b} = ${c}.`, `Desfaça de trás para frente: tire ${b}: ${c} − ${b} = ${c-b}.`, `Agora divida por ${a}: ${c-b} ÷ ${a} = ${B(x)}.`, `Por que não ${c-b}? Faltou desfazer a multiplicação por ${a}.`],
+    regra:'Para descobrir o número: desfaça as operações na ordem contrária.', ck: a*x+b===c};
+};
+
+/* 10. Sequências */
+ADE.sq1 = () => {
+  const st=R(-6,12), d=pick([-5,-4,-3,-2,2,3,4,5]); const seq=Array.from({length:6},(_,i)=>st+i*d); if(!seq.some(v=>v<0)) return ADE.sq1(); const h=R(2,4); const c=seq[h];
+  const shown=seq.map((v,i)=>i===h?'___':sg(v)).join(', ');
+  return {q:`Observe a sequência numérica a seguir, em que cada termo é obtido somando sempre o mesmo número ao anterior.<br>${B(shown+', …')}<br>O número que completa a sequência é`, ...alts(sg(c),[sg(-c||c+2*d), sg(c+d), sg(c-d)],g=>sg(c+g)),
+    exp:[`Descubra o "pulo": ${sg(seq[1])} − ${par(seq[0])} = ${sg(d)}.`, `Do termo antes da lacuna: ${sg(seq[h-1])} ${d<0?'−':'+'} ${Math.abs(d)} = ${B(sg(c))}.`, `Confira com o próximo: ${sg(c)} ${d<0?'−':'+'} ${Math.abs(d)} = ${sg(seq[h+1])}. ✔`, ...(Math.sign(seq[h-1])!==Math.sign(c)&&c!==0?[`Atenção: a sequência ${B('passa pelo zero')}. Use a reta: de ${sg(seq[h-1])}, ande ${Math.abs(d)} ${d<0?'para a esquerda':'para a direita'}.`]:[])],
+    regra:'Sequência com pulo fixo: descubra o pulo e repita.', ck: seq[h+1]-c===d};
+};
+ADE.sq2 = () => {
+  const a=R(2,7), b=R(-5,9); const n=pick([8,10,12,15,20,25]); const c=a*n+b; if(b===0) return ADE.sq2();
+  const lei=`${a}n ${b<0?'−':'+'} ${Math.abs(b)}`;
+  return {q:`Em uma sequência, cada termo pode ser calculado pela expressão ${B(lei)}, em que n é a posição do termo (n = 1 para o primeiro termo).<br>O ${n}º termo dessa sequência é`, ...alts(sg(c),[sg(a*n), sg((a+b)*n), sg(a*(n+b))],g=>sg(c+g*a)),
+    exp:[`Troque o n por ${n}: ${a} × ${n} ${b<0?'−':'+'} ${Math.abs(b)}.`, `Primeiro a multiplicação: ${a} × ${n} = ${a*n}.`, `Depois: ${a*n} ${b<0?'−':'+'} ${Math.abs(b)} = ${B(sg(c))}.`, `Por que não ${sg(a*n)}? Faltou a parte ${b<0?'−':'+'} ${Math.abs(b)} da expressão.`],
+    regra:'Lei da sequência: troque n pela posição e faça as contas (× antes de + e −).', ck: c===a*n+b};
+};
+ADE.sq3 = () => {
+  const f=pick([['palitos','quadradinhos encostados',3,4],['palitos','triângulos encostados',2,3],['cadeiras','mesas encostadas',4,6],['cadeiras','mesas encostadas',2,4]]); const d=f[2], a1=f[3]; const n=R(5,12); const c=a1+d*(n-1);
+  return {q:`Em uma sequência de figuras, a 1ª figura usa ${a1} ${f[0]} e cada nova figura acrescenta ${d} ${f[0]}, formando ${f[1]}.<br>O quadro mostra as primeiras figuras.<br>O número de ${f[0]} da ${n}ª figura é`,
+    tbl:table(['Figura','1ª','2ª','3ª','4ª'],[[f[0][0].toUpperCase()+f[0].slice(1),a1,a1+d,a1+2*d,a1+3*d]]),
+    ...alts(fmt(c),[fmt(a1*n), fmt(a1+d*n), fmt(d*n)],g=>fmt(c+g)),
+    exp:[`Da 1ª figura para a ${n}ª, há ${n-1} acréscimos.`, `${n-1} × ${d} = ${d*(n-1)}.`, `${a1} + ${d*(n-1)} = ${B(fmt(c))}.`, `Por que não ${fmt(a1+d*n)}? Aí foram contados ${n} acréscimos, mas a 1ª figura já começa com ${a1}.`],
+    regra:'Figura n = primeira + (n − 1) × acréscimo.', ck: c===a1+d*(n-1)};
+};
+
+/* 11. Triângulos e ângulos */
+ADE.tr1 = () => {
+  let a,b; do{ a=R(3,15)*5; b=R(3,15)*5; }while(a+b>=170||a+b<=40); const c=180-a-b;
+  return {q:`Observe o triângulo a seguir, em que estão indicadas as medidas de dois ângulos internos.<br>A medida do ângulo indicado por ${B('x')} é`, fig:triFig(a,b,c,[deg(a),deg(b),'x']),
+    ...alts(deg(c),[deg(a+b), deg(180-a), deg(90-(a+b)/2>0&&Number.isInteger(90-(a+b)/2)?90-(a+b)/2:360-a-b)],g=>deg(c+g*5)),
+    exp:[`Os três ângulos de qualquer triângulo somam ${B('180°')}.`, `Some os dois que você conhece: ${a}° + ${b}° = ${a+b}°.`, `Falta: 180° − ${a+b}° = ${B(deg(c))}.`, `Por que não ${deg(a+b)}? Essa é a soma dos dois ângulos conhecidos, não o terceiro.`],
+    regra:'Soma dos ângulos internos do triângulo = 180°.', ck: a+b+c===180};
+};
+ADE.tr2 = () => {
+  const sup=pick([true,false]); const a=sup?R(25,170):R(10,80); const c=(sup?180:90)-a; if(c<=0||c===a) return ADE.tr2();
+  return {q:`Dois ângulos são ${B(sup?'suplementares':'complementares')} quando, juntos, somam ${sup?'180°':'90°'}.<br>O ${sup?'suplemento':'complemento'} de um ângulo de ${deg(a)} mede`, ...alts(deg(c),[deg(sup?90-a>0?90-a:a+10:180-a), deg(360-a), deg(a)],g=>deg(c+g*5)),
+    exp:[`${sup?'Suplementares':'Complementares'} somam ${sup?'180°':'90°'}.`, `${sup?180:90}° − ${a}° = ${B(deg(c))}.`, `Dica para lembrar: ${B('C')}omplemento → ${B('C')}anto (90°, um canto reto). ${B('S')}uplemento → ${B('S')}egmento de reta (180°).`],
+    regra:'Complementares: somam 90°. Suplementares: somam 180°.', ck: (sup?180:90)===a+c};
+};
+ADE.tr3 = () => {
+  const mk=()=>{ let a,b; do{ a=R(3,16)*5; b=R(3,16)*5; }while(a+b>=175||a+b<=20); return [a,b,180-a-b]; };
+  const pool=[];
+  const t1=mk(); pool.push([`Um triângulo com ângulos de ${t1[0]}° e ${t1[1]}° tem o terceiro ângulo medindo ${t1[2]}°.`, true, `${t1[0]} + ${t1[1]} + ${t1[2]} = 180. ✔`]);
+  const t2=mk(); pool.push([`Um triângulo com ângulos de ${t2[0]}° e ${t2[1]}° tem o terceiro ângulo medindo ${t2[2]+10}°.`, false, `O terceiro é 180 − ${t2[0]} − ${t2[1]} = ${t2[2]}°.`]);
+  const r=R(25,65); pool.push([`Em um triângulo retângulo com um ângulo de ${r}°, o outro ângulo agudo mede ${90-r}°.`, true, `Os dois agudos do triângulo retângulo somam 90°: ${r} + ${90-r} = 90.`]);
+  pool.push([`Em um triângulo retângulo com um ângulo de ${r}°, o outro ângulo agudo mede ${180-r}°.`, false, `${180-r}° é maior que 90°. No triângulo retângulo, os dois agudos somam 90°: o outro mede ${90-r}°.`]);
+  pool.push(['Um triângulo pode ter dois ângulos obtusos.', false, 'Dois ângulos maiores que 90° já passariam de 180°.']);
+  pool.push(['Um triângulo pode ter dois ângulos retos.', false, '90° + 90° = 180°: não sobraria nada para o terceiro ângulo.']);
+  pool.push(['Todo triângulo tem pelo menos dois ângulos agudos.', true, 'Como a soma é 180°, no máximo um ângulo pode ser de 90° ou mais.']);
+  const o=R(95,140); pool.push([`Um triângulo com um ângulo de ${o}° é obtusângulo.`, true, `${o}° é maior que 90°: ângulo obtuso.`]);
+  pool.push([`Um triângulo com ângulos de ${t1[0]}°, ${t1[1]}° e ${t1[2]}° é acutângulo.`, Math.max(...t1)<90, Math.max(...t1)<90?'Todos os ângulos são menores que 90°.':`Ele tem um ângulo de ${Math.max(...t1)}°, que não é agudo.`]);
+  const T=pool.filter(p=>p[1]), Fa=pool.filter(p=>!p[1]);
+  const items=shuffle([...shuffle(T).slice(0,3),...shuffle(Fa).slice(0,2)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return M3({q:`Analise as afirmações a seguir sobre os ângulos internos de triângulos.<br>Marque as ${B('três')} afirmações verdadeiras.`, items,
+    exp:['Lembre: os três ângulos somam 180°.','Agudo: menor que 90°. Reto: 90°. Obtuso: maior que 90°.'], regra:'Soma dos ângulos = 180°. No triângulo retângulo, os dois agudos somam 90°.'});
+};
+
+/* 12. Área e perímetro */
+ADE.ar1 = () => {
+  let b=R(4,16), h=R(3,12); if((b*h)%2) b++; const A=b*h/2;
+  const ctx=pick(['um painel de propaganda triangular','um canteiro triangular de um jardim','uma vela de barco, de forma triangular','um terreno triangular']);
+  return {q:`A figura representa ${ctx}, com as medidas indicadas em metros.<br>A área ${ctx.includes('vela')?'dessa vela':ctx.includes('canteiro')?'desse canteiro':ctx.includes('terreno')?'desse terreno':'desse painel'} é`, fig:triArea(b,h),
+    ...alts(fmt(A)+' m²',[fmt(b+h)+' m²', fmt(b*h)+' m²', fmt(b/2)===fmt(A)?fmt(A+h)+' m²':fmt(h*b/4)+' m²'],g=>fmt(A+g*2)+' m²'),
+    exp:['Um triângulo é ' + B('metade') + ' de um retângulo com a mesma base e a mesma altura.', `Retângulo: ${b} × ${h} = ${b*h} m².`, `Metade: ${b*h} ÷ 2 = ${B(fmt(A)+' m²')}.`, `Por que não ${fmt(b+h)} m²? Somar as medidas não dá área. E ${fmt(b*h)} m² esqueceu de dividir por 2.`],
+    regra:'Área do triângulo = base × altura ÷ 2.', ck: A*2===b*h};
+};
+ADE.ar2 = () => {
+  const W1=R(7,14), H1=R(5,10), w2=R(2,W1-3), h2=R(2,H1-2); const A=W1*H1-w2*h2;
+  return {q:`A figura representa a planta de um salão, com as medidas indicadas em metros. O piso de todo o salão será trocado.<br>A área do piso desse salão é`, fig:lShape(W1,H1,w2,h2),
+    ...alts(fmt(A)+' m²',[fmt(W1*H1)+' m²', fmt(2*(W1+H1))+' m²', fmt(W1*H1+w2*h2)+' m²'],g=>fmt(A+g*2)+' m²'),
+    exp:[`Pense no retângulo inteiro: ${W1} × ${H1} = ${W1*H1} m².`, `Tire o pedaço que falta no canto: ${w2} × ${h2} = ${w2*h2} m².`, `${W1*H1} − ${w2*h2} = ${B(fmt(A)+' m²')}.`, `Por que não ${W1*H1} m²? Esse é o retângulo completo, mas o salão tem um recorte.`],
+    regra:'Figura com recorte: área do retângulo grande − área do pedaço que falta.', ck: A===(W1-w2)*H1+w2*(H1-h2)};
+};
+ADE.ar3 = () => {
+  const c=R(8,40), l=R(5,30), v=pick([2,3,4,5]); if(c===l) return ADE.ar3(); const P=2*(c+l); const tot=P*v;
+  return {q:`Um sitiante vai cercar um terreno retangular de ${c} m de comprimento por ${l} m de largura, dando ${B(v+' voltas')} de arame.<br>A quantidade de arame necessária é`, ...alts(fmt(tot)+' m',[fmt(P)+' m', fmt((c+l)*v)+' m', fmt(c*l*v)+' m'],g=>fmt(tot+g*v*2)+' m'),
+    exp:[`Uma volta é o ${B('perímetro')}: ${c} + ${l} + ${c} + ${l} = ${P} m.`, `${v} voltas: ${P} × ${v} = ${B(fmt(tot)+' m')}.`, `Por que não ${fmt((c+l)*v)} m? Aí só dois lados foram somados; o retângulo tem quatro.`],
+    regra:'Perímetro = soma de todos os lados. Retângulo: 2 × (comprimento + largura).', ck: tot===v*(2*c+2*l)};
+};
+
+/* 13. Plano cartesiano: movimentação */
+ADE.mv1 = () => {
+  let x1,y1,x2,y2; do{ x1=R(0,7); y1=R(0,7); x2=R(0,7); y2=R(0,7); }while(x1===x2||y1===y2||Math.abs(x2-x1)===Math.abs(y2-y1));
+  const dx=x2-x1, dy=y2-y1; const H=d=>`${Math.abs(d)} ${Math.abs(d)===1?'unidade':'unidades'} para ${d>0?'a direita':'a esquerda'}`, V=d=>`${Math.abs(d)} ${Math.abs(d)===1?'unidade':'unidades'} para ${d>0?'cima':'baixo'}`;
+  const ok=`${H(dx)} e ${V(dy)}.`; const w=[`${H(-dx)} e ${V(dy)}.`, `${H(dx)} e ${V(-dy)}.`, `${Math.abs(dy)} ${Math.abs(dy)===1?'unidade':'unidades'} para ${dx>0?'a direita':'a esquerda'} e ${Math.abs(dx)} ${Math.abs(dx)===1?'unidade':'unidades'} para ${dy>0?'cima':'baixo'}.`];
+  return {q:`Em um jogo digital, uma peça se move sobre o plano cartesiano. Ela está no ponto ${B(`(${x1}, ${y1})`)} e precisa chegar ao ponto ${B(`(${x2}, ${y2})`)}.<br>A sequência de movimentos que leva a peça até o destino é`,
+    fig:plane([{x:x1,y:y1,lab:'Peça'},{x:x2,y:y2,lab:'Fim'}]), ...alts(ok,w,listExtra([`${H(dx+1)} e ${V(dy)}.`])),
+    exp:[`Na horizontal (x): de ${x1} para ${x2} → ${H(dx)}.`, `Na vertical (y): de ${y1} para ${y2} → ${V(dy)}.`, `Movimento: ${B(ok)}`, 'Cuidado com o sentido: x maior é para a direita; y maior é para cima.'],
+    regra:'Movimento no plano: compare os x (direita/esquerda) e os y (cima/baixo).', ck: true};
+};
+ADE.mv2 = () => {
+  const x=R(1,4), y=R(1,4); const a=R(1,4)*pick([1,-1]), b=R(1,4)*pick([1,-1]); const X=x+a, Y=y+b; if(X<0||Y<0||X>8||Y>8||a===b) return ADE.mv2();
+  const H=d=>`${Math.abs(d)} para ${d>0?'a direita':'a esquerda'}`, V=d=>`${Math.abs(d)} para ${d>0?'cima':'baixo'}`;
+  return {q:`Um robô está no ponto ${B(`(${x}, ${y})`)} de um plano cartesiano. Ele recebe as instruções: andar ${H(a)} e, depois, ${V(b)}.<br>O ponto em que o robô vai parar é`, ...alts(`(${X}, ${Y})`,[`(${Y}, ${X})`, `(${x-a}, ${Y})`, `(${X}, ${y-b})`].filter(s=>!s.includes('-')),listExtra([`(${x+b}, ${y+a})`,`(${X+1}, ${Y})`])),
+    exp:[`Andar para a direita/esquerda muda o ${B('x')}: ${x} ${a>0?'+':'−'} ${Math.abs(a)} = ${X}.`, `Andar para cima/baixo muda o ${B('y')}: ${y} ${b>0?'+':'−'} ${Math.abs(b)} = ${Y}.`, `Ponto final: ${B(`(${X}, ${Y})`)}.`],
+    regra:'Direita/esquerda mexe no x. Cima/baixo mexe no y.', ck: true};
+};
+
+/* 14. Grandezas: tempo e capacidade */
+ADE.tp1 = () => {
+  const st=R(6,15)*60+pick([0,10,15,20,30,40,45,50]); const tv=R(1,3)*60+pick([15,20,25,35,40,45,50]); const ps=pick([0,15,20,25,30]); const ch=st+tv+ps;
+  const cid=pick(['São Paulo','Campinas','Santos','Ribeirão Preto','Sorocaba']);
+  const noCarry = (()=>{ const h=Math.floor(st/60)+Math.floor(tv/60), m=(st%60+tv%60+ps)%60; return h*60+m; })();
+  return {q:`Um ônibus de excursão saiu às ${B(clock(st))} com destino a ${cid}. A viagem durou ${B(dur(tv))}${ps?`, e houve uma parada de ${B(ps+' min')} no caminho`:''}.<br>O ônibus chegou ao destino às`, ...alts(clock(ch),[ps?clock(st+tv):clock(ch+30), noCarry!==ch?clock(noCarry):clock(ch-60), clock(ch+60)],g=>clock(ch+g*5)),
+    exp:[`Some as horas: ${Math.floor(st/60)}h + ${Math.floor(tv/60)}h = ${Math.floor(st/60)+Math.floor(tv/60)}h.`, `Some os minutos: ${st%60} + ${tv%60}${ps?' + '+ps:''} = ${st%60+tv%60+ps} min.`, ...(st%60+tv%60+ps>=60?[`${st%60+tv%60+ps} min é mais de 60: vira ${Math.floor((st%60+tv%60+ps)/60)} h e ${(st%60+tv%60+ps)%60} min.`]:[]), `Chegada: ${B(clock(ch))}.`, ...(ps?[`Cuidado: a parada também conta! Sem ela, daria ${clock(st+tv)}.`]:[])],
+    regra:'60 minutos = 1 hora. Passou de 60 nos minutos, "sobe" 1 hora.', ck: ch-st===tv+ps};
+};
+ADE.tp2 = () => {
+  const cup=pick([200,250,300]); const bot=pick([1,1.5,2]); const per=bot*1000/cup; if(!Number.isInteger(per)) return ADE.tp2(); const n=per*R(10,40); const c=n/per; const L=n*cup/1000;
+  return {q:`Uma escola vai servir suco para ${B(n+' alunos')} em um passeio. Cada aluno receberá um copo de ${B(cup+' mL')}. O suco é vendido em garrafas de ${B(dec(bot)+' L')}.<br>Nessas condições, a quantidade de garrafas necessária é`,
+    ...alts(fmt(c),uniq([L, Math.round(L/2)===c?L+5:Math.ceil(L/2), Math.round(n/bot)].filter(v=>Number.isInteger(v)&&v!==c)).map(fmt),g=>fmt(c+g*2)),
+    exp:[`Quanto suco ao todo: ${n} × ${cup} mL = ${fmt(n*cup)} mL = ${dec(L)} L.`, `Quantas garrafas: ${dec(L)} ÷ ${dec(bot)} = ${B(fmt(c))}.`, `Outro jeito: em uma garrafa cabem ${fmt(bot*1000)} ÷ ${cup} = ${per} copos. ${n} ÷ ${per} = ${c}.`, `Por que não ${fmt(L)}? Esse é o total em ${B('litros')}, não em garrafas.`],
+    regra:'1 L = 1 000 mL. Converta antes de dividir.', ck: c*bot*1000===n*cup};
+};
+/* ====================== AVANÇADO ====================== */
+const AVA = {};
+/* 1. Porcentagem: comparar lojas */
+AVA.lj1 = () => {
+  let VA,pA,VB,pB,fA,fB; let g=0;
+  do{ VA=R(10,60)*100; pA=pick([5,10,15,20]); VB=VA+R(2,12)*100; pB=pick([20,25,30,40]); fA=VA*(100-pA)/100; fB=VB*(100-pB)/100; g++; }while(g<200&&(fA===fB||!Number.isInteger(fA)||!Number.isInteger(fB)||Math.abs(fA-fB)<50));
+  const prod=pick(['uma geladeira','uma TV','um sofá','uma máquina de lavar','um notebook','um fogão']); const cheap=fA<fB?'A':'B', best=Math.min(fA,fB), other=Math.max(fA,fB);
+  const bigDisc = pB>pA ? 'B':'A';
+  return {q:`Uma família pesquisou o preço de ${prod} em duas lojas. O quadro a seguir mostra o preço e o desconto para pagamento à vista em cada loja.<br>A família comprou à vista na loja em que o preço final era menor. Nessas condições, ela pagou`,
+    tbl:table(['Loja','Preço','Desconto à vista'],[['A',money(VA*100),pA+'%'],['B',money(VB*100),pB+'%']]),
+    ...alts(money(best*100),[money(other*100), money((cheap==='A'?VA*pA/100:VB*pB/100)*100), money((cheap==='A'?VA-pA:VB-pB)*100)],g=>money((best+g*50)*100)),
+    exp:[`Loja A: ${pA}% de ${fmt(VA)} = ${fmt(VA*pA/100)}. Preço final: ${fmt(VA)} − ${fmt(VA*pA/100)} = ${money(fA*100)}.`, `Loja B: ${pB}% de ${fmt(VB)} = ${fmt(VB*pB/100)}. Preço final: ${fmt(VB)} − ${fmt(VB*pB/100)} = ${money(fB*100)}.`, `O menor preço é na loja ${cheap}: ${B(money(best*100))}.`, cheap!==bigDisc?`Pegadinha! A loja ${bigDisc} dá o maior desconto (${Math.max(pA,pB)}%), mas o preço dela era mais alto. ${B('Maior desconto nem sempre é o menor preço.')}`:`Aqui a loja com maior desconto também ficou mais barata, mas sempre confira fazendo as contas!`],
+    regra:'Para comparar ofertas, calcule o preço final de cada uma.', ck: Math.abs(Math.min(VA*(1-pA/100),VB*(1-pB/100))-best)<1e-9};
+};
+AVA.lj2 = () => {
+  let VA,pA,VB,pB,fA,fB,g=0; do{ VA=R(5,40)*100; pA=pick([10,15,20]); VB=VA+R(1,8)*100; pB=pick([20,25,30]); fA=VA*(100-pA)/100; fB=VB*(100-pB)/100; g++; }while(g<200&&(fA===fB||!Number.isInteger(fA)||!Number.isInteger(fB)));
+  const prod=pick(['um celular','uma bicicleta','um videogame','um guarda-roupa']);
+  return LAC({q:`O quadro mostra o preço de ${prod} em duas lojas e o desconto dado por cada uma.<br>Complete as lacunas com os valores corretos.`, tbl:table(['Loja','Preço','Desconto'],[['A',money(VA*100),pA+'%'],['B',money(VB*100),pB+'%']]),
+    text:`Na loja A, o preço final é {0}. Na loja B, o preço final é {1}. A loja mais barata é a {2}.`, gaps:[money(fA*100),money(fB*100), fA<fB?'A':'B'],
+    opts:chipSet([money(fA*100),money(fB*100),'A','B'],[money(VA*pA),money(VB*pB),money((VA-pA)*100)],7),
+    exp:[`A: ${fmt(VA)} − ${pA}% (${fmt(VA*pA/100)}) = ${money(fA*100)}.`, `B: ${fmt(VB)} − ${pB}% (${fmt(VB*pB/100)}) = ${money(fB*100)}.`, `Mais barata: loja ${B(fA<fB?'A':'B')}.`],
+    regra:'Compare sempre o preço final, não só a porcentagem.', ck: true});
+};
+/* 2. Proporcionalidade inversa */
+AVA.iv1 = () => {
+  const ctx=pick([{a:'Velocidade média (km/h)',b:'Tempo de viagem',K:pick([120,180,240,360]),xs:[30,40,60,80,90,120],u:'h',txt:'Um motorista faz sempre o mesmo percurso entre duas cidades. O quadro mostra o tempo de viagem de acordo com a velocidade média do carro.',ask:'velocidade média de'},
+    {a:'Número de pedreiros',b:'Dias de trabalho',K:pick([24,36,48,60,72]),xs:[2,3,4,6,8,12],u:'dias',txt:'Uma construtora fez uma estimativa do tempo para terminar uma obra, de acordo com o número de pedreiros, todos trabalhando no mesmo ritmo.',ask:'equipe de'},
+    {a:'Número de torneiras',b:'Tempo para encher (h)',K:pick([12,24,36]),xs:[1,2,3,4,6,12],u:'h',txt:'O quadro mostra o tempo para encher uma piscina, de acordo com o número de torneiras iguais abertas.',ask:'quantidade de torneiras igual a'}]);
+  const xs=ctx.xs.filter(x=>Number.isInteger(ctx.K/x)); if(xs.length<4) return AVA.iv1(); const sel=shuffle(xs).slice(0,4).sort((a,b)=>a-b); const ask=sel.pop(); const rows=sel;
+  const val=x=>ctx.K/x; const c=val(ask); const tx=v=>ctx.u==='h'?dur(v*60):fmt(v)+' '+ctx.u;
+  const near=rows.reduce((m,x)=>Math.abs(x-ask)<Math.abs(m-ask)?x:m); const direct=val(rows[0])*ask/rows[0];
+  const cand=uniq([direct, val(near), c+(c>1?1:0.5)].filter(v=>v!==c&&v>0)); if(cand.length<2) return AVA.iv1();
+  return {q:`${ctx.txt}<br>Nessas condições, para uma ${ctx.ask} ${ask}${ctx.a.includes('km')?' km/h':ctx.a.includes('pedreiros')?' pedreiros':''}, o ${ctx.b.split(' (')[0].toLowerCase()} será de`,
+    tbl:table([ctx.a,...rows.map(String)],[[ctx.b,...rows.map(x=>tx(val(x)))]]), ...alts(tx(c),cand.map(tx),g=>tx(c+g*(ctx.u==='h'?0.5:1))),
+    exp:[`Quando uma grandeza ${B('aumenta')}, a outra ${B('diminui')}: são inversamente proporcionais.`, `O produto é sempre o mesmo: ${rows[0]} × ${tx(val(rows[0]))} → ${rows[0]} × ${fmt(val(rows[0]))} = ${fmt(ctx.K)}.`, `Para ${ask}: ${fmt(ctx.K)} ÷ ${ask} = ${B(tx(c))}.`, `Por que não ${tx(direct)}? Aí a conta foi feita como se as duas grandezas aumentassem juntas (proporção direta).`],
+    regra:'Inversamente proporcionais: uma dobra, a outra cai pela metade. O produto fica constante.', ck: c*ask===ctx.K};
+};
+/* 3. Partilha em partes desiguais */
+AVA.pd1 = () => {
+  const typ=pick(['dif','dobro','triplo']); const k=R(5,60)*10; let A,Bv,T,d,txt;
+  const n1=nm(); let n2=nm(); while(n2===n1) n2=nm();
+  if(typ==='dif'){ Bv=k; d=R(2,20)*10; A=Bv+d; T=A+Bv; txt=`${n1} e ${n2} dividiram ${money(T*100)}, de modo que ${n1} recebeu ${money(d*100)} a mais que ${n2}.`; }
+  else { const m=typ==='dobro'?2:3; Bv=k; A=m*Bv; T=A+Bv; txt=`${n1} e ${n2} dividiram ${money(T*100)}, de modo que ${n1} recebeu o ${typ} da quantia de ${n2}.`; }
+  const askA=pick([true,false]); const c=askA?A:Bv; const w = typ==='dif' ? [T/2, (T-d), askA?Bv:A, T/2+d] : [T/2, T/(typ==='dobro'?2:3), askA?Bv:A];
+  return {q:`${txt}<br>A quantia que ${askA?n1:n2} recebeu foi de`, ...alts(money(c*100),uniq(w.filter(v=>Number.isInteger(v)&&v!==c&&v>0)).map(v=>money(v*100)),g=>money((c+g*10)*100)),
+    exp: typ==='dif' ? [`Tire a diferença do total: ${fmt(T)} − ${fmt(d)} = ${fmt(T-d)}. Agora as duas partes são iguais.`, `Divida por 2: ${fmt(T-d)} ÷ 2 = ${fmt(Bv)} (parte de ${n2}).`, `${n1}: ${fmt(Bv)} + ${fmt(d)} = ${fmt(A)}.`, `Resposta: ${B(money(c*100))}.`, `Por que não ${money(T/2*100)}? Dividir ao meio só vale se as partes forem iguais.`]
+       : [`Se ${n2} recebe 1 parte, ${n1} recebe ${typ==='dobro'?2:3} partes. Total: ${typ==='dobro'?3:4} partes.`, `Uma parte: ${fmt(T)} ÷ ${typ==='dobro'?3:4} = ${fmt(Bv)}.`, `${n1}: ${fmt(Bv)} × ${typ==='dobro'?2:3} = ${fmt(A)}.`, `Resposta: ${B(money(c*100))}.`, `Cuidado: "${typ}" não quer dizer dividir por ${typ==='dobro'?2:3}. Conte as partes!`],
+    regra:'Partilha desigual: transforme em partes iguais (tire a diferença ou conte as partes).', ck: A+Bv===T};
+};
+/* 4. Problemas que viram equação */
+AVA.ep1 = () => {
+  const typ=pick(['ret','taxa','idade']);
+  if(typ==='ret'){ const x=R(4,20), k=R(2,9); const P=2*(x+x+k); const ask=pick(['maior','menor']); const c=ask==='maior'?x+k:x;
+    return {q:`Um terreno retangular tem um lado medindo ${B('x')} metros e o outro medindo ${B(`(x + ${k})`)} metros. O perímetro desse terreno é ${P} m.<br>A medida do ${ask} lado desse terreno é`, ...alts(fmt(c)+' m',[fmt(ask==='maior'?x:x+k)+' m', fmt(P/4)===fmt(c)?fmt(c+2)+' m':fmt(P/4)+' m', fmt((P-k)/2)+' m'].filter(v=>!v.includes('.')),g=>fmt(c+g)+' m'),
+      exp:[`Perímetro = soma dos 4 lados: x + (x + ${k}) + x + (x + ${k}) = ${P}.`, `Junte: 4x + ${2*k} = ${P}.`, `4x = ${P} − ${2*k} = ${P-2*k} → x = ${x}.`, `Lados: ${x} m e ${x+k} m. O ${ask}: ${B(fmt(c)+' m')}.`, `Por que não ${fmt(ask==='maior'?x:x+k)} m? Esse é o valor do ${ask==='maior'?'x (o menor lado)':'maior lado'}. Leia o que a pergunta pede!`],
+      regra:'Monte a equação com o que o problema diz, resolva e confira o que a pergunta pede.', ck: 2*(x+x+k)===P}; }
+  if(typ==='taxa'){ const tx=R(2,6)*50, pp=R(2,8)*10, n=R(6,15); const T=tx+pp*n;
+    const ctx=pick([[`Para participar de um campeonato de futsal, um time pagou uma taxa de inscrição de ${money(tx*100)} e mais ${money(pp*100)} por jogador inscrito. O valor total pago foi de ${money(T*100)}.`,'O número de jogadores inscritos foi'],[`Uma escola alugou um ônibus por ${money(tx*100)} e pagou mais ${money(pp*100)} por aluno para a entrada no museu. O total foi de ${money(T*100)}.`,'O número de alunos que foram ao museu foi']]);
+    const w=[T/pp, (T+tx)/pp, (T-tx)/(pp*2), (T-tx)/tx].filter(v=>Number.isInteger(v)&&v!==n&&v>0);
+    return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(fmt(n),w.map(fmt),g=>fmt(n+g)),
+      exp:[`Equação: ${fmt(tx)} + ${fmt(pp)} × n = ${fmt(T)}.`, `Tire a taxa fixa: ${fmt(T)} − ${fmt(tx)} = ${fmt(T-tx)}.`, `Divida pelo valor de cada um: ${fmt(T-tx)} ÷ ${fmt(pp)} = ${B(n)}.`, `Cuidado: quem divide ${fmt(T)} direto por ${pp} esquece que a taxa é paga ${B('uma vez só')}.`],
+      regra:'Valor fixo + valor por unidade × quantidade = total. Tire o fixo e divida.', ck: tx+pp*n===T}; }
+  const f=R(5,14), m=pick([3,4]); const S=f+m*f; const n1=nm();
+  return {q:`A idade do pai de ${n1} é o ${m===3?'triplo':'quádruplo'} da idade de ${n1}. Somando as duas idades, o resultado é ${S} anos.<br>A idade de ${n1} é`, ...alts(fmt(f)+' anos',[fmt(S/m)===fmt(f)?fmt(f+2)+' anos':Number.isInteger(S/m)?fmt(S/m)+' anos':fmt(f+3)+' anos', fmt(m*f)+' anos', Number.isInteger(S/2)?fmt(S/2)+' anos':fmt(f-2)+' anos'],g=>fmt(f+g)+' anos'),
+    exp:[`Chame a idade de ${n1} de x. O pai tem ${m}x.`, `x + ${m}x = ${S} → ${m+1}x = ${S}.`, `x = ${S} ÷ ${m+1} = ${B(f)}.`, `O pai tem ${m*f} anos. Confira: ${f} + ${m*f} = ${S}. ✔`, `Por que não ${fmt(m*f)} anos? Essa é a idade do ${B('pai')}.`],
+    regra:'Problema com "o triplo de": chame o menor de x e o maior de 3x.', ck: f+m*f===S};
+};
+AVA.ep2 = () => {
+  const a=R(2,6), b=R(5,40), c=a*R(4,15)+b; const ctx=pick([[`Uma academia cobra ${money(b*100)} de matrícula e ${money(a*100)} por aula avulsa. ${nm()} gastou ${money(c*100)} ao todo.`,'n','o número de aulas'],[`Em uma loja, cada camiseta custa ${money(a*100)} e o frete custa ${money(b*100)}. Uma compra custou ${money(c*100)} ao todo.`,'n','o número de camisetas']]);
+  const ok=`${a}n + ${b} = ${c}`;
+  return {q:`${ctx[0]}<br>Chamando de n ${ctx[2]}, a equação que representa essa situação é`, ...alts(ok,[`${b}n + ${a} = ${c}`, `${a}n = ${c} + ${b}`, `${a} + ${b}n = ${c}`].filter(x=>x!==ok),listExtra([`n + ${a+b} = ${c}`])),
+    exp:[`O valor que se repete (multiplica n) é o de cada unidade: ${a}.`, `O valor fixo (pago uma vez) é ${b}.`, `Equação: ${B(ok)}.`, `Por que não ${b}n + ${a}? Aí o valor fixo foi multiplicado pela quantidade.`],
+    regra:'Valor por unidade acompanha o n. Valor fixo fica sozinho.', ck: true};
+};
+/* 5. Sequências: expressão algébrica */
+AVA.sa1 = () => {
+  const d=R(2,6), a1=R(1,15); const b=a1-d; if(b===0) return AVA.sa1();
+  const E=(p,q)=>`${p===1?'':p}n ${q<0?'−':'+'} ${Math.abs(q)}`; const ok=E(d,b);
+  const ctx=pick([['Semana','Distância por dia (km)','Para se preparar para uma corrida, {n} montou um plano de treino. O quadro mostra as distâncias das primeiras semanas.','a distância, em km, na semana n'],['Mês','Economia (R$)','{n} está guardando dinheiro todo mês, sempre aumentando o mesmo valor. O quadro mostra os primeiros meses.','o valor guardado no mês n'],['Dia','Páginas lidas','{n} começou a ler um livro e, a cada dia, lê algumas páginas a mais que no dia anterior. O quadro mostra os primeiros dias.','o número de páginas lidas no dia n']]);
+  const w=[E(d,a1), b!==d? E(a1,d):E(a1+1,d), `n + ${d}`].filter(x=>x!==ok);
+  return {q:`${ctx[2].replace('{n}',nm())}<br>Considerando n a posição (n = 1 para a primeira), a expressão que representa ${ctx[3]} é`,
+    tbl:table([ctx[0],'1','2','3','4'],[[ctx[1],a1,a1+d,a1+2*d,a1+3*d]]), ...alts(ok,w,listExtra([E(d,b+1),E(d+1,b)])),
+    exp:[`De um para o outro, aumenta sempre ${d}: a expressão começa com ${B(d+'n')}.`, `Para n = 1: ${d} × 1 = ${d}. Para chegar em ${a1}, falta ${b>0?'somar '+b:'tirar '+(-b)}.`, `Expressão: ${B(ok)}.`, `Confira com n = 2: ${d} × 2 ${b<0?'−':'+'} ${Math.abs(b)} = ${2*d+b}. ✔`, `Por que não ${E(d,a1)}? Usar o primeiro termo como número fixo é o erro mais comum. Teste com n = 1!`],
+    regra:'Pulo fixo d → expressão d·n + (ajuste). Teste com n = 1 e n = 2.', ck: d*1+b===a1};
+};
+AVA.sa2 = () => {
+  const a=R(2,5), b=R(-4,6); if(b===0) return AVA.sa2(); const t=n=>a*n+b; const lei=`${a}n ${b<0?'−':'+'} ${Math.abs(b)}`; const n10=pick([10,12,15,20]);
+  const par1 = (a%2===0) ? (b%2===0?'pares':'ímpares') : null;
+  const cands=[[`O ${n10}º termo é ${t(n10)}.`, true, `${a} × ${n10} ${b<0?'−':'+'} ${Math.abs(b)} = ${t(n10)}.`],[`O ${n10}º termo é ${a*n10}.`, false, `Faltou o ${b<0?'−':'+'} ${Math.abs(b)}: o certo é ${t(n10)}.`],[`O primeiro termo é ${t(1)}.`, true, `${a} × 1 ${b<0?'−':'+'} ${Math.abs(b)} = ${t(1)}.`],[`De um termo para o seguinte, a sequência aumenta ${a}.`, true, `Cada vez que n aumenta 1, soma-se mais ${a}.`],[`De um termo para o seguinte, a sequência aumenta ${a+b===a?a+1:Math.abs(a+b)}.`, false, `O aumento é sempre o número que multiplica o n: ${a}.`],[`O número ${t(7)+1} é um termo dessa sequência.`, (t(7)+1-b)%a===0, (t(7)+1-b)%a===0?'Existe uma posição que dá esse valor.':`Os termos perto dele são ${t(7)} e ${t(8)}. ${t(7)+1} fica no meio, não aparece.`]];
+  if(par1) cands.push([`Todos os termos são números ${par1}.`, true, `${a}n é sempre par; ${b<0?'tirando':'somando'} ${Math.abs(b)}, ${par1==='pares'?'continua par':'fica ímpar'}.`]);
+  const seenS=new Set(); const cU=cands.filter(c=>!seenS.has(c[0])&&seenS.add(c[0])); const T=cU.filter(c=>c[1]), Fa=cU.filter(c=>!c[1]); const nT=Math.min(T.length,R(2,3)); const items=shuffle([...shuffle(T).slice(0,nT),...shuffle(Fa).slice(0,4-nT)]); if(items.length<4) return AVA.sa2();
+  return SN({q:`Os termos de uma sequência podem ser calculados pela expressão ${B(lei)}, em que n é a posição do termo (n = 1, 2, 3, …).<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items:items.map(c=>({s:c[0],v:c[1],why:c[2]})),
+    exp:[`Primeiros termos: ${[1,2,3,4].map(t).join(', ')}, …`,'Para achar qualquer termo, troque n pela posição.'], regra:'Na expressão a·n + b, o "a" é o pulo entre os termos.'});
+};
+/* 6. Frações: o restante */
+AVA.fr1 = () => {
+  const [a,b]=pick([[1,4],[1,5],[2,5],[1,3],[1,6],[3,10]]); const [c,d]=pick([[3,8],[2,5],[3,10],[2,9],[3,7]]); const D=lcm(b,d); const used=a*D/b+c*D/d; if(used>=D||b===d||D>60) return AVA.fr1();
+  const T=D*R(4,40)*(D<12?10:1); const pA=T*a/b, pB=T*c/d, pC=T-pA-pB;
+  const tema=pick([['Uma campanha arrecadou {T} litros de água mineral. O grupo enviou {a} dessa quantidade para a cidade A, {c} para a cidade B e o restante para a cidade C.','L'],['Uma cooperativa colheu {T} kg de laranja. Vendeu {a} para um mercado, {c} para uma fábrica de suco e o restante para uma feira.','kg']]);
+  const q=tema[0].replace('{T}',fmt(T)).replace('{a}',F(a,b)).replace('{c}',F(c,d)); const u=tema[1];
+  const lab=tema[0].includes('cidade')?['a cidade A','a cidade B','a cidade C']:['o mercado','a fábrica de suco','a feira'];
+  const cands=[[`Para calcular ${F(c,d)} de ${fmt(T)}, podemos dividir ${fmt(T)} por ${d} e multiplicar o resultado por ${c}.`, true, 'É assim que se calcula fração de quantidade.'],[`Para calcular ${F(c,d)} de ${fmt(T)}, podemos dividir ${fmt(T)} por ${c} e multiplicar o resultado por ${d}.`, false, `Divide pelo de baixo (${d}) e multiplica pelo de cima (${c}).`],[`${lab[0][0].toUpperCase()+lab[0].slice(1)} recebeu ${fmt(pA)} ${u}.`, true, `${fmt(T)} ÷ ${b} × ${a} = ${fmt(pA)}.`],[`${lab[1][0].toUpperCase()+lab[1].slice(1)} recebeu ${fmt(T/d)} ${u}.`, T/d===pB, `${F(c,d)} de ${fmt(T)} = ${fmt(T)} ÷ ${d} × ${c} = ${fmt(pB)}.`],[`${lab[2][0].toUpperCase()+lab[2].slice(1)} recebeu ${fmt(pC)} ${u}.`, true, `Restante: ${fmt(T)} − ${fmt(pA)} − ${fmt(pB)} = ${fmt(pC)}.`],[`${lab[2][0].toUpperCase()+lab[2].slice(1)} recebeu menos que ${lab[0]}.`, pC<pA, `${lab[2]}: ${fmt(pC)}; ${lab[0]}: ${fmt(pA)}.`],[`${lab[1][0].toUpperCase()+lab[1].slice(1)} e ${lab[2]} receberam a mesma quantidade.`, pB===pC, `${fmt(pB)} e ${fmt(pC)}.`]];
+  const T_=cands.filter(c=>c[1]), F_=cands.filter(c=>!c[1]); if(F_.length<1) return AVA.fr1(); const nT=Math.min(3,T_.length, 4-Math.min(2,F_.length)); const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]);
+  return SN({q:`${q}<br>Leia as afirmações sobre essa distribuição, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items:items.map(c=>({s:c[0],v:c[1],why:c[2]})),
+    exp:[`${F(a,b)} de ${fmt(T)} = ${fmt(pA)} ${u}.`, `${F(c,d)} de ${fmt(T)} = ${fmt(pB)} ${u}.`, `Restante: ${fmt(T)} − ${fmt(pA)} − ${fmt(pB)} = ${fmt(pC)} ${u}.`], regra:'"O restante" = total − as partes já calculadas.'});
+};
+AVA.fr2 = () => {
+  const [a,b]=pick([[1,4],[1,5],[2,5],[1,3]]); const [c,d]=pick([[3,8],[1,4],[1,2],[3,10],[1,6]]); const D=lcm(b,d); if(a*D/b+c*D/d>=D||b===d) return AVA.fr2();
+  const T=D*R(5,40)*(D<12?10:1); const pA=T*a/b, pB=T*c/d, pC=T-pA-pB; const nm1=nm();
+  return LAC({q:`${nm1} recebeu ${money(T*100)} de salário. Usou ${F(a,b)} para pagar o aluguel, ${F(c,d)} para o mercado e guardou o restante.<br>Complete as lacunas com os valores corretos.`, text:'Aluguel: {0}. Mercado: {1}. Guardou: {2}.',
+    gaps:[money(pA*100),money(pB*100),money(pC*100)], opts:chipSet([money(pA*100),money(pB*100),money(pC*100)],[money(T/b*100),money(T/d*100),money((T-pA)*100),money((T-pB)*100),money((pC+100)*100),money(T/2*100)],7),
+    exp:[`Aluguel: ${fmt(T)} ÷ ${b} × ${a} = ${fmt(pA)}.`, `Mercado: ${fmt(T)} ÷ ${d} × ${c} = ${fmt(pB)}.`, `Guardou: ${fmt(T)} − ${fmt(pA)} − ${fmt(pB)} = ${fmt(pC)}.`], regra:'Calcule cada fração sobre o total. O restante é o que sobra.', ck: pA+pB+pC===T});
+};
+/* 7. Inteiros em quadro de dupla entrada */
+AVA.dp1 = () => {
+  const times=shuffle(['Águias','Leões','Tubarões','Falcões','Panteras','Lobos']).slice(0,4); let gp,gc,sd; do{ gp=times.map(()=>R(3,18)); gc=times.map(()=>R(3,18)); sd=gp.map((g,i)=>g-gc[i]); }while(uniq(sd).length<4||sd.filter(s=>s<0).length<1||sd.filter(s=>s>0).length<1);
+  const best=times[sd.indexOf(Math.max(...sd))], worst=times[sd.indexOf(Math.min(...sd))], mostG=times[gp.indexOf(Math.max(...gp))];
+  const i=R(0,3);
+  const cands=[[`O time ${best} tem o melhor saldo de gols.`, true, `Saldo = marcados − sofridos. O maior é ${sg(Math.max(...sd))}, dos ${best}.`],[`O time ${mostG} tem o melhor saldo de gols.`, mostG===best, mostG===best?'Ele marcou mais e também tem o maior saldo.':`Ele marcou mais gols, mas também sofreu muitos: saldo ${sg(sd[times.indexOf(mostG)])}.`],[`O saldo de gols do time ${times[i]} é ${sg(sd[i])}.`, true, `${gp[i]} − ${gc[i]} = ${sg(sd[i])}.`],[`O saldo de gols do time ${times[i]} é ${sg(-sd[i])}.`, false, `Saldo = marcados − sofridos = ${gp[i]} − ${gc[i]} = ${sg(sd[i])}.`],[`O time ${worst} tem o pior saldo de gols.`, true, `O menor saldo é ${sg(Math.min(...sd))}.`],[`A soma dos saldos de todos os times é ${sg(sd.reduce((a,b)=>a+b,0))}.`, true, `${sd.map((v,j)=>j&&v<0?par(v):sg(v)).join(' + ')} = ${sg(sd.reduce((a,b)=>a+b,0))}.`]];
+  const seenS=new Set(); const cU=cands.filter(c=>!seenS.has(c[0])&&seenS.add(c[0])); const T=cU.filter(c=>c[1]), Fa=cU.filter(c=>!c[1]); const nT=Math.min(3,4-Math.min(1,Fa.length)); const items=shuffle([...shuffle(T).slice(0,nT),...shuffle(Fa).slice(0,4-nT)]);
+  return SN({q:`O quadro mostra os gols marcados e os gols sofridos por quatro times em um campeonato da escola. O saldo de gols é a diferença entre os gols marcados e os gols sofridos.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`,
+    tbl:table(['Time','Gols marcados','Gols sofridos'], times.map((t,j)=>[t,gp[j],gc[j]])), items:items.map(c=>({s:c[0],v:c[1],why:c[2]})),
+    exp:['Saldo = gols marcados − gols sofridos.', ...times.map((t,j)=>`${t}: ${gp[j]} − ${gc[j]} = ${sg(sd[j])}`)], regra:'Sofreu mais do que marcou? Saldo negativo.'});
+};
+AVA.dp2 = () => {
+  const cs=shuffle(['Curitiba','Gramado','Urubici','São Joaquim','Campos do Jordão','Caxias do Sul']).slice(0,4); let mn,mx; do{ mn=cs.map(()=>R(-7,4)); mx=cs.map((_,i)=>mn[i]+R(6,18)); }while(uniq(mx.map((v,i)=>v-mn[i])).length<4||mn.filter(v=>v<0).length<2);
+  const amp=mx.map((v,i)=>v-mn[i]); const big=cs[amp.indexOf(Math.max(...amp))]; const hot=cs[mx.indexOf(Math.max(...mx))];
+  return {q:`O quadro mostra as temperaturas mínima e máxima de quatro cidades em um mesmo dia. A variação da temperatura é a diferença entre a máxima e a mínima.<br>A cidade com a ${B('maior variação')} de temperatura nesse dia foi`,
+    tbl:table(['Cidade','Mínima','Máxima'], cs.map((c,i)=>[c,sg(mn[i])+' °C',sg(mx[i])+' °C'])), ...altsFixed(cs.map(c=>c+'.'), cs.indexOf(big)),
+    exp:['Variação = máxima − mínima.', ...cs.map((c,i)=>`${c}: ${sg(mx[i])} − ${par(mn[i])} = ${amp[i]} °C`), `Maior variação: ${B(big)}.`, ...(hot!==big?[`Cuidado: ${hot} teve a máxima mais alta, mas a variação é a ${B('diferença')}.`]:[])],
+    regra:'Diferença com negativo: máxima − (−mínima) vira soma. Ex.: 10 − (−3) = 13.', ck: true};
+};
+/* 8. Frações na reta numérica */
+AVA.rf1 = () => {
+  const div=pick([2,3,4,5]); const mx=pick([3,4]); const nums=shuffle(Array.from({length:mx*div-1},(_,i)=>i+1).filter(n=>n%div!==0)).slice(0,4).sort((a,b)=>a-b);
+  const pos=n=>[Math.floor(n/div), Math.floor(n/div)+1];
+  const cands=[];
+  nums.forEach((n,j)=>{ const [p,q]=pos(n); if(j%2===0) cands.push([`O número ${F(n,div)} é representado entre ${p} e ${q}.`, true, `${n} ÷ ${div} = ${dec(n/div,2)}, que fica entre ${p} e ${q}.`]); else { const sh=p>0&&R(0,1)?-1:1; cands.push([`O número ${F(n,div)} é representado entre ${p+sh} e ${q+sh}.`, false, `${F(n,div)} = ${dec(n/div,2)}: fica entre ${p} e ${q}.`]); } });
+  const n0=nums[nums.length-1]; if(false) cands.push([`O número ${F(n0,div)} é maior que ${Math.ceil(n0/div)}.`, false, `${F(n0,div)} = ${dec(n0/div,2)}, que é menor que ${Math.ceil(n0/div)}.`]);
+  const k=R(1,mx-1); cands.push([`Os números ${F(k*div,div)} e ${k} são representados no mesmo ponto da reta.`, true, `${k*div} ÷ ${div} = ${k}. São iguais!`]);
+  if(div===4) cands.push([`Os números ${F(2,4)} e ${F(1,2)} são representados no mesmo ponto da reta.`, true, `${F(2,4)} = ${F(1,2)}: frações equivalentes.`]);
+  if(div===4||div===2) cands.push([`O número ${F(1,div)} está mais perto de 1 do que de 0.`, false, `${F(1,div)} é menor que a metade, então está mais perto do 0.`]);
+  const T=cands.filter(c=>c[1]), Fa=cands.filter(c=>!c[1]); const nT=R(2,3); const items=shuffle([...shuffle(T).slice(0,nT),...shuffle(Fa).slice(0,4-nT)]);
+  return SN({q:`Observe um trecho da reta numérica, em que cada intervalo entre dois números inteiros foi dividido em ${div} partes iguais.<br>Leia as afirmações sobre a localização de alguns números nessa reta, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`,
+    fig:fracLine(mx,div), items:items.map(c=>({s:c[0],v:c[1],why:c[2]})),
+    exp:[`Cada tracinho pequeno vale ${F(1,div)}.`, `Para achar ${F(nums[0],div)}, conte ${nums[0]} tracinhos a partir do zero.`, 'Ou divida: numerador ÷ denominador.'], regra:'Fração na reta: conte os pedacinhos a partir do zero. A cada '+div+' pedaços, passa um inteiro.'});
+};
+/* 9. Medidas com várias etapas */
+AVA.mc1 = () => {
+  const typ=pick(['piso','tinta']);
+  if(typ==='piso'){ const c=R(3,8), l=R(3,7); const A=c*l; const cx=pick([1.5,2,2.5]); const n=Math.ceil(A/cx); if(A/cx===n) return AVA.mc1();
+    return {q:`Uma sala retangular mede ${c} m por ${l} m. O piso é vendido em caixas, e cada caixa cobre ${B(dec(cx)+' m²')}.<br>O número ${B('mínimo')} de caixas necessárias para cobrir todo o piso é`, ...alts(fmt(n),[fmt(n-1), fmt(A), fmt(Math.ceil(2*(c+l)/cx))===fmt(n)?fmt(n+3):fmt(Math.ceil(2*(c+l)/cx))],g=>fmt(n+g)),
+      exp:[`Área da sala: ${c} × ${l} = ${A} m².`, `${A} ÷ ${dec(cx)} = ${dec(A/cx,2)}.`, `Não dá para comprar parte de uma caixa: ${n-1} caixas não cobrem tudo. Precisa de ${B(n)}.`, `Por que não ${n-1}? Arredondar para baixo deixa um pedaço da sala sem piso.`],
+      regra:'"Mínimo necessário" com resultado quebrado: arredonde para cima.', ck: (n-1)*cx<A&&n*cx>=A}; }
+  const h=pick([2.5,3]), w=R(4,12); const A=h*w; const lt=pick([8,10,12]); const n=Math.ceil(A/lt); if(A/lt===n||!Number.isInteger(A)) return AVA.mc1();
+  return {q:`Uma parede retangular tem ${dec(h)} m de altura e ${w} m de comprimento. Cada lata de tinta pinta ${B(lt+' m²')}.<br>O número ${B('mínimo')} de latas para pintar essa parede é`, ...alts(fmt(n),[fmt(n-1), fmt(Math.ceil((h+w)*2/lt))===fmt(n)?fmt(n+2):fmt(Math.ceil((h+w)*2/lt)), fmt(Math.round(A))],g=>fmt(n+g)),
+    exp:[`Área da parede: ${dec(h)} × ${w} = ${dec(A)} m².`, `${dec(A)} ÷ ${lt} = ${dec(A/lt,2)}.`, `Não existe pedaço de lata: arredonde para cima → ${B(n)} latas.`, `Por que não ${n-1}? Com ${n-1} latas faltaria tinta.`],
+    regra:'Área = comprimento × altura. Sobrou parte? Precisa de mais uma lata.', ck: (n-1)*lt<A&&n*lt>=A};
+};
+AVA.mc2 = () => {
+  const W1=R(8,16), H1=R(6,12), w2=R(2,W1-4), h2=R(2,H1-3); const P=2*(W1+H1); const A=W1*H1-w2*h2;
+  const ask='per';
+  if(ask==='per') return {q:`A figura representa o terreno de uma escola, com as medidas indicadas em metros. Será colocada uma cerca em todo o contorno do terreno.<br>O comprimento total da cerca é`, fig:lShape(W1,H1,w2,h2),
+    ...alts(fmt(P)+' m',[fmt(P-w2-h2)+' m', fmt(A)+' m', fmt(W1+H1+w2+h2)+' m'],g=>fmt(P+g*2)+' m'),
+    exp:[`Some todos os lados do contorno: ${W1} + ${H1-h2} + ${w2} + ${h2} + ${W1-w2} + ${H1}.`, `Total: ${B(fmt(P)+' m')}.`, `Curiosidade: dá o mesmo que o retângulo inteiro, 2 × (${W1} + ${H1}) = ${P}. O "degrau" só muda o caminho.`, `Por que não ${fmt(P-w2-h2)} m? Aí faltaram os dois lados do recorte.`],
+    regra:'Perímetro: some todos os lados do contorno, inclusive os do recorte.', ck: P===W1+(H1-h2)+w2+h2+(W1-w2)+H1};
+  return null;
+};
+/* ---------- formatos extras (SIM/NÃO, lacunas, marque as três) ---------- */
+BAS.pc_3 = () => {
+  const V=R(6,90)*20; const p2=pick([20,30,40]);
+  return LAC({q:`Um produto custa ${money(V*100)}. Uma forma rápida de calcular porcentagens é começar pelos 10%.<br>Complete as lacunas com os valores corretos.`, text:`10% de ${money(V*100)} é {0}, e ${p2}% de ${money(V*100)} é {1}.`,
+    gaps:[money(V*10),money(V*p2)], opts:chipSet([money(V*10),money(V*p2)],[money(V*100/100*10*10),money(V*1),money((V-V/10)*100),money(V*p2*10),money(p2*100)]),
+    exp:[`10% é dividir por 10: ${fmt(V)} ÷ 10 = ${dec(V/10)}.`, `${p2}% = ${p2/10} × 10% = ${p2/10} × ${dec(V/10)} = ${dec(V*p2/100)}.`], regra:'10% = ÷10. Depois é só multiplicar: 20% = 2 × 10%, 30% = 3 × 10%.', ck:true});
+};
+BAS.cv4 = () => {
+  const L=pick([1.5,2.5,0.5,3.2,1.25]), H=R(1,3), M=pick([10,15,20,30,40,45]), K=pick([2.5,1.2,0.75,3.5]), m=pick([1.5,2.4,0.8,3.6]);
+  const pool=[[`${dec(L)} L = ${fmt(L*1000)} mL`,true,`1 L = 1 000 mL. ${dec(L)} × 1 000 = ${fmt(L*1000)}.`],[`${dec(L)} L = ${fmt(L*100)} mL`,false,`Faltou um zero: ${dec(L)} × 1 000 = ${fmt(L*1000)} mL.`],
+    [`${H} h ${M} min = ${H*60+M} min`,true,`${H} × 60 + ${M} = ${H*60+M}.`],[`${H} h ${M} min = ${H*100+M} min`,false,`1 hora tem 60 minutos, não 100. O certo é ${H*60+M} min.`],
+    [`${dec(K)} kg = ${fmt(K*1000)} g`,true,`1 kg = 1 000 g.`],[`${dec(K)} kg = ${fmt(K*100)} g`,false,`1 kg = 1 000 g: o certo é ${fmt(K*1000)} g.`],
+    [`${dec(m)} m = ${fmt(Math.round(m*100))} cm`,true,'1 m = 100 cm.'],[`${dec(m)} m = ${fmt(Math.round(m*1000))} cm`,false,`1 m tem 100 cm (e não 1 000): o certo é ${fmt(Math.round(m*100))} cm.`]];
+  const T=pool.filter(p=>p[1]), Fa=pool.filter(p=>!p[1]); const items=shuffle([...shuffle(T).slice(0,3),...shuffle(Fa).slice(0,2)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return M3({q:`Analise as igualdades entre medidas a seguir e marque as ${B('três')} que estão corretas.`, items, exp:['1 L = 1 000 mL. 1 kg = 1 000 g. 1 m = 100 cm. 1 h = 60 min.'], regra:'Para trocar de unidade, saiba quanto vale 1 da unidade maior.'});
+};
+ADE.eq3 = () => {
+  const x=R(2,12); const mk=(sol)=>{ const a=R(2,7), b=R(1,25)*pick([1,-1]); return {s:`${a}x ${b<0?'−':'+'} ${Math.abs(b)} = ${sg(a*sol+b)}`, a, b, sol}; };
+  const T=[],F_=[]; const seen=new Set(); while(T.length<3){ const e=mk(x); if(!seen.has(e.s)){ seen.add(e.s); T.push(e);} } while(F_.length<2){ const e=mk(x+pick([-2,-1,1,2])); if(!seen.has(e.s)){ seen.add(e.s); F_.push(e);} }
+  const items=shuffle([...T.map(e=>({s:e.s,v:true,why:`Troque x por ${x}: ${e.a} × ${x} ${e.b<0?'−':'+'} ${Math.abs(e.b)} = ${sg(e.a*x+e.b)}. ✔`})),...F_.map(e=>({s:e.s,v:false,why:`Com x = ${x}: ${e.a} × ${x} ${e.b<0?'−':'+'} ${Math.abs(e.b)} = ${sg(e.a*x+e.b)}, e não ${sg(e.a*e.sol+e.b)}. A solução dela é ${e.sol}.`}))]);
+  return M3({q:`Analise as equações a seguir e marque as ${B('três')} que têm como solução ${B('x = '+x)}.`, items, exp:[`Não precisa resolver cada uma: troque x por ${x} e confira se a igualdade fica verdadeira.`], regra:'Solução é o valor que deixa a igualdade verdadeira. Para conferir, substitua o x.'});
+};
+ADE.pt3 = () => {
+  const [a,b]=pick([[1,2],[2,3],[3,4],[2,5],[3,5],[1,3],[4,5]]); const k=R(3,40)*10; const T=(a+b)*k; const n1=nm(); let n2=nm(); while(n2===n1) n2=nm();
+  return LAC({q:`${n1} e ${n2} ganharam um prêmio de ${money(T*100)} e vão dividir na razão de ${a} para ${b} (${n1} fica com ${a} partes e ${n2} com ${b} partes).<br>Complete as lacunas com os valores corretos.`, text:`${n1} vai receber {0} e ${n2} vai receber {1}.`,
+    gaps:[money(a*k*100),money(b*k*100)], opts:chipSet([money(a*k*100),money(b*k*100)],[money(T/2*100),money(k*100),money(T/a*100),money(T/b*100)]),
+    exp:[`Total de partes: ${a} + ${b} = ${a+b}.`, `Uma parte: ${fmt(T)} ÷ ${a+b} = ${fmt(k)}.`, `${n1}: ${a} × ${fmt(k)} = ${fmt(a*k)}. ${n2}: ${b} × ${fmt(k)} = ${fmt(b*k)}.`], regra:'Razão a : b → total ÷ (a + b) = uma parte.', ck:a*k+b*k===T});
+};
+ADE.ar4 = () => {
+  const c=R(5,30), l=R(3,20); if(c===l) return ADE.ar4(); const P=2*(c+l), A=c*l;
+  return LAC({q:`Um terreno retangular mede ${c} m de comprimento e ${l} m de largura.<br>Complete as lacunas com os valores corretos.`, text:`O perímetro desse terreno é {0} e a área é {1}.`,
+    gaps:[fmt(P)+' m',fmt(A)+' m²'], opts:chipSet([fmt(P)+' m',fmt(A)+' m²'],[fmt(c+l)+' m',fmt(A)+' m',fmt(P)+' m²',fmt(2*A)+' m²']),
+    exp:[`Perímetro = contorno: ${c} + ${l} + ${c} + ${l} = ${P} m.`, `Área = espaço de dentro: ${c} × ${l} = ${A} m².`, 'Perímetro é medido em m; área em m² (metros quadrados).'], regra:'Perímetro: soma dos lados (m). Área: comprimento × largura (m²).', ck:true});
+};
+ADE.fp3 = () => {
+  const d=pick([6,8,10,12]); let a=R(1,d/2-1), c=R(1,d/2-1); const n1=nm(); let n2=nm(); while(n2===n1) n2=nm(); const pizza=pick(['pizza','torta','lasanha']);
+  const [b1]=[d/2]; const A=F(a,d/2), C=F(c,d); const ua=a*2, uc=c, left=d-ua-uc; if(left<=0||ua===uc) return ADE.fp3();
+  const cands=[[`Juntos, ${n1} e ${n2} comeram ${FR(ua+uc,d)} da ${pizza}.`,true,`${A} = ${F(ua,d)}. ${F(ua,d)} + ${C} = ${FR(ua+uc,d)}.`],[`Juntos, ${n1} e ${n2} comeram ${FR(a+c,d/2+d)} da ${pizza}.`,false,'Não se somam os denominadores! Iguale e some só os de cima.'],[`Sobrou ${FR(left,d)} da ${pizza}.`,true,`${F(d,d)} − ${F(ua+uc,d)} = ${FR(left,d)}.`],[`${n1} comeu mais que ${n2}.`,ua>uc,`${A} = ${F(ua,d)} e ${n2} comeu ${C}.`],[`${n2} comeu mais que ${n1}.`,uc>ua,`${n2}: ${C}; ${n1}: ${F(ua,d)}.`],[`Sobrou ${FR(left+1,d)} da ${pizza}.`,false,`Sobrou ${F(d,d)} − ${F(ua+uc,d)} = ${FR(left,d)}.`]];
+  const seenS=new Set(); const cU=cands.filter(c=>!seenS.has(c[0])&&seenS.add(c[0])); const T=cU.filter(c=>c[1]), Fa=cU.filter(c=>!c[1]); const items=shuffle([...shuffle(T).slice(0,2),...shuffle(Fa).slice(0,2)]);
+  return SN({q:`Uma ${pizza} foi dividida em partes iguais. ${n1} comeu ${A} da ${pizza} e ${n2} comeu ${C}.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items:items.map(c=>({s:c[0],v:c[1],why:c[2]})),
+    exp:[`Iguale os denominadores: ${A} = ${F(ua,d)}.`, `Comeram ${F(ua,d)} + ${C} = ${F(ua+uc,d)}. Sobrou ${F(left,d)}.`], regra:'Para somar, comparar ou tirar frações: primeiro iguale os denominadores.'});
+};
+AVA.mc3 = () => {
+  const W1=R(7,14), H1=R(5,10), w2=R(2,W1-3), h2=R(2,H1-2); const A=W1*H1-w2*h2; const pm=pick([25,30,35,40,45,50,60]); const tot=A*pm;
+  return {q:`A figura representa a planta de uma varanda, com as medidas em metros. O piso escolhido custa ${money(pm*100)} o metro quadrado.<br>O valor gasto com o piso de toda a varanda será de`, fig:lShape(W1,H1,w2,h2),
+    ...alts(money(tot*100),[money(W1*H1*pm*100), money(2*(W1+H1)*pm*100), money(A*100)],g=>money((tot+g*pm*2)*100)),
+    exp:[`Área: retângulo inteiro ${W1} × ${H1} = ${W1*H1} m², menos o recorte ${w2} × ${h2} = ${w2*h2} m².`, `${W1*H1} − ${w2*h2} = ${A} m².`, `Custo: ${A} × ${money(pm*100)} = ${B(money(tot*100))}.`, `Por que não ${money(W1*H1*pm*100)}? Aí o recorte não foi descontado.`],
+    regra:'Custo do piso = área × preço do m². Figura com recorte: tire a parte que falta.', ck: tot===A*pm};
+};
+
+const DESC = [];
+const TOPICS = {
+ b:[
+  {k:'reta', n:'Inteiros na reta numérica', g:[BAS.reta1,BAS.reta2,BAS.reta3]},
+  {k:'sin',  n:'Regra de sinais', g:[BAS.sin1,BAS.sin2,BAS.sin3,BAS.sin4]},
+  {k:'fq',   n:'Fração de quantidade', g:[BAS.fq1,BAS.fq2]},
+  {k:'cf',   n:'Comparar frações', g:[BAS.cf1,BAS.cf2,BAS.cf3]},
+  {k:'fo',   n:'Soma e subtração de frações', g:[BAS.fo1,BAS.fo2]},
+  {k:'din',  n:'Decimais com dinheiro', g:[BAS.din1,BAS.din2]},
+  {k:'dv',   n:'Critérios de divisibilidade', g:[BAS.dv1,BAS.dv2]},
+  {k:'pc',   n:'Plano cartesiano', g:[BAS.pc1,BAS.pc2]},
+  {k:'gi',   n:'Ângulos e giros', g:[BAS.gi1,BAS.gi2,BAS.gi3]},
+  {k:'pct',  n:'Porcentagem', g:[BAS.pc_1,BAS.pc_3,BAS.pc_2]},
+  {k:'cv',   n:'Grandezas e medidas', g:[BAS.cv1,BAS.cv4,BAS.cv2,BAS.cv3]}
+ ],
+ a:[
+  {k:'iq',  n:'Problemas com inteiros', g:[ADE.iq1,ADE.iq2,ADE.iq3]},
+  {k:'mm',  n:'MMC, MDC e fatoração', g:[ADE.mm1,ADE.mm2,ADE.mm3]},
+  {k:'fp',  n:'Problemas com frações', g:[ADE.fp1,ADE.fp3,ADE.fp2]},
+  {k:'fm',  n:'Multiplicação e divisão de frações', g:[ADE.fm1,ADE.fm2,ADE.fm3]},
+  {k:'dm',  n:'Operações com decimais', g:[ADE.dm1,ADE.dm2,ADE.dm3,ADE.dm4]},
+  {k:'pa',  n:'Porcentagem', g:[ADE.pa1,ADE.pa2,ADE.pa3]},
+  {k:'pr',  n:'Proporcionalidade', g:[ADE.pr1,ADE.pr2]},
+  {k:'pt',  n:'Razão e partilha', g:[ADE.pt1,ADE.pt3,ADE.pt2]},
+  {k:'eq',  n:'Equações', g:[ADE.eq1,ADE.eq3,ADE.eq2]},
+  {k:'sq',  n:'Sequências', g:[ADE.sq1,ADE.sq2,ADE.sq3]},
+  {k:'tr',  n:'Ângulos e triângulos', g:[ADE.tr1,ADE.tr2,ADE.tr3]},
+  {k:'ar',  n:'Área e perímetro', g:[ADE.ar1,ADE.ar4,ADE.ar2,ADE.ar3]},
+  {k:'mv',  n:'Plano cartesiano', g:[ADE.mv1,ADE.mv2]},
+  {k:'tp',  n:'Grandezas e medidas', g:[ADE.tp1,ADE.tp2]}
+ ],
+ v:[
+  {k:'lj',  n:'Porcentagem: comparar ofertas', g:[AVA.lj1,AVA.lj2]},
+  {k:'iv',  n:'Proporcionalidade inversa', g:[AVA.iv1]},
+  {k:'pd',  n:'Partilha desigual', g:[AVA.pd1]},
+  {k:'ep',  n:'Problemas com equação', g:[AVA.ep1,AVA.ep2]},
+  {k:'sa',  n:'Sequências e expressões', g:[AVA.sa1,AVA.sa2]},
+  {k:'fr',  n:'Frações: o restante', g:[AVA.fr1,AVA.fr2]},
+  {k:'dp',  n:'Inteiros em quadros', g:[AVA.dp1,AVA.dp2]},
+  {k:'rf',  n:'Frações na reta', g:[AVA.rf1]},
+  {k:'mc',  n:'Medidas com várias etapas', g:[AVA.mc1,AVA.mc2,AVA.mc3]}
+ ]
+};
+for(const l of LEVELS) TOPICS[l].forEach(t=>{ if(!DESC.find(d=>d.n===t.n)) DESC.push({k:t.k,n:t.n}); });
+
+/* ---------- sessão: sorteio sem repetição ---------- */
+function qKey(q){ return [q.q, q.tbl||'', q.fig||'', (q.alts||[]).slice().sort().join('#'), (q.items||[]).map(i=>i.s+(i.v?1:0)).join('#'), q.text||'', (q.gaps||[]).join('#')].join('|'); }
+function newSession(){ return {bag:[], last:null, used:new Set(), cnt:{}}; }
+function nextQuestion(sess, lvl){
+  const tops=TOPICS[lvl];
+  for(let round=0; round<2; round++){
+    for(let t=0; t<tops.length*2; t++){
+      if(!sess.bag.length){ sess.bag=shuffle(tops.map((_,i)=>i)); if(sess.bag[0]===sess.last && sess.bag.length>1) sess.bag.push(sess.bag.shift()); }
+      const ti=sess.bag.shift(), tp=tops[ti]; const c0=sess.cnt[tp.k]||0;
+      for(let gi=0; gi<tp.g.length; gi++){ const gen=tp.g[(c0+gi)%tp.g.length];
+        for(let tries=0; tries<30; tries++){
+          let q; try{ q=gen(); }catch(e){ if(typeof console!=='undefined') console.error(tp.k,lvl,e); break; }
+          if(!q) continue; q.t=q.t||'mc';
+          const key=tp.k+'|'+lvl+'|'+qKey(q);
+          if(sess.used.has(key)) continue;
+          sess.last=ti; sess.used.add(key); sess.cnt[tp.k]=c0+1; q.d=tp.k; q.dn=tp.n; q.lvl=lvl; q.key=key; return q;
+        }
+      }
+    }
+    sess.used.clear();
+  }
+  return null;
+}
+if(typeof module!=='undefined') module.exports={BAS,ADE,AVA,DESC,LEVELS,TOPICS,newSession,nextQuestion,setRnd:f=>{RND=f;},fmt,qKey};
+
+</script>
+<script>
+const $=s=>document.querySelector(s);
+const stage=$('#stage'), app=$('#app');
+const LVNAME={b:'Básico',a:'Adequado',v:'Avançado'};
+const LET=['A','B','C','D'];
+const ROUND=10;
+const OWL=(mood='ok')=>`<svg class="owl" viewBox="0 0 120 130" aria-hidden="true">
+  <path d="M22 40 L30 8 L48 30 Z M98 40 L90 8 L72 30 Z" fill="#8A5A2E"/>
+  <ellipse cx="60" cy="74" rx="46" ry="52" fill="#B9824F"/>
+  <ellipse cx="60" cy="88" rx="30" ry="34" fill="#F3DDBE"/>
+  <path d="M42 84 q6 5 12 0 M60 92 q6 5 12 0 M48 100 q6 5 12 0" fill="none" stroke="#C99B6B" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="40" cy="52" r="19" fill="#fff" stroke="#1E2A4A" stroke-width="3"/><circle cx="80" cy="52" r="19" fill="#fff" stroke="#1E2A4A" stroke-width="3"/>
+  <line x1="59" y1="52" x2="61" y2="52" stroke="#1E2A4A" stroke-width="3"/>
+  ${mood==='no' ? '<path d="M32 54 q8 -7 16 0 M72 54 q8 -7 16 0" fill="none" stroke="#1E2A4A" stroke-width="4" stroke-linecap="round"/>' : '<circle cx="42" cy="54" r="7" fill="#1E2A4A"/><circle cx="82" cy="54" r="7" fill="#1E2A4A"/><circle cx="44" cy="51" r="2.2" fill="#fff"/><circle cx="84" cy="51" r="2.2" fill="#fff"/>'}
+  <path d="M54 64 L60 76 L66 64 Z" fill="#F2B705" stroke="#8A5A2E" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M18 92 q-10 14 2 26 M102 92 q10 14 -2 26" fill="none" stroke="#8A5A2E" stroke-width="7" stroke-linecap="round"/>
+  <path d="M48 124 v5 M54 124 v5 M66 124 v5 M72 124 v5" stroke="#F2B705" stroke-width="4" stroke-linecap="round"/>
+</svg>`;
+$('#logo').innerHTML=OWL();
+const STAR=on=>`<svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21.1l1.4-7L2 9.3l7-.8z" fill="${on?'#F2B705':'#E6ECF5'}" stroke="${on?'#B38100':'#C3CEE0'}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+
+let level='b', studentName='';
+const STATE={}; for(const l of ['b','a','v']) STATE[l]={sess:newSession(), phase:'start', list:[], q:null, picked:null, infinite:false, all:[]};
+const st=()=>STATE[level];
+const PRAISE=['Mandou bem!','Isso aí!','Arrasou!','Acertou em cheio!','Muito bem!','É isso mesmo!'];
+const OOPS=['Quase!','Vamos ver juntos?','Opa, essa engana!','Não foi dessa vez!'];
+const pickArr=a=>a[Math.floor(Math.random()*a.length)];
+
+function setLevel(l){ level=l; app.dataset.lv=l; document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', t.dataset.l===l)); render(); }
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setLevel(t.dataset.l));
+
+function render(){ const s=st(); ({start:vStart,q:vQuestion,end:vEnd})[s.phase](); }
+
+function vStart(){
+  const s=st();
+  stage.innerHTML=`<div class="start">
+    <div style="display:grid;gap:14px;min-width:0">
+      <div><span class="lvbadge">Nível ${LVNAME[level]}</span><h2>Bora treinar para o SARESP?</h2></div>
+      <p class="lead">As questões aparecem uma de cada vez, com os conteúdos deste nível misturados. Depois de responder, a Professora Coruja explica a resposta.</p>
+      <div class="row" style="gap:6px">${TOPICS[level].map(t=>`<span class="chip">${t.n}</span>`).join('')}</div>
+      <div class="field"><label for="nome">Seu nome</label><input id="nome" maxlength="40" placeholder="Digite seu nome" value="${studentName.replace(/"/g,'&quot;')}"></div>
+      <div class="row"><button class="btn" id="go10">Rodada de ${ROUND} questões</button><button class="btn soft" id="goInf">Treino sem fim</button></div>
+      ${s.all.length?`<p class="lead">Neste nível você já respondeu ${s.all.length} questões hoje.</p>`:''}
+    </div>
+    <div class="hello">${OWL()}<div class="bubble">Leia com calma, faça a conta no caderno e só depois responda!</div></div>
+  </div>`;
+  $('#nome').oninput=e=>{ studentName=e.target.value; };
+  $('#go10').onclick=()=>begin(false); $('#goInf').onclick=()=>begin(true);
+}
+function begin(inf){ const s=st(); s.infinite=inf; s.list=[]; s.phase='q'; nextQ(); }
+function nextQ(){ const s=st(); s.q=nextQuestion(s.sess, level); s.picked=null; s.resp=null; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function freshResp(q){ if(q.t==='sn') return {sn:q.items.map(()=>null)}; if(q.t==='m3') return {m3:[]}; if(q.t==='lac') return {lac:q.gaps.map(()=>null), act:0}; return {}; }
+function isComplete(q,r){ if(q.t==='sn') return r.sn.every(v=>v!==null); if(q.t==='m3') return r.m3.length===3; if(q.t==='lac') return r.lac.every(v=>v!==null); return false; }
+function grade(q,r){ if(q.t==='sn') return q.items.every((it,i)=>it.v===r.sn[i]); if(q.t==='m3') return q.items.every((it,i)=>it.v===r.m3.includes(i)); if(q.t==='lac') return q.gaps.every((g,i)=>String(g)===r.lac[i]); return false; }
+const HINT={sn:'Marque SIM ou NÃO em cada linha e depois toque em Conferir.', m3:'Marque exatamente três afirmações e depois toque em Conferir.', lac:'Toque em uma lacuna e depois no valor que vai nela. Depois toque em Conferir.'};
+
+function bodySN(q,r,done){
+  return `<div class="tablewrap"><table class="sntb"><tr><th>Essa afirmação está correta?</th><th>SIM</th><th>NÃO</th></tr>${q.items.map((it,i)=>{
+    const b=(val,lab)=>{ let cls='yn'; if(r.sn[i]===val) cls+=' sel'; if(done){ if(it.v===val) cls+=' right'; else if(r.sn[i]===val) cls+=' wrong'; } return `<td><button class="${cls}" data-i="${i}" data-v="${val?1:0}" ${done?'tabindex="-1" aria-disabled="true"':''} aria-label="${lab}">${lab}</button></td>`; };
+    return `<tr class="${done?(r.sn[i]===it.v?'okrow':'norow'):''}"><td class="st">${i+1}. ${it.s}</td>${b(true,'SIM')}${b(false,'NÃO')}</tr>`; }).join('')}</table></div>`;
+}
+function bodyM3(q,r,done){
+  return `<div class="m3list">${q.items.map((it,i)=>{ const on=r.m3.includes(i); let cls='chk'+(on?' on':''); if(done){ if(it.v) cls+=' right'; else if(on) cls+=' wrong'; }
+    return `<button class="${cls}" data-i="${i}" ${done?'tabindex="-1" aria-disabled="true"':''} aria-pressed="${on}"><span class="box">${on?'✓':''}</span><span class="T">${it.s}</span></button>`; }).join('')}</div>`;
+}
+function bodyLAC(q,r,done){
+  let txt=q.text.replace(/\{(\d)\}/g,(m,k)=>{ k=+k; const v=r.lac[k]; let cls='gap'+(v?' full':'')+(!done&&r.act===k?' act':''); if(done) cls+= String(q.gaps[k])===v?' right':' wrong';
+    return `<button class="${cls}" data-g="${k}" ${done?'tabindex="-1" aria-disabled="true"':''}>${v||'?'}</button>${done&&String(q.gaps[k])!==v?` <span class="fix">${q.gaps[k]}</span>`:''}`; });
+  return `<p class="lactext">${txt}</p>${done?'':`<div class="chips">${q.opts.map(o=>`<button class="chipv ${r.lac.includes(o)?'used':''}" data-o="${o.replace(/"/g,'&quot;')}">${o}</button>`).join('')}</div>`}`;
+}
+function vQuestion(){
+  const s=st(), q=s.q, done=s.picked!==null; if(!s.resp) s.resp=freshResp(q); const r=s.resp;
+  const shownN = done ? s.list.length : s.list.length+1;
+  const dots = s.infinite ? `<span class="count">Questão ${shownN} · ${s.list.filter(x=>x.ok).length} acerto${s.list.filter(x=>x.ok).length===1?'':'s'}</span>`
+    : `<div class="dots" aria-label="Progresso">${Array.from({length:ROUND},(_,i)=>{ const rr=s.list[i]; return `<i class="${rr?(rr.ok?'ok':'no'):(i===s.list.length&&!done?'now':'')}"></i>`; }).join('')}</div>`;
+  let body='';
+  if(q.t==='mc'){ body=`<div class="alts ${q.altSvg?'svg':''} ${done?'done':''}">${q.alts.map((a,i)=>{ let cls=''; if(done){ if(i===q.ans) cls='right'; else if(i===s.picked) cls='wrong'; }
+      return `<button class="alt ${cls}" data-i="${i}" ${done?'tabindex="-1" aria-disabled="true"':''}><span class="L">${LET[i]}</span><span class="T">${a}</span></button>`; }).join('')}</div>`; }
+  else { body = (q.t==='sn'?bodySN(q,r,done):q.t==='m3'?bodyM3(q,r,done):bodyLAC(q,r,done)) + (done?'':`<div class="row"><span class="lead" style="font-size:15px">${HINT[q.t]}</span><button class="btn" id="conf" ${isComplete(q,r)?'':'disabled'}>Conferir</button></div>`); }
+  let explain='';
+  if(done){ const ok=s.list[s.list.length-1].ok;
+    const head = q.t==='mc' ? (ok?pickArr(PRAISE):pickArr(OOPS)+` A resposta certa é a letra ${LET[q.ans]}.`) : (ok?pickArr(PRAISE):pickArr(OOPS)+' Veja onde estava a pegadinha.');
+    const per = q.t==='sn'||q.t==='m3' ? `<ul class="whys">${q.items.map((it,i)=>{ const mine = q.t==='sn'? r.sn[i] : r.m3.includes(i); const right = q.t==='sn'? mine===it.v : mine===it.v;
+        return `<li class="${right?'y':'n'}"><b>${q.t==='sn'?(it.v?'SIM':'NÃO'):(it.v?'Verdadeira':'Falsa')}</b> · ${it.s}<br><span>${it.why}</span></li>`; }).join('')}</ul>`
+      : q.t==='lac' ? `<p class="whyl">Valores certos: ${q.gaps.map((g,i)=>`<b>${g}</b>`).join(' · ')}</p>` : '';
+    explain=`<section class="explain" id="exp">${OWL(ok?'ok':'no')}
+      <div class="ebox"><h3 class="${ok?'ok':'no'}">${head}</h3>${per}
+        <ol class="steps">${q.exp.map(e=>`<li><div>${e}</div></li>`).join('')}</ol>
+        <div class="rule"><small>Regra de bolso</small><p>${q.regra}</p></div>
+        <div class="row">${ s.infinite ? `<button class="btn" id="next">Próxima questão</button><button class="btn soft" id="stop">Encerrar e ver resultado</button>` : (s.list.length>=ROUND?`<button class="btn" id="next">Ver meu resultado</button>`:`<button class="btn" id="next">Próxima questão</button>`)}</div>
+      </div></section>`; }
+  const fmtTag = {mc:'',sn:'<span class="chip plain">Sim ou não</span>',m3:'<span class="chip plain">Marque três</span>',lac:'<span class="chip plain">Lacunas</span>'}[q.t];
+  stage.innerHTML=`<div class="qtop"><span class="qnum">${s.infinite?'':'Questão '+shownN}</span><span class="chip">${q.dn}</span>${fmtTag}${dots}</div>
+    <p class="qtext">${q.q}</p>
+    ${q.tbl?`<div class="tablewrap">${q.tbl}</div>`:''}
+    ${q.fig?`<div class="figbox">${q.fig}</div>`:''}
+    ${body}
+    ${explain}`;
+  if(!done){
+    if(q.t==='mc') stage.querySelectorAll('.alt').forEach(b=>b.onclick=()=>answer(+b.dataset.i));
+    if(q.t==='sn') stage.querySelectorAll('.yn').forEach(b=>b.onclick=()=>{ r.sn[+b.dataset.i]=b.dataset.v==='1'; keep(); });
+    if(q.t==='m3') stage.querySelectorAll('.chk').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; const k=r.m3.indexOf(i); if(k>=0) r.m3.splice(k,1); else if(r.m3.length<3) r.m3.push(i); keep(); });
+    if(q.t==='lac'){ stage.querySelectorAll('.gap').forEach(b=>b.onclick=()=>{ const g=+b.dataset.g; if(r.act===g && r.lac[g]!==null) r.lac[g]=null; r.act=g; keep(); });
+      stage.querySelectorAll('.chipv').forEach(b=>b.onclick=()=>{ const o=b.dataset.o; const prev=r.lac.indexOf(o); if(prev>=0) r.lac[prev]=null; r.lac[r.act]=o; const nx=r.lac.findIndex(v=>v===null); r.act = nx>=0?nx:r.act; keep(); }); }
+    const c=$('#conf'); if(c) c.onclick=()=>{ if(!isComplete(q,r)) return; finish(grade(q,r),'done'); };
+  } else {
+    $('#next').onclick=()=>{ if(!s.infinite && s.list.length>=ROUND){ s.phase='end'; render(); window.scrollTo({top:0,behavior:'smooth'}); } else nextQ(); };
+    if($('#stop')) $('#stop').onclick=()=>{ s.phase='end'; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+    const e=$('#exp'); setTimeout(()=>e.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'nearest'}),60);
+  }
+}
+function keep(){ const y=window.scrollY; render(); window.scrollTo(0,y); }
+function finish(ok,picked){ const s=st(); if(s.picked!==null) return; s.picked=picked; const rec={d:s.q.d, dn:s.q.dn, ok}; s.list.push(rec); s.all.push(rec); render(); }
+function answer(i){ finish(i===st().q.ans, i); }
+
+
+function reportRows(list){ const m=new Map(); list.forEach(r=>{ const x=m.get(r.dn)||{ok:0,t:0}; x.t++; if(r.ok) x.ok++; m.set(r.dn,x); });
+  return [...m.entries()].sort((a,b)=>(a[1].ok/a[1].t)-(b[1].ok/b[1].t)).map(([dn,x])=>{ const p=x.ok/x.t; const cls=p>=0.75?'g':p>=0.5?'y':'r'; const lab=p>=0.75?'Domina':p>=0.5?'Quase lá':'Treinar mais';
+    return `<tr><td>${dn}</td><td>${x.ok} de ${x.t}</td><td><span class="pill ${cls}">${lab}</span></td></tr>`; }).join(''); }
+function vEnd(){
+  const s=st(), tot=s.list.length, ok=s.list.filter(x=>x.ok).length, p=tot?Math.round(ok/tot*100):0;
+  const stars=p>=90?3:p>=70?2:p>=50?1:0; const msg=['Cada erro ensina! Vamos tentar de novo?','Bom começo! Continue treinando.','Muito bem! Você está quase lá.','Incrível! Você mandou muito bem!'][stars];
+  stage.innerHTML=`<div class="score">
+      <div class="ring" style="--p:${p}"><b>${ok}<small>de ${tot}</small></b></div>
+      <div style="display:grid;gap:10px;min-width:0">
+        <span class="lvbadge" style="justify-self:start">Nível ${LVNAME[level]}${studentName?' · '+studentName.replace(/</g,'&lt;'):''}</span>
+        <h2>${msg}</h2><div class="stars">${[0,1,2].map(i=>STAR(i<stars)).join('')}</div>
+      </div></div>
+    <div><h3 style="font-family:var(--font-display);margin:0 0 4px;font-size:22px">Como foi em cada conteúdo</h3>
+      <p class="lead" style="font-size:15px">Do mais difícil para o mais fácil nesta ${s.infinite?'sessão':'rodada'}.</p>
+      <div class="tablewrap"><table class="report"><tr><th>Conteúdo</th><th>Acertos</th><th></th></tr>${reportRows(s.list)}</table></div></div>
+    ${s.all.length>s.list.length?`<details><summary style="cursor:pointer;font-weight:900">Tudo o que você fez neste nível hoje (${s.all.length} questões)</summary><div class="tablewrap"><table class="report">${reportRows(s.all)}</table></div></details>`:''}
+    <div class="row"><button class="btn" id="again">Nova rodada de ${ROUND}</button><button class="btn soft" id="inf">Treino sem fim</button></div>`;
+  $('#again').onclick=()=>begin(false); $('#inf').onclick=()=>begin(true);
+}
+render();
+</script>
+
+</body>
+</html>
