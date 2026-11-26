@@ -204,6 +204,13 @@ h2{font-family:var(--font-display);font-weight:700;font-size:clamp(26px,3.4vw,40
 .whys li span{color:var(--muted)}
 .whyl{margin:0;font-weight:800}
 @media (max-width:480px){ .sntb th:not(:first-child){width:64px} .yn{min-width:48px;font-size:15px} }
+
+.abbox{display:flex;flex-direction:column;gap:12px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px}
+.abyn{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.abyn .yn{width:auto;min-width:92px;padding:10px 16px}
+.abl{display:flex;flex-direction:column;gap:6px;font-weight:800;font-size:17px}
+.abin{font:inherit;font-size:20px;font-weight:800;padding:10px 12px;border:2.5px solid var(--ink);border-radius:12px;max-width:240px}
+.abin.right{border-color:var(--ok);background:var(--ok-l)}.abin.wrong{border-color:var(--bad);background:var(--bad-l)}
+.model{background:#EEF6FF;border-left:6px solid var(--lv);border-radius:12px;padding:10px 14px;font-weight:600;font-size:16px}.model ol{margin:6px 0 0;padding-left:1.2em}
 </style>
 </head>
 <body>
@@ -1195,6 +1202,369 @@ ADE.fp3 = () => {
   return SN({q:`Uma ${pizza} foi dividida em partes iguais. ${n1} comeu ${A} da ${pizza} e ${n2} comeu ${C}.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items:items.map(c=>({s:c[0],v:c[1],why:c[2]})),
     exp:[`Iguale os denominadores: ${A} = ${F(ua,d)}.`, `Comeram ${F(ua,d)} + ${C} = ${F(ua+uc,d)}. Sobrou ${F(left,d)}.`], regra:'Para somar, comparar ou tirar frações: primeiro iguale os denominadores.'});
 };
+/* ====================== NOVOS GERADORES (v2) ====================== */
+const kgf = v => Number.isInteger(v) ? fmt(v) : dec(v,1);
+const AB = (o) => (typeof o.yes==='boolean' && o.val!==undefined && o.model && o.model.length) ? {t:'ab', ...o} : null;
+const sgp = n => n<0 ? `(−${fmt(-n)})` : fmt(n);
+const STEM_ABRE = () => pick(['Observe','Analise','Considere']);
+
+/* ---------- gráficos ---------- */
+function colChart(labels, vals, step, top, unit=''){
+  const W=460, H=270, ox=58, oy=222, cw=(W-ox-16)/labels.length, sc=(oy-24)/top;
+  let s='';
+  for(let v=0; v<=top; v+=step){ const y=oy-v*sc; s+=L([ox,y],[W-10,y],'f-thin')+T(ox-10,y,fmt(v),17,'f-mut','end'); }
+  labels.forEach((lb,i)=>{ const x=ox+10+i*cw, h=vals[i]*sc; s+=`<rect class="f-col" x="${x.toFixed(1)}" y="${(oy-h).toFixed(1)}" width="${(cw-20).toFixed(1)}" height="${h.toFixed(1)}" rx="3"/>`+T(x+(cw-20)/2,oy+22,lb,17,'f-txt'); });
+  s+=L([ox,oy],[W-10,oy])+L([ox,oy],[ox,12]);
+  if(unit) s+=T(ox-6,8,unit,15,'f-mut','start');
+  return S(`0 0 ${W} ${H}`, s);
+}
+function lineChart(labels, vals, lo, hi, step=2){
+  const W=460, H=270, ox=58, top=18, oy=226, cw=(W-ox-40)/(labels.length-1), sc=(oy-top)/(hi-lo); const Y=v=>oy-(v-lo)*sc;
+  let s='';
+  for(let v=lo; v<=hi; v+=step){ s+=L([ox,Y(v)],[W-12,Y(v)], v===0?'f-mid':'f-thin')+T(ox-10,Y(v),sg(v),17,'f-mut','end'); }
+  const pts=vals.map((v,i)=>[ox+20+i*cw, Y(v)]);
+  s+=`<polyline fill="none" stroke="#2E7D5B" stroke-width="4" points="${pts.map(p=>p.map(n=>n.toFixed(1)).join(',')).join(' ')}"/>`;
+  pts.forEach((p,i)=>{ s+=`<circle class="f-dot" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="7"/>`+T(p[0],H-14,labels[i],17,'f-txt'); });
+  s+=L([ox,top-6],[ox,oy+4]);
+  return S(`0 0 ${W} ${H}`, s);
+}
+function balanceFig(lb, lw, rb, rw){ // lb caixas + lw kg (esq) ; rb caixas + rw kg (dir)
+  const W=520, H=230, cx=260, by=62;
+  let s=`<polygon class="f-cf" points="${cx-22},${H-8} ${cx+22},${H-8} ${cx},${by+8}"/>`+L([cx-170,by],[cx+170,by])+`<circle class="f-ink" cx="${cx}" cy="${by}" r="7"/>`;
+  const pan=(sx,boxes,w)=>{ let p=L([sx,by],[sx-62,by+70],'f-mid')+L([sx,by],[sx+62,by+70],'f-mid')+`<path class="f-ct" d="M${sx-78},${by+70} h156 a78,20 0 0 1 -156,0z"/>`;
+    const items=[...Array(boxes).fill('x'), ...(w?[w+' kg']:[])]; const tot=items.length+(w?0.8:0); const iw=Math.min(36, 160/tot);
+    const ww0=Math.max(58, iw*1.8); const totalW=boxes*iw+(w?ww0+4:0); items.forEach((it,i)=>{ const x=sx-totalW/2+i*iw+2; if(it==='x'){ p+=`<rect x="${x.toFixed(1)}" y="${by+26}" width="${(iw-4).toFixed(1)}" height="42" rx="6" fill="#F28A1E" stroke="#1F2A44" stroke-width="2"/>`+T(x+(iw-4)/2,by+47,'x',22,'f-txt'); }
+      else { const ww=Math.max(58, iw*1.8); p+=`<rect x="${x.toFixed(1)}" y="${by+22}" width="${ww.toFixed(1)}" height="46" rx="7" fill="#4A90C2" stroke="#1F2A44" stroke-width="2"/>`+`<text x="${(x+ww/2).toFixed(1)}" y="${by+46}" font-size="19" fill="#fff" font-weight="800" text-anchor="middle" dominant-baseline="middle">${it}</text>`; } });
+    return p; };
+  s+=pan(cx-150, lb, lw)+pan(cx+150, rb, rw);
+  return S(`0 0 ${W} ${H}`, s);
+}
+
+/* ---------- BÁSICO ---------- */
+BAS.sin5 = () => {
+  const a=R(2,5), n=pick([2,3,4]); if(a**n>200) return BAS.sin5();
+  const kind = pick(['par','par','neg']);
+  if(kind==='neg' && n===2){ // −a² x (−a)²
+    const c=-(a*a);
+    return {q:`O valor da expressão ${B('−'+a+'²')} é`, ...alts(sg(c),[sg(a*a), sg(-2*a), sg(2*a)],g=>sg(c-g)),
+      exp:[`Repare: não há parênteses. Só o ${a} está elevado ao quadrado.`, `${a}² = ${a} × ${a} = ${a*a}.`, `O sinal de menos continua na frente: ${B(sg(c))}.`, `Por que não ${a*a}? Esse seria o valor de (−${a})², com parênteses.`],
+      regra:'(−3)² = 9, mas −3² = −9. Os parênteses fazem toda a diferença!', ck:true};
+  }
+  const c=(-a)**n;
+  return {q:`O valor da potência ${B(`(−${a})<sup>${n}</sup>`)} é`, ...alts(sg(c),[sg(-c), sg(-a*n), sg(a*n)],g=>sg(c+(g%2?1:-1)*g)),
+    exp:[`Potência é multiplicação repetida: (−${a})<sup>${n}</sup> = ${Array(n).fill(`(−${a})`).join(' × ')}.`, `Sem o sinal: ${a}<sup>${n}</sup> = ${a**n}.`, `Quantos sinais de menos? ${n}. ${n%2===0?'Número par de negativos → resultado positivo':'Número ímpar de negativos → resultado negativo'}: ${B(sg(c))}.`, `Por que não ${sg(-a*n)}? Isso é ${a} × ${n}. Potência não é multiplicar pelo expoente!`],
+    regra:'Negativo elevado a expoente par → positivo. A expoente ímpar → negativo.', ck: c===Math.pow(-a,n)};
+};
+BAS.sin6 = () => {
+  const pool=[]; const a=R(2,4), b=R(2,5), c=R(2,9), d=R(2,9);
+  pool.push([`(−${a})² = ${a*a}`, true, `(−${a}) × (−${a}) = ${a*a}: sinais iguais.`]);
+  pool.push([`(−${a})³ = ${a**3}`, false, `Três sinais de menos → negativo: (−${a})³ = −${a**3}.`]);
+  pool.push([`(−${b})³ = −${b**3}`, true, `${b} × ${b} × ${b} = ${b**3}, com sinal negativo (expoente ímpar).`]);
+  pool.push([`−${b}² = ${b*b}`, false, `Sem parênteses, só o ${b} é elevado: −${b}² = −${b*b}.`]);
+  pool.push([`(−${c}) × (−${d}) = ${c*d}`, true, 'Sinais iguais → positivo.']);
+  pool.push([`(−${c}) + (−${d}) = ${c+d}`, false, `Na soma, juntamos duas "dívidas": −${c} − ${d} = −${c+d}.`]);
+  pool.push([`(−1)<sup>${2*R(1,4)}</sup> = 1`, true, 'Expoente par: o resultado é positivo.']);
+  pool.push([`${c} − ${c+d} = −${d}`, true, `Tirar mais do que se tem dá negativo: ${c} − ${c+d} = −${d}.`]);
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=R(2,3);
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`Leia as afirmações a seguir sobre operações com números inteiros, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items,
+    exp:['Na multiplicação e na potência, conte os sinais de menos: par → +, ímpar → −.','Na soma e na subtração, pense em dinheiro ou no termômetro.'], regra:'Regra de sinais vale para × e ÷ (e potência). Na soma, pense em ganhar e perder.'});
+};
+BAS.reta4 = () => {
+  let v; do{ v=[R(-9,-1),R(-9,-1),R(1,9),0]; }while(new Set(v).size<4||v[0]===v[1]);
+  const [n1,n2,p]=v; const lo=Math.min(n1,n2), hi=Math.max(n1,n2);
+  const right=[`${sg(hi)} é maior que ${sg(lo)}.`,`${sg(lo)} está à esquerda de ${sg(hi)} na reta numérica.`,`O zero é maior que ${sg(lo)}.`,`${sg(lo)} é menor que ${p}.`];
+  const wrong=[`${sg(lo)} é maior que ${sg(hi)}.`,`${sg(hi)} é menor que ${sg(lo)}.`,`${sg(lo)} é maior que zero.`,`${sg(lo)} está à direita de ${sg(hi)} na reta numérica.`,`${sg(lo)} é maior que ${p}.`];
+  const ok=pick(right); const ws=shuffle(wrong).slice(0,3);
+  return {q:`${STEM_ABRE()} os números ${sg(n1)}, ${sg(n2)}, 0 e ${p}.<br>Qual das afirmações a seguir é ${B('verdadeira')}?`, ...alts(ok,ws,listExtra([`${sg(hi)} está à esquerda de ${sg(lo)} na reta numérica.`])),
+    exp:['Na reta, os negativos ficam à esquerda do zero.', `Entre ${sg(lo)} e ${sg(hi)}, o mais perto do zero é ${sg(hi)}: ele é o ${B('maior')}.`, `Afirmação verdadeira: ${B(ok)}`],
+    regra:'Mais à esquerda na reta = menor. Entre negativos, o mais perto do zero é o maior.', ck:true};
+};
+BAS.fq3 = () => {
+  const d=pick([4,5,8,10]); let n=R(1,d-1); while(gcd(n,d)!==1) n=R(1,d-1); const T=d*R(6,40); const c=T/d*n;
+  const ctx=pick([['Uma turma arrecadou {T} latas de alimento. {f} das latas foram para a creche do bairro.','latas'],['Em um campeonato, foram marcados {T} gols. {f} dos gols foram de cabeça.','gols'],['Uma padaria fez {T} pães. {f} dos pães foram vendidos de manhã.','pães']]);
+  const pool=[[`Cada parte (${F(1,d)}) corresponde a ${fmt(T/d)} ${ctx[1]}.`, true, `${fmt(T)} ÷ ${d} = ${fmt(T/d)}.`],[`${F(n,d)} do total corresponde a ${fmt(c)} ${ctx[1]}.`, true, `${fmt(T/d)} × ${n} = ${fmt(c)}.`],[`${F(n,d)} do total corresponde a ${fmt(T/d)} ${ctx[1]}.`, n===1, n===1?'É só uma parte.':`Isso é só ${F(1,d)}. Faltou multiplicar por ${n}: ${fmt(c)}.`],[`O restante é ${fmt(T-c)} ${ctx[1]}.`, true, `${fmt(T)} − ${fmt(c)} = ${fmt(T-c)}.`],[`O restante é ${fmt(T-c+T/d)} ${ctx[1]}.`, false, `O restante é ${fmt(T)} − ${fmt(c)} = ${fmt(T-c)}.`],[`Para achar ${F(n,d)} de ${fmt(T)}, divide-se ${fmt(T)} por ${n} e multiplica-se por ${d}.`, false, `É ao contrário: divide pelo de baixo (${d}) e multiplica pelo de cima (${n}).`]];
+  const seen=new Set(); const P=pool.filter(p=>!seen.has(p[0])&&seen.add(p[0])); const T_=P.filter(p=>p[1]), F_=P.filter(p=>!p[1]); if(F_.length<1) return BAS.fq3(); const nT=Math.min(3,T_.length); const k=Math.max(1,4-nT);
+  const items=shuffle([...shuffle(T_).slice(0,4-Math.min(k,F_.length)),...shuffle(F_).slice(0,Math.min(k,F_.length))]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`${ctx[0].replace('{T}',fmt(T)).replace('{f}',F(n,d))}<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items,
+    exp:[`Uma parte: ${fmt(T)} ÷ ${d} = ${fmt(T/d)}.`, `${n} partes: ${fmt(c)}. Restante: ${fmt(T-c)}.`], regra:'Fração de quantidade: divide pelo de baixo, multiplica pelo de cima.'});
+};
+BAS.pct4 = () => {
+  const V=R(4,40)*20; const pool=[[`10% de ${fmt(V)} é ${fmt(V/10)}.`, true, '10% é dividir por 10.'],[`50% de ${fmt(V)} é ${fmt(V/2)}.`, true, '50% é a metade.'],[`25% de ${fmt(V)} é ${fmt(V/4)}.`, true, '25% é a quarta parte (÷ 4).'],[`25% de ${fmt(V)} é ${fmt(V/2)}.`, false, `Esse valor é a metade (50%). 25% é ${fmt(V/4)}.`],[`20% de ${fmt(V)} é ${fmt(V-20)}.`, false, `Tirar 20 não é calcular 20%. 20% de ${fmt(V)} = 2 × 10% = ${fmt(V/5)}.`],[`20% de ${fmt(V)} é ${fmt(V/5)}.`, true, `2 × 10% = 2 × ${fmt(V/10)} = ${fmt(V/5)}.`],[`10% de ${fmt(V)} é ${fmt(V/100)===fmt(V/10)?V:dec(V/100)}.`, false, `Isso seria 1%. 10% de ${fmt(V)} é ${fmt(V/10)}.`],[`100% de ${fmt(V)} é o próprio ${fmt(V)}.`, true, '100% é o total.']];
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=R(2,3);
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`Leia as afirmações a seguir sobre porcentagens do número ${B(fmt(V))}, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items,
+    exp:[`10% de ${fmt(V)} = ${fmt(V/10)}. A partir dele: 20% = ${fmt(V/5)}, 50% = ${fmt(V/2)}.`, `25% é a metade da metade: ${fmt(V/4)}.`], regra:'10% = ÷10 · 50% = ÷2 · 25% = ÷4 · 20% = 2 × 10%.'});
+};
+/* qual conta resolve? (frações) */
+BAS.opq = () => {
+  const [a,b]=pick([[1,2],[3,4],[2,3],[1,3],[3,5]]); const [c,d]=pick([[1,4],[1,5],[1,6],[1,8],[1,3]]); if(a/b<=c/d||(a===c&&b===d)) return BAS.opq();
+  const nmx=nm(); const A=F(a,b), C=F(c,d);
+  const sit=pick([
+    ['sum',`${nmx} tomou ${A} litro de suco de manhã e ${C} litro à tarde. Para saber quanto ${nmx} tomou no dia, a conta que deve ser feita é`, 'juntou o suco de manhã com o da tarde'],
+    ['sub',`Uma garrafa tinha ${A} litro de suco. ${nmx} tomou ${C} litro. Para saber quanto sobrou na garrafa, a conta que deve ser feita é`, 'tirou uma parte do que tinha'],
+    ['mul',`Uma garrafa tem ${A} litro de suco. ${nmx} vai tomar só ${C} ${B('desse')} suco. Para saber quanto vai tomar, a conta que deve ser feita é`, 'quer uma fração de outra fração ("de" vira vezes)'],
+    ['div',`${nmx} tem ${A} litro de suco e vai encher copinhos de ${C} litro cada. Para saber quantos copinhos vai encher, a conta que deve ser feita é`, 'quer saber quantos copinhos cabem']]);
+  const ex={sum:`${A} + ${C}`, sub:`${A} − ${C}`, mul:`${C} × ${A}`, div:`${A} ÷ ${C}`};
+  return {q:sit[1], ...alts(ex[sit[0]], Object.keys(ex).filter(k=>k!==sit[0]).map(k=>ex[k]), listExtra([`${C} − ${A}`])),
+    exp:[`Antes de calcular, descubra ${B('o que a pergunta quer')}.`, `Aqui ${nmx} ${sit[2]}.`, `Juntar → + · Sobrar/tirar → − · Fração ${B('de')} algo → × · Quantos cabem → ÷.`, `Conta certa: ${B(ex[sit[0]])}.`, 'Dica: troque as frações por números fáceis (por exemplo, 6 litros e 2 litros) e veja qual conta você faria.'],
+    regra:'Quem decide a conta é a pergunta, não os números!', ck:true};
+};
+BAS.gr1 = () => {
+  const ctx=pick([{t:'livros emprestados pela biblioteca',lb:['seg','ter','qua','qui','sex'],u:'livros'},{t:'alunos que foram de bicicleta à escola',lb:['jan','fev','mar','abr'],u:'alunos'},{t:'garrafas recolhidas na campanha de reciclagem',lb:['6º A','6º B','7º A','7º B'],u:'garrafas'}]);
+  const step=pick([2,5,10]); const top=step*pick([5,6,8]); const vals=ctx.lb.map(()=>step*R(1,top/step)+(br('half',0.4)?step/2:0)).map(v=>Math.min(v,top));
+  if(!Number.isInteger(vals.reduce((a,b)=>a+b,0))||new Set(vals).size<vals.length) return BAS.gr1();
+  const kind=pick(['ler','dif','soma']); const i=R(0,vals.length-1); let j=R(0,vals.length-1); while(j===i) j=R(0,vals.length-1);
+  const mx=Math.max(...vals), mn=Math.min(...vals);
+  let q, c, ds, ex;
+  if(kind==='ler'){ q=`De acordo com o gráfico, o número de ${ctx.u} em ${B(ctx.lb[i])} foi`; c=vals[i]; ds=[vals[i]+step/2, vals[i]-step/2, vals[i]+step].filter(v=>v>0&&Number.isInteger(v)&&v!==c); ex=[`Encontre a coluna de ${ctx.lb[i]} e siga o topo até o eixo da esquerda.`, `A escala vai de ${step} em ${step}.`, `O topo está em ${B(fmt(c))}.`]; }
+  else if(kind==='dif'){ q=`A diferença entre o maior e o menor número de ${ctx.u} registrados no gráfico é`; c=mx-mn; ds=[mx, mx+mn, mn]; ex=[`Maior coluna: ${fmt(mx)}. Menor coluna: ${fmt(mn)}.`, `Diferença: ${fmt(mx)} − ${fmt(mn)} = ${B(fmt(c))}.`]; }
+  else { q=`Somando ${ctx.lb[i]} e ${ctx.lb[j]}, o total de ${ctx.u} foi`; c=vals[i]+vals[j]; ds=[vals[i]+vals[j]+step, Math.max(vals[i],vals[j]), vals[i]+vals[j]-step].filter(v=>v>0); ex=[`${ctx.lb[i]}: ${fmt(vals[i])}. ${ctx.lb[j]}: ${fmt(vals[j])}.`, `Total: ${fmt(vals[i])} + ${fmt(vals[j])} = ${B(fmt(c))}.`]; }
+  return {q:`O gráfico mostra a quantidade de ${ctx.t}.<br>${q}`, fig:colChart(ctx.lb, vals, step, top), ...alts(fmt(c), ds.map(fmt), g=>fmt(c+g*step)),
+    exp:[...ex, `Cuidado com a ${B('escala')}: cada linha vale ${step}. Uma coluna no meio de duas linhas vale a metade do caminho (${step/2} a mais).`], regra:'Gráfico: leia o título, depois a escala, depois faça a conta.', ck:true};
+};
+BAS.gr2 = () => {
+  const lb=['A','B','C','D']; const step=pick([5,10]); const top=step*6; let vals; do{ vals=lb.map(()=>step*R(1,6)); }while(new Set(vals).size<4);
+  const mx=Math.max(...vals), mn=Math.min(...vals), iM=vals.indexOf(mx), im=vals.indexOf(mn), tot=vals.reduce((a,b)=>a+b,0);
+  const pool=[[`O time ${lb[iM]} fez mais pontos.`, true, `A coluna mais alta é a do ${lb[iM]}: ${mx}.`],[`O time ${lb[im]} fez mais pontos.`, false, `A coluna do ${lb[im]} é a mais baixa: ${mn}.`],[`O time ${lb[0]} fez ${vals[0]} pontos.`, true, `O topo da coluna ${lb[0]} está em ${vals[0]}.`],[`O time ${lb[1]} fez ${vals[1]+step/2} pontos.`, false, `O topo da coluna ${lb[1]} está em ${vals[1]}.`],[`Os quatro times fizeram, juntos, ${tot} pontos.`, true, `${vals.join(' + ')} = ${tot}.`],[`A diferença entre o primeiro e o último colocado é de ${mx-mn} pontos.`, true, `${mx} − ${mn} = ${mx-mn}.`],[`A diferença entre o primeiro e o último colocado é de ${mx+mn} pontos.`, false, `Diferença é subtração: ${mx} − ${mn} = ${mx-mn}.`]];
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=R(2,3);
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`O gráfico mostra os pontos de quatro times em uma gincana da escola.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, fig:colChart(lb.map(x=>'Time '+x), vals, step, top), items,
+    exp:['Leia a escala do eixo da esquerda antes de tudo.', `Pontos: ${lb.map((x,i)=>x+' = '+vals[i]).join(', ')}.`], regra:'Gráfico de colunas: a altura da coluna é o valor. Confira a escala!'});
+};
+
+/* ---------- ADEQUADO ---------- */
+ADE.bal1 = () => {
+  const n=R(2,5), x=R(2,12), w=R(1,9); const tot=n*x+w; const kind=pick(['massa','eq','tira']);
+  const fig=balanceFig(n,w,0,tot);
+  const base=`A balança a seguir está em ${B('equilíbrio')}. As ${n} caixas laranja têm a mesma massa, x kg.`;
+  if(kind==='eq') return {q:`${base}<br>A equação que representa essa balança é`, fig, ...alts(`${n}x + ${w} = ${tot}`,[`x + ${n} + ${w} = ${tot}`, `${n}x = ${tot} + ${w}`, `${n} + ${w} = ${tot}x`],listExtra([`${w}x + ${n} = ${tot}`])),
+    exp:[`Do lado esquerdo: ${n} caixas (${n}x) e mais ${w} kg.`, `Do lado direito: ${tot} kg.`, `Equilíbrio = mesmo peso dos dois lados: ${B(`${n}x + ${w} = ${tot}`)}.`], regra:'Balança em equilíbrio vira equação: lado esquerdo = lado direito.', ck:true};
+  if(kind==='tira') return {q:`${base}<br>Retirando ${w} kg de ${B('cada')} prato, a balança continua em equilíbrio. Nessa nova situação, as ${n} caixas equilibram`, fig, ...alts(`${fmt(tot-w)} kg`,[`${fmt(tot)} kg`, `${fmt(tot+w)} kg`, `${fmt(x)} kg`],g=>`${fmt(tot-w+g)} kg`),
+    exp:[`Tirando o mesmo peso dos dois lados, a balança não sai do lugar.`, `Direita: ${tot} − ${w} = ${B(fmt(tot-w)+' kg')}.`, `Então ${n} caixas = ${tot-w} kg, e cada caixa tem ${x} kg.`], regra:'O que faz de um lado, faz do outro: a balança continua equilibrada.', ck:true};
+  return {q:`${base}<br>A massa de cada caixa é`, fig, ...alts(`${fmt(x)} kg`,[`${fmt(tot-w)} kg`, `${fmt(x+w)} kg`, Number.isInteger(tot/n)?`${fmt(tot/n)} kg`:`${fmt(x+1)} kg`],g=>`${fmt(x+g)} kg`),
+    exp:[`Equação: ${n}x + ${w} = ${tot}.`, `Tire ${w} kg dos dois lados: ${n}x = ${tot-w}.`, `Divida por ${n}: x = ${B(fmt(x)+' kg')}.`, `Cuidado: dividir ${tot} por ${n} antes de tirar o peso solto dá errado.`], regra:'Primeiro tire o peso solto; depois divida pelo número de caixas.', ck:n*x+w===tot};
+};
+AVA.bal2 = () => {
+  const x=R(2,9), a=R(3,5), b=R(1,a-1), w1=R(1,6); const w2=(a-b)*x+w1; if(w2>40) return AVA.bal2();
+  return {q:`A balança está em equilíbrio. Todas as caixas laranja têm a mesma massa, x kg.<br>A massa de cada caixa é`, fig:balanceFig(a,w1,b,w2),
+    ...alts(`${x} kg`,[`${fmt(w2-w1)} kg`, Number.isInteger(w2/b)?`${fmt(w2/b)} kg`:`${x+2} kg`, Number.isInteger((w2-w1)/a)&&(w2-w1)/a!==x?`${fmt((w2-w1)/a)} kg`:`${Math.max(1,x-1)} kg`],g=>`${x+g} kg`),
+    exp:[`Equação: ${a}x + ${w1} = ${b}x + ${w2}.`, `Tire ${b} caixa${b>1?'s':''} dos dois lados: ${a-b}x + ${w1} = ${w2}.`, `Tire ${w1} kg dos dois lados: ${a-b}x = ${w2-w1}.`, `Divida: x = ${B(x+' kg')}.`], regra:'Tire o que é igual dos dois lados até sobrar só caixa de um lado.', ck:a*x+w1===b*x+w2};
+};
+ADE.dz1 = () => {
+  const ctx=pick([
+    {up:'Um avião voa a {A} m de altitude.', dn:'Um submarino está a {D} m de profundidade.', A:R(10,40)*100, D:R(2,12)*50, u:'m', q:'A distância vertical entre o avião e o submarino é', qr:'O submarino está a {T} m abaixo do avião. O submarino está na posição'},
+    {up:'Em um dia, a temperatura máxima foi de {A} °C.', dn:'A mínima foi de {D} °C abaixo de zero.', A:R(3,15), D:R(1,8), u:'°C', q:'A diferença entre a máxima e a mínima foi de', qr:'A diferença entre a máxima e a mínima foi de {T} °C. A temperatura mínima foi de'},
+    {up:'Um elevador está no {A}º andar.', dn:'A garagem fica no {D}º subsolo.', A:R(3,15), D:R(1,4), u:'andares', q:'Para ir do andar até a garagem, o elevador vai descer', qr:'O elevador desceu {T} andares e chegou à garagem. A garagem fica no andar'},
+    {up:'O topo de um morro fica a {A} m acima do nível do mar.', dn:'Uma caverna embaixo dele chega a {D} m abaixo do nível do mar.', A:R(5,30)*10, D:R(2,9)*10, u:'m', q:'A distância entre o topo do morro e o fundo da caverna é', qr:'O fundo da caverna está {T} m abaixo do topo. A posição do fundo da caverna é'}]);
+  const A=ctx.A, D=ctx.D, Tt=A+D; const rev=br('rev',0.35);
+  const story=`${ctx.up.replace('{A}',fmt(A))} ${ctx.dn.replace('{D}',fmt(D))}`;
+  if(rev){
+    const q=`${ctx.up.replace('{A}',fmt(A))} ${ctx.qr.replace('{T}',fmt(Tt))}`; const u=ctx.u==='andares'?'':' '+ctx.u;
+    return {q, ...alts(sg(-D)+u,[sg(D)+u, sg(-(Tt+A))+u, sg(A-Tt===-D?Tt-A+1:Tt-A)+u],g=>sg(-D-g)+u),
+      exp:[`Do ponto de cima (${fmt(A)}) até o zero são ${fmt(A)}.`, `A distância total é ${fmt(Tt)}. Falta: ${fmt(Tt)} − ${fmt(A)} = ${fmt(D)} abaixo do zero.`, `Posição: ${B(sg(-D)+u)} (negativo porque está abaixo do zero).`], regra:'Abaixo do zero = número negativo.', ck:Tt-A===D};
+  }
+  const u=' '+ctx.u;
+  return {q:`${story}<br>${ctx.q}`, ...alts(fmt(Tt)+u,[fmt(Math.abs(A-D))+u, fmt(A)+u, fmt(D)+u],g=>fmt(Tt+g*(ctx.u==='m'?50:1))+u),
+    exp:[`Um está ${B('acima')} do zero e o outro ${B('abaixo')}.`, `Do ponto de baixo até o zero: ${fmt(D)}. Do zero até o de cima: ${fmt(A)}.`, `Some as duas partes: ${fmt(A)} + ${fmt(D)} = ${B(fmt(Tt)+u)}.`, `Por que não ${fmt(Math.abs(A-D))}? Subtrair só vale quando os dois estão do mesmo lado do zero.`],
+    regra:'Um acima e outro abaixo do zero? A distância é a SOMA das duas partes.', ck:Tt===A-(-D)};
+};
+ADE.dz2 = () => {
+  const A=R(4,18), D=R(1,9); const cid=pick(['Gramado','Urubici','São Joaquim','Campos do Jordão']);
+  const pool=[[`A diferença entre a máxima e a mínima foi de ${A+D} °C.`, true, `${A} − (−${D}) = ${A} + ${D} = ${A+D}.`],[`A diferença entre a máxima e a mínima foi de ${Math.abs(A-D)} °C.`, A-D===A+D, `Não é ${A} − ${D}. A mínima é negativa: ${A} − (−${D}) = ${A+D}.`],[`A temperatura mínima foi menor que zero.`, true, `−${D} °C está abaixo de zero.`],[`Se a mínima tivesse sido ${D+2} °C mais alta, teria ficado acima de zero.`, true, `−${D} + ${D+2} = 2 °C.`],[`Se a temperatura subir ${D} °C a partir da mínima, chega a zero.`, true, `−${D} + ${D} = 0.`],[`Se a temperatura subir ${D} °C a partir da mínima, chega a ${D} °C.`, false, `−${D} + ${D} = 0, e não ${D}.`]];
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=Math.min(3,4-Math.min(1,F_.length));
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`Em ${cid}, em um dia de inverno, a temperatura mínima foi de ${B('−'+D+' °C')} e a máxima foi de ${B(A+' °C')}.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items,
+    exp:[`De −${D} até 0: ${D} graus. De 0 até ${A}: ${A} graus.`, `Diferença total: ${A+D} °C.`], regra:'Diferença passando pelo zero: some as duas partes.'});
+};
+ADE.sit = () => {
+  const a=R(2,6), b=R(2,9)*5, x=R(3,12); const c=a*x+b;
+  const ok=pick([`${nm()} comprou ${a} cadernos iguais e uma mochila de R$ ${b},00, gastando R$ ${c},00. O preço de cada caderno é x.`,`Um táxi cobra R$ ${b},00 fixos mais R$ ${a},00 por quilômetro. Uma corrida custou R$ ${c},00. A corrida teve x quilômetros.`,`Em um jogo, cada fase vale ${a} pontos e há um bônus de ${b} pontos. ${nm()} fez ${c} pontos. Ela passou por x fases.`]);
+  const w=[`${nm()} comprou ${b} cadernos de R$ ${a},00 cada, gastando R$ ${c},00 ao todo. O preço da mochila é x.`, `${nm()} tinha R$ ${c},00 e gastou R$ ${b},00. Depois dividiu o resto entre ${a} amigos. Cada amigo recebeu x.`, `${a} amigos dividiram R$ ${c},00 e cada um ainda ganhou R$ ${b},00 de presente. Cada amigo ficou com x.`];
+  return {q:`Considere a equação ${B(`${a}x + ${b} = ${c}`)}.<br>A situação que pode ser representada por essa equação é:`, ...alts(ok,w,listExtra(['Nenhuma das situações.'])),
+    exp:[`Na equação, ${B(a+'x')} é algo que ${B('se repete')} ${a} vezes (x vezes ${a}).`, `O ${B('+ '+b)} é um valor ${B('fixo')}, que aparece uma vez só.`, `${c} é o ${B('total')}.`, `A situação certa tem: ${a} coisas iguais de valor x, mais ${b} fixo, dando ${c}.`],
+    regra:'Na equação ax + b = c: "a" se repete com o x, "b" é fixo, "c" é o total.', ck:true};
+};
+/* encontre o erro */
+function errSteps(steps, wrongIdx, title, why, rule){
+  const labs=['Passo 1','Passo 2','Passo 3','O aluno não errou'];
+  return {q:`${title}<br>${steps.map((s,i)=>`${B('Passo '+(i+1)+':')} ${s}`).join('<br>')}<br>O aluno cometeu um erro. Em qual passo ele errou?`.replace('O aluno cometeu um erro. ', wrongIdx===3?'':'O aluno cometeu um erro. ').replace('Em qual passo ele errou?', wrongIdx===3?'Analise a resolução. Ela está correta ou em qual passo houve erro?':'Em qual passo ele errou?'),
+    ...altsFixed(labs.map(l=>l+'.'), wrongIdx), exp:why, regra:rule, ck:true};
+}
+ADE.err1 = () => {
+  const a=R(2,6), x=R(2,12), b=R(2,20); const c=a*x+b; const kind=pick(['sinal','div','ok','soma']);
+  const st=[`${a}x + ${b} = ${c}`, `${a}x = ${c} − ${b}`, `${a}x = ${c-b}`, `x = ${c-b} ÷ ${a} = ${x}`];
+  let steps, w, why;
+  if(kind==='sinal'){ steps=[`${a}x = ${c} + ${b}`, `${a}x = ${c+b}`, `x = ${dec((c+b)/a,1)}`]; w=0; why=[`No passo 1, o ${b} estava ${B('somando')}. Para tirar ele do lado do x, é preciso ${B('subtrair')} ${b} dos dois lados: ${a}x = ${c} − ${b}.`, `Resposta certa: x = ${x}.`]; }
+  else if(kind==='div'){ steps=[`${a}x = ${c} − ${b}`, `${a}x = ${c-b}`, `x = ${c-b} − ${a} = ${c-b-a}`]; w=2; why=[`No passo 3, o x estava ${B('multiplicado')} por ${a}. A operação contrária é ${B('dividir')}: x = ${c-b} ÷ ${a} = ${x}.`]; }
+  else if(kind==='soma'){ steps=[`${a}x = ${c} − ${b}`, `${a}x = ${c-b+10}`, `x = ${dec((c-b+10)/a,1)}`]; w=1; why=[`No passo 2, a conta ${c} − ${b} está errada: o certo é ${c-b}.`, `Resposta certa: x = ${x}.`]; }
+  else { steps=[`${a}x = ${c} − ${b}`, `${a}x = ${c-b}`, `x = ${c-b} ÷ ${a} = ${x}`]; w=3; why=['Todos os passos estão certos.', `Confira: ${a} × ${x} + ${b} = ${c}. ✔`]; }
+  return errSteps(steps, w, `Um aluno resolveu a equação ${B(`${a}x + ${b} = ${c}`)} assim:`, why, 'Para conferir uma equação, troque o x pelo resultado e veja se a igualdade fica verdadeira.');
+};
+ADE.err2 = () => {
+  const [b,d]=pick([[2,3],[3,4],[2,5],[4,6],[3,6],[2,4]]); const a=R(1,b-1), c=R(1,d-1); const D=b*d/gcd(b,d); const N=a*D/b+c*D/d; const kind=pick(['den','conv','ok']);
+  let steps,w,why;
+  if(kind==='den'){ steps=[`${F(a,b)} + ${F(c,d)} = ${F(a+'+'+c, b+'+'+d)}`, `= ${F(a+c,b+d)}`, `Resposta: ${F(a+c,b+d)}`]; w=0; why=[`No passo 1, o aluno somou os denominadores. O de baixo ${B('não se soma')}!`, `Certo: ${F(a*D/b,D)} + ${F(c*D/d,D)} = ${FR(N,D)}.`]; }
+  else if(kind==='conv'){ steps=[`Denominador comum: ${D}`, `${F(a,b)} = ${F(a,D)} e ${F(c,d)} = ${F(c*D/d,D)}`, `${F(a,D)} + ${F(c*D/d,D)} = ${F(a+c*D/d,D)}`]; w=1; if(a*D/b===a) return ADE.err2(); why=[`No passo 2, o aluno mudou o de baixo de ${F(a,b)} para ${D}, mas esqueceu de multiplicar o de cima: ${F(a,b)} = ${F(a*D/b,D)}.`]; }
+  else { steps=[`Denominador comum: ${D}`, `${F(a,b)} = ${F(a*D/b,D)} e ${F(c,d)} = ${F(c*D/d,D)}`, `${F(a*D/b,D)} + ${F(c*D/d,D)} = ${F(N,D)}`]; w=3; why=['Todos os passos estão corretos.']; }
+  return errSteps(steps, w, `Um aluno calculou ${F(a,b)} + ${F(c,d)} assim:`, why, 'Iguale os denominadores; o que multiplica embaixo, multiplica em cima.');
+};
+ADE.err3 = () => {
+  const p=pick([10,20,25,30]), V=R(5,40)*20; const d=V*p/100; const kind=pick(['reais','soma','ok']);
+  let steps,w,why;
+  if(kind==='reais'){ steps=[`Preço: R$ ${fmt(V)},00 com ${p}% de desconto`, `Desconto: R$ ${p},00`, `Preço final: ${fmt(V)} − ${p} = R$ ${fmt(V-p)},00`]; w=1; why=[`No passo 2, o aluno trocou ${p}% por ${p} reais. ${p}% de ${fmt(V)} = R$ ${dec(d)}.`, `Preço final certo: R$ ${dec(V-d)}.`]; }
+  else if(kind==='soma'){ steps=[`Preço: R$ ${fmt(V)},00 com ${p}% de desconto`, `Desconto: ${p}% de ${fmt(V)} = ${dec(d)}`, `Preço final: ${fmt(V)} + ${dec(d)} = R$ ${dec(V+d)}`]; w=2; why=[`No passo 3, o aluno ${B('somou')}. Desconto ${B('tira')}: ${fmt(V)} − ${dec(d)} = R$ ${dec(V-d)}.`]; }
+  else { steps=[`Preço: R$ ${fmt(V)},00 com ${p}% de desconto`, `Desconto: ${p}% de ${fmt(V)} = ${dec(d)}`, `Preço final: ${fmt(V)} − ${dec(d)} = R$ ${dec(V-d)}`]; w=3; why=['Todos os passos estão corretos.']; }
+  return errSteps(steps, w, `Um aluno calculou o preço de um produto com desconto assim:`, why, 'Desconto: calcule a porcentagem do preço e TIRE. Acréscimo: calcule e SOME.');
+};
+ADE.eq4 = () => {
+  const a=R(2,6), x=R(2,10), b=R(1,15); const c=a*x+b;
+  const pool=[[`A solução da equação é x = ${x}.`, true, `${a} × ${x} + ${b} = ${c}. ✔`],[`A solução da equação é x = ${x+1}.`, false, `${a} × ${x+1} + ${b} = ${a*(x+1)+b}, e não ${c}.`],[`Um passo possível é tirar ${b} dos dois lados: ${a}x = ${c-b}.`, true, 'O que faz de um lado, faz do outro.'],[`Um passo possível é somar ${b} dos dois lados: ${a}x = ${c+b}.`, false, `Para eliminar o + ${b}, é preciso subtrair ${b}.`],[`Se x valesse ${x}, o lado esquerdo daria ${c}.`, true, `${a} × ${x} + ${b} = ${c}.`],[`Para achar x, basta fazer ${c} ÷ ${a}.`, false, `Primeiro é preciso tirar o ${b}. Depois divide por ${a}.`]];
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=R(2,3);
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`Considere a equação ${B(`${a}x + ${b} = ${c}`)}.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items,
+    exp:[`${a}x + ${b} = ${c} → ${a}x = ${c-b} → x = ${x}.`], regra:'Para conferir, troque o x pelo valor e veja se a conta fecha.'});
+};
+ADE.rev1 = () => {
+  const d=pick([3,4,5,8,10]); let n=R(1,d-1); while(gcd(n,d)!==1) n=R(1,d-1); const T=d*R(4,40); const part=T/d*n;
+  const ctx=pick([[`Em uma escola, ${F(n,d)} dos alunos vão de ônibus. Esses alunos são ${fmt(part)}.`,'O total de alunos da escola é'],[`${nm()} já leu ${F(n,d)} de um livro, o que corresponde a ${fmt(part)} páginas.`,'O livro tem, ao todo,'],[`Uma caixa-d’água está com ${F(n,d)} da sua capacidade, ou seja, ${fmt(part)} litros.`,'A capacidade total da caixa-d’água é de']]);
+  return {q:`${ctx[0]}<br>${ctx[1]}`, ...alts(fmt(T),[fmt(part*n/d===Math.round(part*n/d)?part*n/d:part+n), fmt(part/n===Math.round(part/n)&&n>1?part/n:part*2), fmt(part+T/d)].filter(s=>s!==fmt(T)),g=>fmt(T+g*(T/d))),
+    exp:[`Agora é o caminho ${B('de volta')}: sabemos a parte e queremos o total.`, `${n} parte${n>1?'s':''} = ${fmt(part)}. Então ${B('1 parte')} = ${fmt(part)} ÷ ${n} = ${fmt(T/d)}.`, `O total tem ${d} partes: ${fmt(T/d)} × ${d} = ${B(fmt(T))}.`, 'Confira: o total tem que ser MAIOR que a parte.'],
+    regra:'Parte → total: divida pelo de cima e multiplique pelo de baixo.', ck:T*n/d===part};
+};
+ADE.rev3 = () => {
+  const p=pick([10,20,25,30,40,50,5,15]); const V=R(2,30)*20; const d=V*p/100; if(!Number.isInteger(d)) return ADE.rev3(); const f=V-d; const prod=pick(PROD);
+  return {q:`${prod[0].toUpperCase()+prod.slice(1)} custava ${money(V*100)} e passou a custar ${money(f*100)} na promoção.<br>O desconto dado foi de`, ...alts(p+'%',[fmt(d)+'%', (100-p)+'%', (p===10?20:p/2)+'%'].filter(s=>s!==p+'%'),g=>(p+5*g)+'%'),
+    exp:[`Quanto baixou: ${fmt(V)} − ${fmt(f)} = ${fmt(d)} reais.`, `Que porcentagem ${fmt(d)} é de ${fmt(V)}? Faça ${fmt(d)} ÷ ${fmt(V)} = ${dec(d/V,2)} = ${B(p+'%')}.`, `Confira: ${p}% de ${fmt(V)} = ${fmt(d)}. ✔`, `Cuidado: o desconto em ${B('reais')} (${fmt(d)}) não é a porcentagem.`],
+    regra:'Porcentagem do desconto = valor que baixou ÷ preço antigo × 100.', ck:V*p/100===d};
+};
+AVA.rev2 = () => {
+  const p=pick([10,20,25,50]); const V=R(4,40)*20; const f=V*(100-p)/100; if(!Number.isInteger(f)) return AVA.rev2();
+  return {q:`Com ${B(p+'% de desconto')}, ${nm()} pagou ${money(f*100)} em ${pick(PROD)}.<br>O preço original, sem desconto, era de`, ...alts(money(V*100),[money((f+f*p/100)*100), money((f+p)*100), money(f*p/100*100)].filter(s=>s!==money(V*100)),g=>money((V+g*10)*100)),
+    exp:[`Com ${p}% de desconto, pagou ${100-p}% do preço.`, `${100-p}% do preço = ${fmt(f)}. Então 1% = ${dec(f/(100-p),2)} e 100% = ${B(money(V*100))}.`, `Confira: ${p}% de ${fmt(V)} = ${fmt(V*p/100)}; ${fmt(V)} − ${fmt(V*p/100)} = ${fmt(f)}. ✔`, `Cuidado: somar ${p}% de ${fmt(f)} dá errado, porque o desconto foi calculado sobre o preço ${B('antigo')}.`],
+    regra:'Pagou o preço final? Ele é (100% − desconto) do preço original.', ck:V*(100-p)/100===f};
+};
+ADE.pr3 = () => {
+  const u=pick([3,4,5,6,8,12,15]); const xs=shuffle([1,2,3,4,5,6,8,10]).slice(0,4).sort((a,b)=>a-b); const it=pick([['Pacotes','Preço (R$)'],['Horas','Peças'],['Litros','Km']]);
+  const ys=xs.map(x=>x*u);
+  const pool=[[`Quando a 1ª grandeza dobra, a 2ª também dobra.`, true, `${xs[0]} → ${ys[0]} e ${xs[0]*2} → ${xs[0]*2*u}.`],[`As grandezas são inversamente proporcionais.`, false, 'As duas aumentam juntas: são diretamente proporcionais.'],[`Para ${xs[3]+1} ${it[0].toLowerCase()}, o valor seria ${(xs[3]+1)*u}.`, true, `${xs[3]+1} × ${u} = ${(xs[3]+1)*u}.`],[`Para ${xs[3]+1} ${it[0].toLowerCase()}, o valor seria ${ys[3]+1}.`, false, `Não se soma 1: cada ${it[0].toLowerCase().replace(/s$/,'')} vale ${u}. Fica ${(xs[3]+1)*u}.`],[`Dividindo cada valor da 2ª linha pelo da 1ª, o resultado é sempre ${u}.`, true, `${ys[1]} ÷ ${xs[1]} = ${u}.`]];
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=R(2,3);
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`${STEM_ABRE()} o quadro a seguir.<br>Leia as afirmações, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, tbl:table([it[0],...xs.map(String)],[[it[1],...ys.map(String)]]), items,
+    exp:[`Cada unidade da 1ª linha vale ${u} na 2ª.`, 'Uma dobra, a outra dobra: diretamente proporcionais.'], regra:'Diretamente proporcionais: a divisão (2ª ÷ 1ª) dá sempre o mesmo número.'});
+};
+ADE.pr4 = () => {
+  const u=R(2,9); const xs=[1,2,3]; const dir=xs.map(x=>x*u).join(', ');
+  const K=pick([12,24,36]); const inv=[K,K/2,K/3].join(', '); const add=xs.map(x=>x+u).join(', '); const sq=xs.map(x=>x*x+u).join(', ');
+  const which=pick(['dir','inv']);
+  const opt=s=>`1, 2, 3 → ${s}`;
+  return {q:`Em cada alternativa, a primeira grandeza vale 1, 2 e 3, e a seta mostra os valores correspondentes da segunda grandeza.<br>Em qual delas as grandezas são ${B(which==='dir'?'diretamente':'inversamente')} proporcionais?`,
+    ...alts(opt(which==='dir'?dir:inv),[opt(which==='dir'?add:dir), opt(which==='dir'?inv:add), opt(sq)],listExtra([opt([u,u,u].join(', '))])),
+    exp: which==='dir' ? ['Direta: quando uma dobra, a outra dobra.', `1 → ${u}, 2 → ${2*u}, 3 → ${3*u}: sempre × ${u}. ✔`, `Cuidado com ${add}: aumenta sempre ${1}, mas não dobra. Isso não é proporção.`] : ['Inversa: quando uma dobra, a outra cai pela metade.', `1 → ${K}, 2 → ${K/2}, 3 → ${K/3}: o produto é sempre ${K}. ✔`],
+    regra:'Direta: divisão constante. Inversa: multiplicação constante.', ck:true};
+};
+ADE.tr4 = () => {
+  let a,b; do{ a=R(4,15)*5; b=R(4,15)*5; }while(a+b>=170||a+b<=40); const c=180-a-b;
+  const typ = Math.max(a,b,c)>90?'obtusângulo':Math.max(a,b,c)===90?'retângulo':'acutângulo';
+  const pool=[[`O ângulo x mede ${c}°.`, true, `180 − ${a} − ${b} = ${c}.`],[`O ângulo x mede ${a+b}°.`, false, `${a+b} é a soma dos dois conhecidos. x = 180 − ${a+b} = ${c}.`],[`A soma dos três ângulos é 180°.`, true, 'Vale para todo triângulo.'],[`A soma dos três ângulos é 360°.`, false, '360° é a soma no quadrilátero. No triângulo é 180°.'],[`O triângulo é ${typ}.`, true, typ==='obtusângulo'?'Tem um ângulo maior que 90°.':typ==='retângulo'?'Tem um ângulo de 90°.':'Todos os ângulos são menores que 90°.'],[`O suplemento do ângulo de ${a}° mede ${180-a}°.`, true, `${a} + ${180-a} = 180.`]];
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=R(2,3);
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`Observe o triângulo a seguir.<br>Leia as afirmações, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, fig:triFig(a,b,c,[deg(a),deg(b),'x']), items,
+    exp:[`x = 180 − ${a} − ${b} = ${c}°.`], regra:'Triângulo: 180°. Quadrilátero: 360°.'});
+};
+ADE.mm4 = () => {
+  const [a,b]=pick([[6,8],[8,12],[10,15],[12,18],[15,20],[20,30]]); const l=a/gcd(a,b)*b, g=gcd(a,b);
+  const pool=[[`O MMC de ${a} e ${b} é ${l}.`, true, `${l} é o primeiro número que está na tabuada do ${a} e do ${b}.`],[`O MMC de ${a} e ${b} é ${a*b}.`, a*b===l, `${a*b} é múltiplo dos dois, mas não é o ${B('menor')}: o MMC é ${l}.`],[`O MDC de ${a} e ${b} é ${g}.`, true, `${g} é o maior número que divide ${a} e ${b}.`],[`O MDC de ${a} e ${b} é 1.`, g===1, `${g} divide os dois, então o MDC é ${g}.`],[`Dois ônibus que saem a cada ${a} e a cada ${b} minutos voltam a sair juntos depois de ${l} minutos.`, true, 'Encontro de novo = MMC.'],[`Com ${a} lápis e ${b} borrachas, dá para montar no máximo ${g} kits iguais sem sobrar.`, true, 'Grupos iguais sem sobrar = MDC.'],[`Com ${a} lápis e ${b} borrachas, dá para montar no máximo ${l} kits iguais sem sobrar.`, false, `Não dá para ter mais kits do que lápis! Use o MDC: ${g}.`]];
+  const T_=pool.filter(p=>p[1]), F_=pool.filter(p=>!p[1]); const nT=R(2,3);
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`Considere os números ${B(a)} e ${B(b)}.<br>Leia as afirmações a seguir, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, items,
+    exp:[`Múltiplos de ${a}: ${[1,2,3,4,5,6].map(k=>k*a).join(', ')}…`, `Múltiplos de ${b}: ${[1,2,3,4].map(k=>k*b).join(', ')}…`, `MMC = ${l}. MDC = ${g}.`], regra:'"Juntos de novo" → MMC. "Grupos iguais sem sobrar" → MDC.'});
+};
+ADE.gr3 = () => {
+  const lb=['seg','ter','qua','qui','sex']; let v; do{ v=lb.map(()=>R(-5,8)); }while(new Set(v).size<4||!v.some(x=>x<0)||!v.some(x=>x>0));
+  const mx=Math.max(...v), mn=Math.min(...v); const kind=pick(['amp','var']);
+  const i=R(0,3);
+  let q,c,ds,ex;
+  if(kind==='amp'){ q='A diferença entre a maior e a menor temperatura da semana foi de'; c=mx-mn; ds=[mx+mn, Math.abs(mx)-Math.abs(mn), mx]; ex=[`Maior: ${sg(mx)} °C. Menor: ${sg(mn)} °C.`, `${sg(mx)} − ${sgp(mn)} = ${B(c+' °C')}.`]; c=c+' °C'; ds=ds.map(x=>sg(x)+' °C'); }
+  else { const d=v[i+1]-v[i]; q=`De ${lb[i]} para ${lb[i+1]}, a temperatura`; c = d>0?`subiu ${d} °C.`:d<0?`caiu ${-d} °C.`:'não mudou.'; ds=[d>0?`caiu ${d} °C.`:`subiu ${-d||1} °C.`, `${d>=0?'subiu':'caiu'} ${Math.abs(Math.abs(v[i+1])-Math.abs(v[i]))===Math.abs(d)?Math.abs(d)+2:Math.abs(Math.abs(v[i+1])-Math.abs(v[i]))} °C.`, `${d>=0?'subiu':'caiu'} ${Math.abs(v[i+1])} °C.`]; ex=[`${lb[i]}: ${sg(v[i])} °C. ${lb[i+1]}: ${sg(v[i+1])} °C.`, `Variação: ${sg(v[i+1])} − ${sgp(v[i])} = ${sg(d)}.`, `Resposta: ${B(c)}`]; }
+  return {q:`O gráfico mostra a temperatura mínima, em °C, em uma cidade durante uma semana.<br>${q}`, fig:lineChart(lb,v,-6,10), ...alts(c,ds,g=>`${g+20} °C`),
+    exp:[...ex, 'Cuidado com os negativos: abaixo da linha do zero, as temperaturas são negativas.'], regra:'Variação = valor final − valor inicial. Com negativos, use a reta.', ck:true};
+};
+ADE.gr3b = () => {
+  const lb=['seg','ter','qua','qui','sex']; let v; do{ v=lb.map(()=>R(-5,8)); }while(new Set(v).size<5||!v.some(x=>x<0)||!v.some(x=>x>0));
+  const names=['segunda','terça','quarta','quinta','sexta']; const kind=pick(['frio','quente']); const k = kind==='frio'? v.indexOf(Math.min(...v)) : v.indexOf(Math.max(...v));
+  const others=shuffle([0,1,2,3,4].filter(i=>i!==k)).slice(0,3); const opts=shuffle([k,...others]);
+  const close = v.filter(x=>x<0).sort((a,b)=>b-a)[0];
+  return {q:`O gráfico mostra a temperatura mínima, em °C, em uma cidade durante uma semana.<br>O dia ${kind==='frio'?'mais frio':'mais quente'} foi`, fig:lineChart(lb,v,-6,10), ...altsFixed(opts.map(i=>names[i]+'.'), opts.indexOf(k)),
+    exp:[`Valores: ${lb.map((l,i)=>l+' '+sg(v[i])).join(', ')}.`, kind==='frio'?`O mais frio é o ponto ${B('mais baixo')} do gráfico: ${sg(v[k])} °C, na ${names[k]}.`:`O mais quente é o ponto ${B('mais alto')}: ${sg(v[k])} °C, na ${names[k]}.`, ...(kind==='frio'&&close!==undefined&&close!==v[k]?[`Cuidado: ${sg(close)} é negativo, mas está mais perto do zero, então é menos frio.`]:[])],
+    regra:'No gráfico de linhas, mais alto = maior valor; mais baixo = menor.', ck:true};
+};
+ADE.gr4 = () => {
+  const cats=['Carro','Ônibus','A pé','Bicicleta']; const T=pick([200,240,300,400]); let v, gg=0; do{ const a=R(2,12)*10, b=R(2,12)*10, c=R(2,12)*10; v=[a,b,c,T-a-b-c]; gg++; }while(gg<500&&(v[3]<20||v[3]>140||new Set(v).size<4)); if(gg>=500) return null;
+  const top=Math.ceil(Math.max(...v)/20)*20+20; const half=T/2; const ib=v.indexOf(Math.max(...v));
+  const mot=v[0]+v[1], nmot=v[2]+v[3];
+  return LAC({q:`Uma escola com ${T} alunos fez uma pesquisa sobre como eles chegam à escola. O resultado está no gráfico.<br>Complete as lacunas com os valores corretos.`, fig:colChart(cats,v,20,top),
+    text:`Vão de carro ou de ônibus {0} alunos, e vão a pé ou de bicicleta {1} alunos. A diferença entre esses dois grupos é de {2} alunos.`,
+    gaps:[fmt(mot),fmt(nmot),fmt(Math.abs(mot-nmot))], opts:chipSet([fmt(mot),fmt(nmot),fmt(Math.abs(mot-nmot))],[fmt(v[ib]),fmt(T),fmt(mot+20),fmt(half)],7),
+    exp:[`Leia cada coluna: ${cats.map((c,i)=>c+' = '+v[i]).join(', ')}.`, `Carro + ônibus: ${v[0]} + ${v[1]} = ${mot}.`, `A pé + bicicleta: ${v[2]} + ${v[3]} = ${nmot}.`, `Diferença: ${Math.max(mot,nmot)} − ${Math.min(mot,nmot)} = ${Math.abs(mot-nmot)}.`], regra:'Some as colunas pedidas; diferença é a maior menos a menor.', ck:mot+nmot===T});
+};
+ADE.gr5 = () => {
+  const lb=['seg','ter','qua','qui','sex']; let v; do{ v=lb.map(()=>R(-4,9)); }while(new Set(v).size<4||!v.some(x=>x<0));
+  const mx=Math.max(...v), mn=Math.min(...v); const negs=v.filter(x=>x<0).length; const i=R(0,3); const d=v[i+1]-v[i];
+  const pool=[[`A menor temperatura foi ${sg(mn)} °C.`, true, 'É o ponto mais baixo do gráfico.'],[`A menor temperatura foi ${sg(Math.max(...v.filter(x=>x<0)))===sg(mn)?sg(mn+1):sg(Math.max(...v.filter(x=>x<0)))} °C.`, false, `O ponto mais baixo é ${sg(mn)} °C.`],[`Em ${negs} dia${negs>1?'s':''} a temperatura ficou abaixo de zero.`, true, 'Conte os pontos abaixo da linha do zero.'],[`A diferença entre a maior e a menor temperatura foi de ${mx-mn} °C.`, true, `${sg(mx)} − ${sgp(mn)} = ${mx-mn}.`],[`De ${lb[i]} para ${lb[i+1]}, a temperatura ${d>=0?'subiu':'caiu'} ${Math.abs(d)} °C.`, true, `${sg(v[i+1])} − ${sgp(v[i])} = ${sg(d)}.`],[`A diferença entre a maior e a menor temperatura foi de ${mx+mn===mx-mn?mx-mn+2:Math.abs(mx+mn)} °C.`, false, `Não dá para tirar o sinal. ${sg(mx)} − ${sgp(mn)} = ${mx-mn}.`]];
+  const seen=new Set(); const P=pool.filter(p=>!seen.has(p[0])&&seen.add(p[0])); const T_=P.filter(p=>p[1]), F_=P.filter(p=>!p[1]); const nT=Math.min(3,4-Math.min(1,F_.length));
+  const items=shuffle([...shuffle(T_).slice(0,nT),...shuffle(F_).slice(0,4-nT)]).map(p=>({s:p[0],v:p[1],why:p[2]}));
+  return SN({q:`O gráfico mostra as temperaturas mínimas, em °C, de uma cidade durante uma semana.<br>Leia as afirmações, analisando-as cuidadosamente, e, depois, marque SIM ou NÃO.`, fig:lineChart(lb,v,-6,10), items,
+    exp:[`Valores: ${lb.map((l,k)=>l+' '+sg(v[k])).join(', ')}.`], regra:'Linha do zero separa positivos (acima) e negativos (abaixo).'});
+};
+
+/* ---------- RESPONDA E JUSTIFIQUE (formato aberto adaptado) ---------- */
+ADE.ab1 = () => {
+  const its=shuffle(LANCHE).slice(0,3).map(([n,lo,hi])=>({n,p:R(lo/5,hi/5)*5,q:R(1,3)})); const tot=its.reduce((s,i)=>s+i.p*i.q,0);
+  const yes=br('yes',0.5); const has = yes ? Math.ceil((tot+R(1,8)*50)/100)*100 : Math.floor((tot-R(1,8)*50)/100)*100; if(has<=0||has===tot) return ADE.ab1();
+  return AB({q:`${nm()} tem ${money(has)} e quer comprar os itens do quadro.<br>O dinheiro é suficiente para a compra? Responda SIM ou NÃO e escreva o valor total da compra.`, tbl:table(['Item','Preço','Quantidade'],its.map(i=>[i.n,money(i.p),i.q])),
+    yes, ask:'Valor total da compra (R$)', val:tot/100, kind:'num',
+    model:[...its.map(i=>`${i.n}: ${money(i.p)} × ${i.q} = ${money(i.p*i.q)}`), `Total: ${money(tot)}.`, `${money(has)} ${yes?'é maior que':'é menor que'} ${money(tot)}, então ${B(yes?'SIM, é suficiente':'NÃO é suficiente')}${yes?` (sobram ${money(has-tot)})`:` (faltam ${money(tot-has)})`}.`],
+    exp:['Calcule o total de cada item (preço × quantidade).','Some tudo e compare com o dinheiro que tem.'], regra:'Na prova, a justificativa precisa mostrar as contas, não só "sim" ou "não".'});
+};
+ADE.ab2 = () => {
+  const st=R(7,15)*60+pick([0,10,20,30,40,50]); const tv=R(1,3)*60+pick([15,20,25,35,40,45]); const ps=pick([15,20,25,30]); const ch=st+tv+ps;
+  const yes=br('yes',0.5); const lim = yes ? ch+pick([5,10,15,20]) : ch-pick([5,10,15,20,25]);
+  const evt=pick(['os portões do estádio fecham','o show começa','a apresentação começa','o museu fecha a entrada']);
+  return AB({q:`Um ônibus saiu às ${B(clock(st))}. A viagem dura ${B(dur(tv))} e haverá uma parada de ${B(ps+' min')}. No destino, ${evt} às ${B(clock(lim))}.<br>O ônibus chega a tempo? Responda SIM ou NÃO e escreva o horário de chegada.`,
+    yes, ask:'Horário de chegada (ex.: 16h40)', val:ch, kind:'time',
+    model:[`Horas: ${Math.floor(st/60)} h + ${Math.floor(tv/60)} h = ${Math.floor(st/60)+Math.floor(tv/60)} h.`, `Minutos: ${st%60} + ${tv%60} + ${ps} = ${st%60+tv%60+ps} min${st%60+tv%60+ps>=60?` = ${Math.floor((st%60+tv%60+ps)/60)} h ${(st%60+tv%60+ps)%60} min`:''}.`, `Chegada: ${clock(ch)}.`, `${clock(ch)} ${yes?'é antes de':'é depois de'} ${clock(lim)}: ${B(yes?'SIM, chega a tempo':'NÃO chega a tempo')}.`],
+    exp:['Some a viagem e a parada ao horário de saída.','60 minutos viram 1 hora.'], regra:'Não esqueça a parada! E lembre: 1 h = 60 min.'});
+};
+ADE.ab3 = () => {
+  const has=pick([1,1.2,1.5,2,2.5]); const parts=[R(2,8)*50, R(2,8)*50, R(1,9)*20]; const tot=parts.reduce((a,b)=>a+b,0); const H=has*1000; if(Math.abs(H-tot)<30) return ADE.ab3(); const yes=H>=tot;
+  return AB({q:`${nm()} tem ${B(dec(has)+' kg')} de farinha. Ela vai fazer três receitas que usam ${parts.map(p=>p+' g').join(', ').replace(/, ([^,]*)$/,' e $1')} de farinha.<br>A farinha é suficiente? Responda SIM ou NÃO e escreva quantos gramas as receitas usam ao todo.`,
+    yes, ask:'Total de farinha das receitas (g)', val:tot, kind:'num',
+    model:[`Total das receitas: ${parts.join(' + ')} = ${fmt(tot)} g.`, `${dec(has)} kg = ${fmt(H)} g.`, `${fmt(H)} g ${yes?'≥':'<'} ${fmt(tot)} g: ${B(yes?'SIM, é suficiente':'NÃO é suficiente')}.`],
+    exp:['Deixe tudo na mesma unidade (1 kg = 1 000 g).','Some as receitas e compare.'], regra:'Antes de comparar, converta: kg → g (× 1 000).'});
+};
+ADE.ab4 = () => {
+  const n=R(12,40), cup=pick([200,250,300]), bot=pick([1.5,2]), k=R(2,8); const need=n*cup/1000; const has=k*bot; if(has===need) return ADE.ab4(); const yes=has>=need;
+  return AB({q:`Para a festa da turma, ${n} alunos vão tomar um copo de ${cup} mL de suco cada. Foram compradas ${k} garrafas de ${dec(bot)} L.<br>O suco é suficiente? Responda SIM ou NÃO e escreva quantos litros de suco são necessários.`,
+    yes, ask:'Litros necessários', val:need, kind:'num',
+    model:[`Necessário: ${n} × ${cup} mL = ${fmt(n*cup)} mL = ${dec(need)} L.`, `Comprado: ${k} × ${dec(bot)} L = ${dec(has)} L.`, `${dec(has)} L ${yes?'≥':'<'} ${dec(need)} L: ${B(yes?'SIM, é suficiente':'NÃO é suficiente')}.`],
+    exp:['Calcule quanto precisa e quanto tem, na mesma unidade.','1 L = 1 000 mL.'], regra:'Compare sempre na mesma unidade.'});
+};
+AVA.ab5 = () => {
+  const p=pick([10,15,20,25,30]); const V=R(10,60)*20; const f=V*(100-p)/100; if(!Number.isInteger(f*100)) return AVA.ab5(); const yes=br('yes',0.5); const has = yes? f+R(1,6)*10 : Math.max(10, f-R(1,6)*10); if(has===f) return AVA.ab5();
+  const prod=pick(PROD);
+  return AB({q:`${nm()} tem ${money(has*100)}. Ele quer comprar ${prod} de ${money(V*100)}, que está com ${p}% de desconto.<br>Ele tem dinheiro suficiente? Responda SIM ou NÃO e escreva o preço com desconto.`,
+    yes, ask:'Preço com desconto (R$)', val:f, kind:'num',
+    model:[`Desconto: ${p}% de ${fmt(V)} = ${dec(V*p/100)}.`, `Preço final: ${fmt(V)} − ${dec(V*p/100)} = ${money(f*100)}.`, `${money(has*100)} ${yes?'≥':'<'} ${money(f*100)}: ${B(yes?'SIM, é suficiente':'NÃO é suficiente')}.`],
+    exp:['Primeiro o desconto, depois o preço final, depois compare.'], regra:'Desconto: calcule a % e tire do preço.'});
+};
+AVA.ab6 = () => {
+  const p0=pick([2,4,5]), g0=pick([150,200,250,300]); const u=g0/p0; if(!Number.isInteger(u)) return AVA.ab6(); const p1=p0*R(2,4)+pick([0,1,2]); const need=u*p1; const has=pick([1,1.5,2]); const H=has*1000; if(H===need) return AVA.ab6(); const yes=H>=need;
+  return AB({q:`Uma receita usa ${g0} g de queijo para ${p0} pessoas. ${nm()} vai fazer a receita para ${p1} pessoas e tem ${dec(has)} kg de queijo.<br>O queijo é suficiente? Responda SIM ou NÃO e escreva quantos gramas de queijo serão necessários.`,
+    yes, ask:'Queijo necessário (g)', val:need, kind:'num',
+    model:[`Para 1 pessoa: ${g0} ÷ ${p0} = ${fmt(u)} g.`, `Para ${p1} pessoas: ${fmt(u)} × ${p1} = ${fmt(need)} g.`, `${dec(has)} kg = ${fmt(H)} g. ${fmt(H)} ${yes?'≥':'<'} ${fmt(need)}: ${B(yes?'SIM, é suficiente':'NÃO é suficiente')}.`],
+    exp:['Proporção direta: ache o valor para 1 e multiplique.','Converta kg em g antes de comparar.'], regra:'Regra de três (ou valor de 1) e depois compare na mesma unidade.'});
+};
 AVA.mc3 = () => {
   const W1=R(7,14), H1=R(5,10), w2=R(2,W1-3), h2=R(2,H1-2); const A=W1*H1-w2*h2; const pm=pick([25,30,35,40,45,50,60]); const tot=A*pm;
   return {q:`A figura representa a planta de uma varanda, com as medidas em metros. O piso escolhido custa ${money(pm*100)} o metro quadrado.<br>O valor gasto com o piso de toda a varanda será de`, fig:lShape(W1,H1,w2,h2),
@@ -1206,50 +1576,54 @@ AVA.mc3 = () => {
 const DESC = [];
 const TOPICS = {
  b:[
-  {k:'reta', n:'Inteiros na reta numérica', g:[BAS.reta1,BAS.reta2,BAS.reta3]},
-  {k:'sin',  n:'Regra de sinais', g:[BAS.sin1,BAS.sin2,BAS.sin3,BAS.sin4]},
-  {k:'fq',   n:'Fração de quantidade', g:[BAS.fq1,BAS.fq2]},
+  {k:'reta', n:'Inteiros na reta numérica', g:[BAS.reta1,BAS.reta2,BAS.reta4,BAS.reta3]},
+  {k:'sin',  n:'Regra de sinais', g:[BAS.sin1,BAS.sin6,BAS.sin2,BAS.sin5,BAS.sin3,BAS.sin4]},
+  {k:'fq',   n:'Fração de quantidade', g:[BAS.fq1,BAS.fq3,BAS.fq2]},
   {k:'cf',   n:'Comparar frações', g:[BAS.cf1,BAS.cf2,BAS.cf3]},
-  {k:'fo',   n:'Soma e subtração de frações', g:[BAS.fo1,BAS.fo2]},
+  {k:'fo',   n:'Soma e subtração de frações', g:[BAS.fo1,BAS.opq,BAS.fo2]},
   {k:'din',  n:'Decimais com dinheiro', g:[BAS.din1,BAS.din2]},
   {k:'dv',   n:'Critérios de divisibilidade', g:[BAS.dv1,BAS.dv2]},
   {k:'pc',   n:'Plano cartesiano', g:[BAS.pc1,BAS.pc2]},
   {k:'gi',   n:'Ângulos e giros', g:[BAS.gi1,BAS.gi2,BAS.gi3]},
-  {k:'pct',  n:'Porcentagem', g:[BAS.pc_1,BAS.pc_3,BAS.pc_2]},
-  {k:'cv',   n:'Grandezas e medidas', g:[BAS.cv1,BAS.cv4,BAS.cv2,BAS.cv3]}
+  {k:'pct',  n:'Porcentagem', g:[BAS.pc_1,BAS.pct4,BAS.pc_3,BAS.pc_2]},
+  {k:'cv',   n:'Grandezas e medidas', g:[BAS.cv1,BAS.cv4,BAS.cv2,BAS.cv3]},
+  {k:'grb',  n:'Tabelas e gráficos', g:[BAS.gr1,BAS.gr2]}
  ],
  a:[
-  {k:'iq',  n:'Problemas com inteiros', g:[ADE.iq1,ADE.iq2,ADE.iq3]},
-  {k:'mm',  n:'MMC, MDC e fatoração', g:[ADE.mm1,ADE.mm2,ADE.mm3]},
-  {k:'fp',  n:'Problemas com frações', g:[ADE.fp1,ADE.fp3,ADE.fp2]},
-  {k:'fm',  n:'Multiplicação e divisão de frações', g:[ADE.fm1,ADE.fm2,ADE.fm3]},
+  {k:'iq',  n:'Problemas com inteiros', g:[ADE.iq1,ADE.dz1,ADE.iq2,ADE.dz2,ADE.iq3]},
+  {k:'mm',  n:'MMC, MDC e fatoração', g:[ADE.mm1,ADE.mm4,ADE.mm2,ADE.mm3]},
+  {k:'fp',  n:'Problemas com frações', g:[ADE.fp1,ADE.err2,ADE.fp3,ADE.rev1,ADE.fp2]},
+  {k:'fm',  n:'Multiplicação e divisão de frações', g:[ADE.fm1,BAS.opq,ADE.fm2,ADE.fm3]},
   {k:'dm',  n:'Operações com decimais', g:[ADE.dm1,ADE.dm2,ADE.dm3,ADE.dm4]},
-  {k:'pa',  n:'Porcentagem', g:[ADE.pa1,ADE.pa2,ADE.pa3]},
-  {k:'pr',  n:'Proporcionalidade', g:[ADE.pr1,ADE.pr2]},
+  {k:'pa',  n:'Porcentagem', g:[ADE.pa1,ADE.err3,ADE.pa2,ADE.rev3,ADE.pa3]},
+  {k:'pr',  n:'Proporcionalidade', g:[ADE.pr1,ADE.pr3,ADE.pr2,ADE.pr4]},
   {k:'pt',  n:'Razão e partilha', g:[ADE.pt1,ADE.pt3,ADE.pt2]},
-  {k:'eq',  n:'Equações', g:[ADE.eq1,ADE.eq3,ADE.eq2]},
+  {k:'eq',  n:'Equações', g:[ADE.bal1,ADE.eq1,ADE.eq4,ADE.sit,ADE.eq3,ADE.err1,ADE.eq2]},
   {k:'sq',  n:'Sequências', g:[ADE.sq1,ADE.sq2,ADE.sq3]},
-  {k:'tr',  n:'Ângulos e triângulos', g:[ADE.tr1,ADE.tr2,ADE.tr3]},
+  {k:'tr',  n:'Ângulos e triângulos', g:[ADE.tr1,ADE.tr4,ADE.tr2,ADE.tr3]},
   {k:'ar',  n:'Área e perímetro', g:[ADE.ar1,ADE.ar4,ADE.ar2,ADE.ar3]},
   {k:'mv',  n:'Plano cartesiano', g:[ADE.mv1,ADE.mv2]},
-  {k:'tp',  n:'Grandezas e medidas', g:[ADE.tp1,ADE.tp2]}
+  {k:'tp',  n:'Grandezas e medidas', g:[ADE.tp1,ADE.tp2]},
+  {k:'gra', n:'Tabelas e gráficos', g:[ADE.gr3,ADE.gr5,ADE.gr3b,ADE.gr4]},
+  {k:'aba', n:'Responda e justifique', g:[ADE.ab1,ADE.ab2,ADE.ab3,ADE.ab4]}
  ],
  v:[
-  {k:'lj',  n:'Porcentagem: comparar ofertas', g:[AVA.lj1,AVA.lj2]},
+  {k:'lj',  n:'Porcentagem: comparar ofertas', g:[AVA.lj1,AVA.rev2,AVA.lj2]},
   {k:'iv',  n:'Proporcionalidade inversa', g:[AVA.iv1]},
   {k:'pd',  n:'Partilha desigual', g:[AVA.pd1]},
-  {k:'ep',  n:'Problemas com equação', g:[AVA.ep1,AVA.ep2]},
+  {k:'ep',  n:'Problemas com equação', g:[AVA.ep1,AVA.bal2,AVA.ep2]},
   {k:'sa',  n:'Sequências e expressões', g:[AVA.sa1,AVA.sa2]},
   {k:'fr',  n:'Frações: o restante', g:[AVA.fr1,AVA.fr2]},
-  {k:'dp',  n:'Inteiros em quadros', g:[AVA.dp1,AVA.dp2]},
+  {k:'dp',  n:'Inteiros em quadros', g:[AVA.dp1,ADE.dz1,AVA.dp2]},
   {k:'rf',  n:'Frações na reta', g:[AVA.rf1]},
-  {k:'mc',  n:'Medidas com várias etapas', g:[AVA.mc1,AVA.mc2,AVA.mc3]}
+  {k:'mc',  n:'Medidas com várias etapas', g:[AVA.mc1,AVA.mc2,AVA.mc3]},
+  {k:'abv', n:'Responda e justifique', g:[AVA.ab5,AVA.ab6,ADE.ab2,ADE.ab1]}
  ]
 };
 for(const l of LEVELS) TOPICS[l].forEach(t=>{ if(!DESC.find(d=>d.n===t.n)) DESC.push({k:t.k,n:t.n}); });
 
 /* ---------- sessão: sorteio sem repetição ---------- */
-function qKey(q){ return [q.q, q.tbl||'', q.fig||'', (q.alts||[]).slice().sort().join('#'), (q.items||[]).map(i=>i.s+(i.v?1:0)).join('#'), q.text||'', (q.gaps||[]).join('#')].join('|'); }
+function qKey(q){ return [q.q, q.tbl||'', q.fig||'', (q.alts||[]).slice().sort().join('#'), (q.items||[]).map(i=>i.s+(i.v?1:0)).join('#'), q.text||'', (q.gaps||[]).join('#'), q.ask||'', String(q.val??''), String(q.yes??'')].join('|'); }
 function newSession(){ return {bag:[], last:null, used:new Set(), cnt:{}}; }
 function nextQuestion(sess, lvl){
   const tops=TOPICS[lvl];
@@ -1326,10 +1700,14 @@ function vStart(){
 function begin(inf){ const s=st(); s.infinite=inf; s.list=[]; s.phase='q'; nextQ(); }
 function nextQ(){ const s=st(); s.q=nextQuestion(s.sess, level); s.picked=null; s.resp=null; render(); window.scrollTo({top:0,behavior:'smooth'}); }
 
-function freshResp(q){ if(q.t==='sn') return {sn:q.items.map(()=>null)}; if(q.t==='m3') return {m3:[]}; if(q.t==='lac') return {lac:q.gaps.map(()=>null), act:0}; return {}; }
-function isComplete(q,r){ if(q.t==='sn') return r.sn.every(v=>v!==null); if(q.t==='m3') return r.m3.length===3; if(q.t==='lac') return r.lac.every(v=>v!==null); return false; }
-function grade(q,r){ if(q.t==='sn') return q.items.every((it,i)=>it.v===r.sn[i]); if(q.t==='m3') return q.items.every((it,i)=>it.v===r.m3.includes(i)); if(q.t==='lac') return q.gaps.every((g,i)=>String(g)===r.lac[i]); return false; }
-const HINT={sn:'Marque SIM ou NÃO em cada linha e depois toque em Conferir.', m3:'Marque exatamente três afirmações e depois toque em Conferir.', lac:'Toque em uma lacuna e depois no valor que vai nela. Depois toque em Conferir.'};
+function parseAns(s,kind){ s=String(s||'').trim(); if(!s) return NaN; if(kind==='time'){ const m=s.match(/^(\d{1,2})\s*[h:]\s*(\d{0,2})/i); return m? (+m[1])*60+(+(m[2]||0)) : NaN; } s=s.replace(/R\$|\s|[a-zA-Zº°²]/g,'').replace('−','-'); if(s.includes(',')) s=s.replace(/\./g,'').replace(',','.'); else if(/^\d{1,3}(\.\d{3})+$/.test(s)) s=s.replace(/\./g,''); return Number(s); }
+function freshResp(q){ if(q.t==='ab') return {yn:null, v:''}; if(q.t==='sn') return {sn:q.items.map(()=>null)}; if(q.t==='m3') return {m3:[]}; if(q.t==='lac') return {lac:q.gaps.map(()=>null), act:0}; return {}; }
+function isComplete(q,r){ if(q.t==='ab') return r.yn!==null && !isNaN(parseAns(r.v,q.kind)); if(q.t==='sn') return r.sn.every(v=>v!==null); if(q.t==='m3') return r.m3.length===3; if(q.t==='lac') return r.lac.every(v=>v!==null); return false; }
+function grade(q,r){ if(q.t==='ab'){ const v=parseAns(r.v,q.kind); return r.yn===q.yes && Math.abs(v-q.val)<0.01; } if(q.t==='sn') return q.items.every((it,i)=>it.v===r.sn[i]); if(q.t==='m3') return q.items.every((it,i)=>it.v===r.m3.includes(i)); if(q.t==='lac') return q.gaps.every((g,i)=>String(g)===r.lac[i]); return false; }
+const HINT={sn:'Marque SIM ou NÃO em cada linha e depois toque em Conferir.', m3:'Marque exatamente três afirmações e depois toque em Conferir.', lac:'Toque em uma lacuna e depois no valor que vai nela. Depois toque em Conferir.', ab:'Marque SIM ou NÃO, escreva o valor que você calculou e toque em Conferir.'};
+function bodyAB(q,r,done){ const b=(val,lab)=>{ let cls='yn'; if(r.yn===val) cls+=' sel'; if(done){ if(q.yes===val) cls+=' right'; else if(r.yn===val) cls+=' wrong'; } return `<button class="${cls}" data-ab="${val?1:0}" ${done?'tabindex="-1" aria-disabled="true"':''}>${lab}</button>`; };
+  const v=parseAns(r.v,q.kind); const okv=done && Math.abs(v-q.val)<0.01; const shown = q.kind==='time'? clock(q.val) : (Number.isInteger(q.val)? fmt(q.val) : dec(q.val,2));
+  return `<div class="abbox"><div class="abyn"><span class="lead" style="font-size:16px">Sua resposta:</span>${b(true,'SIM')}${b(false,'NÃO')}</div><label class="abl">${q.ask}:<input id="abv" class="abin ${done?(okv?'right':'wrong'):''}" inputmode="${q.kind==='time'?'text':'decimal'}" autocomplete="off" value="${String(r.v).replace(/"/g,'')}" ${done?'disabled':''}></label>${done&&!okv?`<span class="fix">${shown}</span>`:''}</div>`; }
 
 function bodySN(q,r,done){
   return `<div class="tablewrap"><table class="sntb"><tr><th>Essa afirmação está correta?</th><th>SIM</th><th>NÃO</th></tr>${q.items.map((it,i)=>{
@@ -1353,12 +1731,13 @@ function vQuestion(){
   let body='';
   if(q.t==='mc'){ body=`<div class="alts ${q.altSvg?'svg':''} ${done?'done':''}">${q.alts.map((a,i)=>{ let cls=''; if(done){ if(i===q.ans) cls='right'; else if(i===s.picked) cls='wrong'; }
       return `<button class="alt ${cls}" data-i="${i}" ${done?'tabindex="-1" aria-disabled="true"':''}><span class="L">${LET[i]}</span><span class="T">${a}</span></button>`; }).join('')}</div>`; }
-  else { body = (q.t==='sn'?bodySN(q,r,done):q.t==='m3'?bodyM3(q,r,done):bodyLAC(q,r,done)) + (done?'':`<div class="row"><span class="lead" style="font-size:15px">${HINT[q.t]}</span><button class="btn" id="conf" ${isComplete(q,r)?'':'disabled'}>Conferir</button></div>`); }
+  else { body = (q.t==='ab'?bodyAB(q,r,done):q.t==='sn'?bodySN(q,r,done):q.t==='m3'?bodyM3(q,r,done):bodyLAC(q,r,done)) + (done?'':`<div class="row"><span class="lead" style="font-size:15px">${HINT[q.t]}</span><button class="btn" id="conf" ${isComplete(q,r)?'':'disabled'}>Conferir</button></div>`); }
   let explain='';
   if(done){ const ok=s.list[s.list.length-1].ok;
     const head = q.t==='mc' ? (ok?pickArr(PRAISE):pickArr(OOPS)+` A resposta certa é a letra ${LET[q.ans]}.`) : (ok?pickArr(PRAISE):pickArr(OOPS)+' Veja onde estava a pegadinha.');
     const per = q.t==='sn'||q.t==='m3' ? `<ul class="whys">${q.items.map((it,i)=>{ const mine = q.t==='sn'? r.sn[i] : r.m3.includes(i); const right = q.t==='sn'? mine===it.v : mine===it.v;
         return `<li class="${right?'y':'n'}"><b>${q.t==='sn'?(it.v?'SIM':'NÃO'):(it.v?'Verdadeira':'Falsa')}</b> · ${it.s}<br><span>${it.why}</span></li>`; }).join('')}</ul>`
+      : q.t==='ab' ? `<div class="model"><b>Uma justificativa possível (é assim que a prova quer):</b><ol>${q.model.map(m=>`<li>${m}</li>`).join('')}</ol></div>`
       : q.t==='lac' ? `<p class="whyl">Valores certos: ${q.gaps.map((g,i)=>`<b>${g}</b>`).join(' · ')}</p>` : '';
     explain=`<section class="explain" id="exp">${OWL(ok?'ok':'no')}
       <div class="ebox"><h3 class="${ok?'ok':'no'}">${head}</h3>${per}
@@ -1366,7 +1745,7 @@ function vQuestion(){
         <div class="rule"><small>Regra de bolso</small><p>${q.regra}</p></div>
         <div class="row">${ s.infinite ? `<button class="btn" id="next">Próxima questão</button><button class="btn soft" id="stop">Encerrar e ver resultado</button>` : (s.list.length>=ROUND?`<button class="btn" id="next">Ver meu resultado</button>`:`<button class="btn" id="next">Próxima questão</button>`)}</div>
       </div></section>`; }
-  const fmtTag = {mc:'',sn:'<span class="chip plain">Sim ou não</span>',m3:'<span class="chip plain">Marque três</span>',lac:'<span class="chip plain">Lacunas</span>'}[q.t];
+  const fmtTag = {mc:'',sn:'<span class="chip plain">Sim ou não</span>',m3:'<span class="chip plain">Marque três</span>',lac:'<span class="chip plain">Lacunas</span>',ab:'<span class="chip plain">Responda e justifique</span>'}[q.t];
   stage.innerHTML=`<div class="qtop"><span class="qnum">${s.infinite?'':'Questão '+shownN}</span><span class="chip">${q.dn}</span>${fmtTag}${dots}</div>
     <p class="qtext">${q.q}</p>
     ${q.tbl?`<div class="tablewrap">${q.tbl}</div>`:''}
@@ -1379,6 +1758,7 @@ function vQuestion(){
     if(q.t==='m3') stage.querySelectorAll('.chk').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; const k=r.m3.indexOf(i); if(k>=0) r.m3.splice(k,1); else if(r.m3.length<3) r.m3.push(i); keep(); });
     if(q.t==='lac'){ stage.querySelectorAll('.gap').forEach(b=>b.onclick=()=>{ const g=+b.dataset.g; if(r.act===g && r.lac[g]!==null) r.lac[g]=null; r.act=g; keep(); });
       stage.querySelectorAll('.chipv').forEach(b=>b.onclick=()=>{ const o=b.dataset.o; const prev=r.lac.indexOf(o); if(prev>=0) r.lac[prev]=null; r.lac[r.act]=o; const nx=r.lac.findIndex(v=>v===null); r.act = nx>=0?nx:r.act; keep(); }); }
+    if(q.t==='ab'){ stage.querySelectorAll('[data-ab]').forEach(b=>b.onclick=()=>{ r.yn=b.dataset.ab==='1'; keep(); }); const ip=$('#abv'); if(ip){ ip.oninput=()=>{ r.v=ip.value; const c=$('#conf'); if(c) c.disabled=!isComplete(q,r); }; ip.onkeydown=e=>{ if(e.key==='Enter'){ const c=$('#conf'); if(c&&!c.disabled) c.click(); } }; } }
     const c=$('#conf'); if(c) c.onclick=()=>{ if(!isComplete(q,r)) return; finish(grade(q,r),'done'); };
   } else {
     $('#next').onclick=()=>{ if(!s.infinite && s.list.length>=ROUND){ s.phase='end'; render(); window.scrollTo({top:0,behavior:'smooth'}); } else nextQ(); };
